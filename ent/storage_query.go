@@ -293,12 +293,12 @@ func (sq *StorageQuery) WithStorageSerial(opts ...func(*SerialQuery)) *StorageQu
 // Example:
 //
 //	var v []struct {
-//		CreatedAt time.Time `json:"created_at,omitempty"`
+//		CreateTime time.Time `json:"create_time,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.Storage.Query().
-//		GroupBy(storage.FieldCreatedAt).
+//		GroupBy(storage.FieldCreateTime).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 //
@@ -320,11 +320,11 @@ func (sq *StorageQuery) GroupBy(field string, fields ...string) *StorageGroupBy 
 // Example:
 //
 //	var v []struct {
-//		CreatedAt time.Time `json:"created_at,omitempty"`
+//		CreateTime time.Time `json:"create_time,omitempty"`
 //	}
 //
 //	client.Storage.Query().
-//		Select(storage.FieldCreatedAt).
+//		Select(storage.FieldCreateTime).
 //		Scan(ctx, &v)
 //
 func (sq *StorageQuery) Select(fields ...string) *StorageSelect {

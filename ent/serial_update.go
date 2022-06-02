@@ -31,9 +31,9 @@ func (su *SerialUpdate) Where(ps ...predicate.Serial) *SerialUpdate {
 	return su
 }
 
-// SetUpdatedAt sets the "updated_at" field.
-func (su *SerialUpdate) SetUpdatedAt(t time.Time) *SerialUpdate {
-	su.mutation.SetUpdatedAt(t)
+// SetUpdateTime sets the "update_time" field.
+func (su *SerialUpdate) SetUpdateTime(t time.Time) *SerialUpdate {
+	su.mutation.SetUpdateTime(t)
 	return su
 }
 
@@ -139,9 +139,9 @@ func (su *SerialUpdate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (su *SerialUpdate) defaults() {
-	if _, ok := su.mutation.UpdatedAt(); !ok {
-		v := serial.UpdateDefaultUpdatedAt()
-		su.mutation.SetUpdatedAt(v)
+	if _, ok := su.mutation.UpdateTime(); !ok {
+		v := serial.UpdateDefaultUpdateTime()
+		su.mutation.SetUpdateTime(v)
 	}
 }
 
@@ -174,11 +174,11 @@ func (su *SerialUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
-	if value, ok := su.mutation.UpdatedAt(); ok {
+	if value, ok := su.mutation.UpdateTime(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeTime,
 			Value:  value,
-			Column: serial.FieldUpdatedAt,
+			Column: serial.FieldUpdateTime,
 		})
 	}
 	if su.mutation.ItemCleared() {
@@ -270,9 +270,9 @@ type SerialUpdateOne struct {
 	mutation *SerialMutation
 }
 
-// SetUpdatedAt sets the "updated_at" field.
-func (suo *SerialUpdateOne) SetUpdatedAt(t time.Time) *SerialUpdateOne {
-	suo.mutation.SetUpdatedAt(t)
+// SetUpdateTime sets the "update_time" field.
+func (suo *SerialUpdateOne) SetUpdateTime(t time.Time) *SerialUpdateOne {
+	suo.mutation.SetUpdateTime(t)
 	return suo
 }
 
@@ -385,9 +385,9 @@ func (suo *SerialUpdateOne) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (suo *SerialUpdateOne) defaults() {
-	if _, ok := suo.mutation.UpdatedAt(); !ok {
-		v := serial.UpdateDefaultUpdatedAt()
-		suo.mutation.SetUpdatedAt(v)
+	if _, ok := suo.mutation.UpdateTime(); !ok {
+		v := serial.UpdateDefaultUpdateTime()
+		suo.mutation.SetUpdateTime(v)
 	}
 }
 
@@ -437,11 +437,11 @@ func (suo *SerialUpdateOne) sqlSave(ctx context.Context) (_node *Serial, err err
 			}
 		}
 	}
-	if value, ok := suo.mutation.UpdatedAt(); ok {
+	if value, ok := suo.mutation.UpdateTime(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeTime,
 			Value:  value,
-			Column: serial.FieldUpdatedAt,
+			Column: serial.FieldUpdateTime,
 		})
 	}
 	if suo.mutation.ItemCleared() {

@@ -19,10 +19,10 @@ type Serial struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID string `json:"id,omitempty"`
-	// CreatedAt holds the value of the "created_at" field.
-	CreatedAt time.Time `json:"created_at,omitempty"`
-	// UpdatedAt holds the value of the "updated_at" field.
-	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	// CreateTime holds the value of the "create_time" field.
+	CreateTime time.Time `json:"create_time,omitempty"`
+	// UpdateTime holds the value of the "update_time" field.
+	UpdateTime time.Time `json:"update_time,omitempty"`
 	// StorageID holds the value of the "storage_id" field.
 	StorageID uuid.UUID `json:"storage_id,omitempty"`
 	// ItemID holds the value of the "item_id" field.
@@ -78,7 +78,7 @@ func (*Serial) scanValues(columns []string) ([]interface{}, error) {
 		switch columns[i] {
 		case serial.FieldID:
 			values[i] = new(sql.NullString)
-		case serial.FieldCreatedAt, serial.FieldUpdatedAt:
+		case serial.FieldCreateTime, serial.FieldUpdateTime:
 			values[i] = new(sql.NullTime)
 		case serial.FieldStorageID, serial.FieldItemID:
 			values[i] = new(uuid.UUID)
@@ -103,17 +103,17 @@ func (s *Serial) assignValues(columns []string, values []interface{}) error {
 			} else if value.Valid {
 				s.ID = value.String
 			}
-		case serial.FieldCreatedAt:
+		case serial.FieldCreateTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field created_at", values[i])
+				return fmt.Errorf("unexpected type %T for field create_time", values[i])
 			} else if value.Valid {
-				s.CreatedAt = value.Time
+				s.CreateTime = value.Time
 			}
-		case serial.FieldUpdatedAt:
+		case serial.FieldUpdateTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
+				return fmt.Errorf("unexpected type %T for field update_time", values[i])
 			} else if value.Valid {
-				s.UpdatedAt = value.Time
+				s.UpdateTime = value.Time
 			}
 		case serial.FieldStorageID:
 			if value, ok := values[i].(*uuid.UUID); !ok {
@@ -165,10 +165,10 @@ func (s *Serial) String() string {
 	var builder strings.Builder
 	builder.WriteString("Serial(")
 	builder.WriteString(fmt.Sprintf("id=%v", s.ID))
-	builder.WriteString(", created_at=")
-	builder.WriteString(s.CreatedAt.Format(time.ANSIC))
-	builder.WriteString(", updated_at=")
-	builder.WriteString(s.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(", create_time=")
+	builder.WriteString(s.CreateTime.Format(time.ANSIC))
+	builder.WriteString(", update_time=")
+	builder.WriteString(s.UpdateTime.Format(time.ANSIC))
 	builder.WriteString(", storage_id=")
 	builder.WriteString(fmt.Sprintf("%v", s.StorageID))
 	builder.WriteString(", item_id=")

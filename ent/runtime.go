@@ -20,16 +20,16 @@ func init() {
 	_ = itemMixinFields0
 	itemFields := schema.Item{}.Fields()
 	_ = itemFields
-	// itemDescCreatedAt is the schema descriptor for created_at field.
-	itemDescCreatedAt := itemMixinFields0[0].Descriptor()
-	// item.DefaultCreatedAt holds the default value on creation for the created_at field.
-	item.DefaultCreatedAt = itemDescCreatedAt.Default.(time.Time)
-	// itemDescUpdatedAt is the schema descriptor for updated_at field.
-	itemDescUpdatedAt := itemMixinFields0[1].Descriptor()
-	// item.DefaultUpdatedAt holds the default value on creation for the updated_at field.
-	item.DefaultUpdatedAt = itemDescUpdatedAt.Default.(time.Time)
-	// item.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	item.UpdateDefaultUpdatedAt = itemDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// itemDescCreateTime is the schema descriptor for create_time field.
+	itemDescCreateTime := itemMixinFields0[0].Descriptor()
+	// item.DefaultCreateTime holds the default value on creation for the create_time field.
+	item.DefaultCreateTime = itemDescCreateTime.Default.(func() time.Time)
+	// itemDescUpdateTime is the schema descriptor for update_time field.
+	itemDescUpdateTime := itemMixinFields0[1].Descriptor()
+	// item.DefaultUpdateTime holds the default value on creation for the update_time field.
+	item.DefaultUpdateTime = itemDescUpdateTime.Default.(func() time.Time)
+	// item.UpdateDefaultUpdateTime holds the default value on update for the update_time field.
+	item.UpdateDefaultUpdateTime = itemDescUpdateTime.UpdateDefault.(func() time.Time)
 	// itemDescSku is the schema descriptor for sku field.
 	itemDescSku := itemFields[1].Descriptor()
 	// item.SkuValidator is a validator for the "sku" field. It is called by the builders before save.
@@ -43,29 +43,29 @@ func init() {
 	_ = serialMixinFields0
 	serialFields := schema.Serial{}.Fields()
 	_ = serialFields
-	// serialDescCreatedAt is the schema descriptor for created_at field.
-	serialDescCreatedAt := serialMixinFields0[0].Descriptor()
-	// serial.DefaultCreatedAt holds the default value on creation for the created_at field.
-	serial.DefaultCreatedAt = serialDescCreatedAt.Default.(time.Time)
-	// serialDescUpdatedAt is the schema descriptor for updated_at field.
-	serialDescUpdatedAt := serialMixinFields0[1].Descriptor()
-	// serial.DefaultUpdatedAt holds the default value on creation for the updated_at field.
-	serial.DefaultUpdatedAt = serialDescUpdatedAt.Default.(time.Time)
-	// serial.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	serial.UpdateDefaultUpdatedAt = serialDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// serialDescCreateTime is the schema descriptor for create_time field.
+	serialDescCreateTime := serialMixinFields0[0].Descriptor()
+	// serial.DefaultCreateTime holds the default value on creation for the create_time field.
+	serial.DefaultCreateTime = serialDescCreateTime.Default.(func() time.Time)
+	// serialDescUpdateTime is the schema descriptor for update_time field.
+	serialDescUpdateTime := serialMixinFields0[1].Descriptor()
+	// serial.DefaultUpdateTime holds the default value on creation for the update_time field.
+	serial.DefaultUpdateTime = serialDescUpdateTime.Default.(func() time.Time)
+	// serial.UpdateDefaultUpdateTime holds the default value on update for the update_time field.
+	serial.UpdateDefaultUpdateTime = serialDescUpdateTime.UpdateDefault.(func() time.Time)
 	storageMixin := schema.Storage{}.Mixin()
 	storageMixinFields0 := storageMixin[0].Fields()
 	_ = storageMixinFields0
 	storageFields := schema.Storage{}.Fields()
 	_ = storageFields
-	// storageDescCreatedAt is the schema descriptor for created_at field.
-	storageDescCreatedAt := storageMixinFields0[0].Descriptor()
-	// storage.DefaultCreatedAt holds the default value on creation for the created_at field.
-	storage.DefaultCreatedAt = storageDescCreatedAt.Default.(time.Time)
-	// storageDescUpdatedAt is the schema descriptor for updated_at field.
-	storageDescUpdatedAt := storageMixinFields0[1].Descriptor()
-	// storage.DefaultUpdatedAt holds the default value on creation for the updated_at field.
-	storage.DefaultUpdatedAt = storageDescUpdatedAt.Default.(time.Time)
-	// storage.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	storage.UpdateDefaultUpdatedAt = storageDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// storageDescCreateTime is the schema descriptor for create_time field.
+	storageDescCreateTime := storageMixinFields0[0].Descriptor()
+	// storage.DefaultCreateTime holds the default value on creation for the create_time field.
+	storage.DefaultCreateTime = storageDescCreateTime.Default.(func() time.Time)
+	// storageDescUpdateTime is the schema descriptor for update_time field.
+	storageDescUpdateTime := storageMixinFields0[1].Descriptor()
+	// storage.DefaultUpdateTime holds the default value on creation for the update_time field.
+	storage.DefaultUpdateTime = storageDescUpdateTime.Default.(func() time.Time)
+	// storage.UpdateDefaultUpdateTime holds the default value on update for the update_time field.
+	storage.UpdateDefaultUpdateTime = storageDescUpdateTime.UpdateDefault.(func() time.Time)
 }

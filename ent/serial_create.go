@@ -23,30 +23,30 @@ type SerialCreate struct {
 	hooks    []Hook
 }
 
-// SetCreatedAt sets the "created_at" field.
-func (sc *SerialCreate) SetCreatedAt(t time.Time) *SerialCreate {
-	sc.mutation.SetCreatedAt(t)
+// SetCreateTime sets the "create_time" field.
+func (sc *SerialCreate) SetCreateTime(t time.Time) *SerialCreate {
+	sc.mutation.SetCreateTime(t)
 	return sc
 }
 
-// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (sc *SerialCreate) SetNillableCreatedAt(t *time.Time) *SerialCreate {
+// SetNillableCreateTime sets the "create_time" field if the given value is not nil.
+func (sc *SerialCreate) SetNillableCreateTime(t *time.Time) *SerialCreate {
 	if t != nil {
-		sc.SetCreatedAt(*t)
+		sc.SetCreateTime(*t)
 	}
 	return sc
 }
 
-// SetUpdatedAt sets the "updated_at" field.
-func (sc *SerialCreate) SetUpdatedAt(t time.Time) *SerialCreate {
-	sc.mutation.SetUpdatedAt(t)
+// SetUpdateTime sets the "update_time" field.
+func (sc *SerialCreate) SetUpdateTime(t time.Time) *SerialCreate {
+	sc.mutation.SetUpdateTime(t)
 	return sc
 }
 
-// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (sc *SerialCreate) SetNillableUpdatedAt(t *time.Time) *SerialCreate {
+// SetNillableUpdateTime sets the "update_time" field if the given value is not nil.
+func (sc *SerialCreate) SetNillableUpdateTime(t *time.Time) *SerialCreate {
 	if t != nil {
-		sc.SetUpdatedAt(*t)
+		sc.SetUpdateTime(*t)
 	}
 	return sc
 }
@@ -150,23 +150,23 @@ func (sc *SerialCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (sc *SerialCreate) defaults() {
-	if _, ok := sc.mutation.CreatedAt(); !ok {
-		v := serial.DefaultCreatedAt
-		sc.mutation.SetCreatedAt(v)
+	if _, ok := sc.mutation.CreateTime(); !ok {
+		v := serial.DefaultCreateTime()
+		sc.mutation.SetCreateTime(v)
 	}
-	if _, ok := sc.mutation.UpdatedAt(); !ok {
-		v := serial.DefaultUpdatedAt
-		sc.mutation.SetUpdatedAt(v)
+	if _, ok := sc.mutation.UpdateTime(); !ok {
+		v := serial.DefaultUpdateTime()
+		sc.mutation.SetUpdateTime(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
 func (sc *SerialCreate) check() error {
-	if _, ok := sc.mutation.CreatedAt(); !ok {
-		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Serial.created_at"`)}
+	if _, ok := sc.mutation.CreateTime(); !ok {
+		return &ValidationError{Name: "create_time", err: errors.New(`ent: missing required field "Serial.create_time"`)}
 	}
-	if _, ok := sc.mutation.UpdatedAt(); !ok {
-		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Serial.updated_at"`)}
+	if _, ok := sc.mutation.UpdateTime(); !ok {
+		return &ValidationError{Name: "update_time", err: errors.New(`ent: missing required field "Serial.update_time"`)}
 	}
 	if _, ok := sc.mutation.StorageID(); !ok {
 		return &ValidationError{Name: "storage_id", err: errors.New(`ent: missing required field "Serial.storage_id"`)}
@@ -216,21 +216,21 @@ func (sc *SerialCreate) createSpec() (*Serial, *sqlgraph.CreateSpec) {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := sc.mutation.CreatedAt(); ok {
+	if value, ok := sc.mutation.CreateTime(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeTime,
 			Value:  value,
-			Column: serial.FieldCreatedAt,
+			Column: serial.FieldCreateTime,
 		})
-		_node.CreatedAt = value
+		_node.CreateTime = value
 	}
-	if value, ok := sc.mutation.UpdatedAt(); ok {
+	if value, ok := sc.mutation.UpdateTime(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeTime,
 			Value:  value,
-			Column: serial.FieldUpdatedAt,
+			Column: serial.FieldUpdateTime,
 		})
-		_node.UpdatedAt = value
+		_node.UpdateTime = value
 	}
 	if nodes := sc.mutation.ItemIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

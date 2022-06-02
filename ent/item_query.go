@@ -293,12 +293,12 @@ func (iq *ItemQuery) WithItemSerial(opts ...func(*SerialQuery)) *ItemQuery {
 // Example:
 //
 //	var v []struct {
-//		CreatedAt time.Time `json:"created_at,omitempty"`
+//		CreateTime time.Time `json:"create_time,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.Item.Query().
-//		GroupBy(item.FieldCreatedAt).
+//		GroupBy(item.FieldCreateTime).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 //
@@ -320,11 +320,11 @@ func (iq *ItemQuery) GroupBy(field string, fields ...string) *ItemGroupBy {
 // Example:
 //
 //	var v []struct {
-//		CreatedAt time.Time `json:"created_at,omitempty"`
+//		CreateTime time.Time `json:"create_time,omitempty"`
 //	}
 //
 //	client.Item.Query().
-//		Select(item.FieldCreatedAt).
+//		Select(item.FieldCreateTime).
 //		Scan(ctx, &v)
 //
 func (iq *ItemQuery) Select(fields ...string) *ItemSelect {

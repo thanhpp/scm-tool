@@ -11,8 +11,8 @@ var (
 	// ItemsColumns holds the columns for the "items" table.
 	ItemsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID},
-		{Name: "created_at", Type: field.TypeTime},
-		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "create_time", Type: field.TypeTime},
+		{Name: "update_time", Type: field.TypeTime},
 		{Name: "sku", Type: field.TypeString, Unique: true},
 		{Name: "desc", Type: field.TypeString},
 		{Name: "sell_price", Type: field.TypeFloat64},
@@ -33,8 +33,8 @@ var (
 	// SerialsColumns holds the columns for the "serials" table.
 	SerialsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString, Unique: true},
-		{Name: "created_at", Type: field.TypeTime},
-		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "create_time", Type: field.TypeTime},
+		{Name: "update_time", Type: field.TypeTime},
 		{Name: "item_id", Type: field.TypeUUID},
 		{Name: "storage_id", Type: field.TypeUUID},
 	}
@@ -68,8 +68,8 @@ var (
 	// StoragesColumns holds the columns for the "storages" table.
 	StoragesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
-		{Name: "created_at", Type: field.TypeTime},
-		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "create_time", Type: field.TypeTime},
+		{Name: "update_time", Type: field.TypeTime},
 		{Name: "name", Type: field.TypeString},
 		{Name: "location", Type: field.TypeString},
 	}

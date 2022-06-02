@@ -22,30 +22,30 @@ type ItemCreate struct {
 	hooks    []Hook
 }
 
-// SetCreatedAt sets the "created_at" field.
-func (ic *ItemCreate) SetCreatedAt(t time.Time) *ItemCreate {
-	ic.mutation.SetCreatedAt(t)
+// SetCreateTime sets the "create_time" field.
+func (ic *ItemCreate) SetCreateTime(t time.Time) *ItemCreate {
+	ic.mutation.SetCreateTime(t)
 	return ic
 }
 
-// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (ic *ItemCreate) SetNillableCreatedAt(t *time.Time) *ItemCreate {
+// SetNillableCreateTime sets the "create_time" field if the given value is not nil.
+func (ic *ItemCreate) SetNillableCreateTime(t *time.Time) *ItemCreate {
 	if t != nil {
-		ic.SetCreatedAt(*t)
+		ic.SetCreateTime(*t)
 	}
 	return ic
 }
 
-// SetUpdatedAt sets the "updated_at" field.
-func (ic *ItemCreate) SetUpdatedAt(t time.Time) *ItemCreate {
-	ic.mutation.SetUpdatedAt(t)
+// SetUpdateTime sets the "update_time" field.
+func (ic *ItemCreate) SetUpdateTime(t time.Time) *ItemCreate {
+	ic.mutation.SetUpdateTime(t)
 	return ic
 }
 
-// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (ic *ItemCreate) SetNillableUpdatedAt(t *time.Time) *ItemCreate {
+// SetNillableUpdateTime sets the "update_time" field if the given value is not nil.
+func (ic *ItemCreate) SetNillableUpdateTime(t *time.Time) *ItemCreate {
 	if t != nil {
-		ic.SetUpdatedAt(*t)
+		ic.SetUpdateTime(*t)
 	}
 	return ic
 }
@@ -160,23 +160,23 @@ func (ic *ItemCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (ic *ItemCreate) defaults() {
-	if _, ok := ic.mutation.CreatedAt(); !ok {
-		v := item.DefaultCreatedAt
-		ic.mutation.SetCreatedAt(v)
+	if _, ok := ic.mutation.CreateTime(); !ok {
+		v := item.DefaultCreateTime()
+		ic.mutation.SetCreateTime(v)
 	}
-	if _, ok := ic.mutation.UpdatedAt(); !ok {
-		v := item.DefaultUpdatedAt
-		ic.mutation.SetUpdatedAt(v)
+	if _, ok := ic.mutation.UpdateTime(); !ok {
+		v := item.DefaultUpdateTime()
+		ic.mutation.SetUpdateTime(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
 func (ic *ItemCreate) check() error {
-	if _, ok := ic.mutation.CreatedAt(); !ok {
-		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Item.created_at"`)}
+	if _, ok := ic.mutation.CreateTime(); !ok {
+		return &ValidationError{Name: "create_time", err: errors.New(`ent: missing required field "Item.create_time"`)}
 	}
-	if _, ok := ic.mutation.UpdatedAt(); !ok {
-		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Item.updated_at"`)}
+	if _, ok := ic.mutation.UpdateTime(); !ok {
+		return &ValidationError{Name: "update_time", err: errors.New(`ent: missing required field "Item.update_time"`)}
 	}
 	if _, ok := ic.mutation.Sku(); !ok {
 		return &ValidationError{Name: "sku", err: errors.New(`ent: missing required field "Item.sku"`)}
@@ -233,21 +233,21 @@ func (ic *ItemCreate) createSpec() (*Item, *sqlgraph.CreateSpec) {
 		_node.ID = id
 		_spec.ID.Value = &id
 	}
-	if value, ok := ic.mutation.CreatedAt(); ok {
+	if value, ok := ic.mutation.CreateTime(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeTime,
 			Value:  value,
-			Column: item.FieldCreatedAt,
+			Column: item.FieldCreateTime,
 		})
-		_node.CreatedAt = value
+		_node.CreateTime = value
 	}
-	if value, ok := ic.mutation.UpdatedAt(); ok {
+	if value, ok := ic.mutation.UpdateTime(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeTime,
 			Value:  value,
-			Column: item.FieldUpdatedAt,
+			Column: item.FieldUpdateTime,
 		})
-		_node.UpdatedAt = value
+		_node.UpdateTime = value
 	}
 	if value, ok := ic.mutation.Sku(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{

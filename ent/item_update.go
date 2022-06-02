@@ -29,9 +29,9 @@ func (iu *ItemUpdate) Where(ps ...predicate.Item) *ItemUpdate {
 	return iu
 }
 
-// SetUpdatedAt sets the "updated_at" field.
-func (iu *ItemUpdate) SetUpdatedAt(t time.Time) *ItemUpdate {
-	iu.mutation.SetUpdatedAt(t)
+// SetUpdateTime sets the "update_time" field.
+func (iu *ItemUpdate) SetUpdateTime(t time.Time) *ItemUpdate {
+	iu.mutation.SetUpdateTime(t)
 	return iu
 }
 
@@ -164,9 +164,9 @@ func (iu *ItemUpdate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (iu *ItemUpdate) defaults() {
-	if _, ok := iu.mutation.UpdatedAt(); !ok {
-		v := item.UpdateDefaultUpdatedAt()
-		iu.mutation.SetUpdatedAt(v)
+	if _, ok := iu.mutation.UpdateTime(); !ok {
+		v := item.UpdateDefaultUpdateTime()
+		iu.mutation.SetUpdateTime(v)
 	}
 }
 
@@ -203,11 +203,11 @@ func (iu *ItemUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
-	if value, ok := iu.mutation.UpdatedAt(); ok {
+	if value, ok := iu.mutation.UpdateTime(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeTime,
 			Value:  value,
-			Column: item.FieldUpdatedAt,
+			Column: item.FieldUpdateTime,
 		})
 	}
 	if value, ok := iu.mutation.Sku(); ok {
@@ -311,9 +311,9 @@ type ItemUpdateOne struct {
 	mutation *ItemMutation
 }
 
-// SetUpdatedAt sets the "updated_at" field.
-func (iuo *ItemUpdateOne) SetUpdatedAt(t time.Time) *ItemUpdateOne {
-	iuo.mutation.SetUpdatedAt(t)
+// SetUpdateTime sets the "update_time" field.
+func (iuo *ItemUpdateOne) SetUpdateTime(t time.Time) *ItemUpdateOne {
+	iuo.mutation.SetUpdateTime(t)
 	return iuo
 }
 
@@ -453,9 +453,9 @@ func (iuo *ItemUpdateOne) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (iuo *ItemUpdateOne) defaults() {
-	if _, ok := iuo.mutation.UpdatedAt(); !ok {
-		v := item.UpdateDefaultUpdatedAt()
-		iuo.mutation.SetUpdatedAt(v)
+	if _, ok := iuo.mutation.UpdateTime(); !ok {
+		v := item.UpdateDefaultUpdateTime()
+		iuo.mutation.SetUpdateTime(v)
 	}
 }
 
@@ -509,11 +509,11 @@ func (iuo *ItemUpdateOne) sqlSave(ctx context.Context) (_node *Item, err error) 
 			}
 		}
 	}
-	if value, ok := iuo.mutation.UpdatedAt(); ok {
+	if value, ok := iuo.mutation.UpdateTime(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeTime,
 			Value:  value,
-			Column: item.FieldUpdatedAt,
+			Column: item.FieldUpdateTime,
 		})
 	}
 	if value, ok := iuo.mutation.Sku(); ok {

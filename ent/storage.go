@@ -17,10 +17,10 @@ type Storage struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID uuid.UUID `json:"id,omitempty"`
-	// CreatedAt holds the value of the "created_at" field.
-	CreatedAt time.Time `json:"created_at,omitempty"`
-	// UpdatedAt holds the value of the "updated_at" field.
-	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	// CreateTime holds the value of the "create_time" field.
+	CreateTime time.Time `json:"create_time,omitempty"`
+	// UpdateTime holds the value of the "update_time" field.
+	UpdateTime time.Time `json:"update_time,omitempty"`
 	// Name holds the value of the "name" field.
 	Name string `json:"name,omitempty"`
 	// Location holds the value of the "location" field.
@@ -55,7 +55,7 @@ func (*Storage) scanValues(columns []string) ([]interface{}, error) {
 		switch columns[i] {
 		case storage.FieldName, storage.FieldLocation:
 			values[i] = new(sql.NullString)
-		case storage.FieldCreatedAt, storage.FieldUpdatedAt:
+		case storage.FieldCreateTime, storage.FieldUpdateTime:
 			values[i] = new(sql.NullTime)
 		case storage.FieldID:
 			values[i] = new(uuid.UUID)
@@ -80,17 +80,17 @@ func (s *Storage) assignValues(columns []string, values []interface{}) error {
 			} else if value != nil {
 				s.ID = *value
 			}
-		case storage.FieldCreatedAt:
+		case storage.FieldCreateTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field created_at", values[i])
+				return fmt.Errorf("unexpected type %T for field create_time", values[i])
 			} else if value.Valid {
-				s.CreatedAt = value.Time
+				s.CreateTime = value.Time
 			}
-		case storage.FieldUpdatedAt:
+		case storage.FieldUpdateTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
+				return fmt.Errorf("unexpected type %T for field update_time", values[i])
 			} else if value.Valid {
-				s.UpdatedAt = value.Time
+				s.UpdateTime = value.Time
 			}
 		case storage.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -137,10 +137,10 @@ func (s *Storage) String() string {
 	var builder strings.Builder
 	builder.WriteString("Storage(")
 	builder.WriteString(fmt.Sprintf("id=%v", s.ID))
-	builder.WriteString(", created_at=")
-	builder.WriteString(s.CreatedAt.Format(time.ANSIC))
-	builder.WriteString(", updated_at=")
-	builder.WriteString(s.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(", create_time=")
+	builder.WriteString(s.CreateTime.Format(time.ANSIC))
+	builder.WriteString(", update_time=")
+	builder.WriteString(s.UpdateTime.Format(time.ANSIC))
 	builder.WriteString(", name=")
 	builder.WriteString(s.Name)
 	builder.WriteString(", location=")

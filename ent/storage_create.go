@@ -22,30 +22,30 @@ type StorageCreate struct {
 	hooks    []Hook
 }
 
-// SetCreatedAt sets the "created_at" field.
-func (sc *StorageCreate) SetCreatedAt(t time.Time) *StorageCreate {
-	sc.mutation.SetCreatedAt(t)
+// SetCreateTime sets the "create_time" field.
+func (sc *StorageCreate) SetCreateTime(t time.Time) *StorageCreate {
+	sc.mutation.SetCreateTime(t)
 	return sc
 }
 
-// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (sc *StorageCreate) SetNillableCreatedAt(t *time.Time) *StorageCreate {
+// SetNillableCreateTime sets the "create_time" field if the given value is not nil.
+func (sc *StorageCreate) SetNillableCreateTime(t *time.Time) *StorageCreate {
 	if t != nil {
-		sc.SetCreatedAt(*t)
+		sc.SetCreateTime(*t)
 	}
 	return sc
 }
 
-// SetUpdatedAt sets the "updated_at" field.
-func (sc *StorageCreate) SetUpdatedAt(t time.Time) *StorageCreate {
-	sc.mutation.SetUpdatedAt(t)
+// SetUpdateTime sets the "update_time" field.
+func (sc *StorageCreate) SetUpdateTime(t time.Time) *StorageCreate {
+	sc.mutation.SetUpdateTime(t)
 	return sc
 }
 
-// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (sc *StorageCreate) SetNillableUpdatedAt(t *time.Time) *StorageCreate {
+// SetNillableUpdateTime sets the "update_time" field if the given value is not nil.
+func (sc *StorageCreate) SetNillableUpdateTime(t *time.Time) *StorageCreate {
 	if t != nil {
-		sc.SetUpdatedAt(*t)
+		sc.SetUpdateTime(*t)
 	}
 	return sc
 }
@@ -154,23 +154,23 @@ func (sc *StorageCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (sc *StorageCreate) defaults() {
-	if _, ok := sc.mutation.CreatedAt(); !ok {
-		v := storage.DefaultCreatedAt
-		sc.mutation.SetCreatedAt(v)
+	if _, ok := sc.mutation.CreateTime(); !ok {
+		v := storage.DefaultCreateTime()
+		sc.mutation.SetCreateTime(v)
 	}
-	if _, ok := sc.mutation.UpdatedAt(); !ok {
-		v := storage.DefaultUpdatedAt
-		sc.mutation.SetUpdatedAt(v)
+	if _, ok := sc.mutation.UpdateTime(); !ok {
+		v := storage.DefaultUpdateTime()
+		sc.mutation.SetUpdateTime(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
 func (sc *StorageCreate) check() error {
-	if _, ok := sc.mutation.CreatedAt(); !ok {
-		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Storage.created_at"`)}
+	if _, ok := sc.mutation.CreateTime(); !ok {
+		return &ValidationError{Name: "create_time", err: errors.New(`ent: missing required field "Storage.create_time"`)}
 	}
-	if _, ok := sc.mutation.UpdatedAt(); !ok {
-		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Storage.updated_at"`)}
+	if _, ok := sc.mutation.UpdateTime(); !ok {
+		return &ValidationError{Name: "update_time", err: errors.New(`ent: missing required field "Storage.update_time"`)}
 	}
 	if _, ok := sc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "Storage.name"`)}
@@ -214,21 +214,21 @@ func (sc *StorageCreate) createSpec() (*Storage, *sqlgraph.CreateSpec) {
 		_node.ID = id
 		_spec.ID.Value = &id
 	}
-	if value, ok := sc.mutation.CreatedAt(); ok {
+	if value, ok := sc.mutation.CreateTime(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeTime,
 			Value:  value,
-			Column: storage.FieldCreatedAt,
+			Column: storage.FieldCreateTime,
 		})
-		_node.CreatedAt = value
+		_node.CreateTime = value
 	}
-	if value, ok := sc.mutation.UpdatedAt(); ok {
+	if value, ok := sc.mutation.UpdateTime(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeTime,
 			Value:  value,
-			Column: storage.FieldUpdatedAt,
+			Column: storage.FieldUpdateTime,
 		})
-		_node.UpdatedAt = value
+		_node.UpdateTime = value
 	}
 	if value, ok := sc.mutation.Name(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{

@@ -17,10 +17,10 @@ type Item struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID uuid.UUID `json:"id,omitempty"`
-	// CreatedAt holds the value of the "created_at" field.
-	CreatedAt time.Time `json:"created_at,omitempty"`
-	// UpdatedAt holds the value of the "updated_at" field.
-	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	// CreateTime holds the value of the "create_time" field.
+	CreateTime time.Time `json:"create_time,omitempty"`
+	// UpdateTime holds the value of the "update_time" field.
+	UpdateTime time.Time `json:"update_time,omitempty"`
 	// Sku holds the value of the "sku" field.
 	Sku string `json:"sku,omitempty"`
 	// Desc holds the value of the "desc" field.
@@ -59,7 +59,7 @@ func (*Item) scanValues(columns []string) ([]interface{}, error) {
 			values[i] = new(sql.NullFloat64)
 		case item.FieldSku, item.FieldDesc:
 			values[i] = new(sql.NullString)
-		case item.FieldCreatedAt, item.FieldUpdatedAt:
+		case item.FieldCreateTime, item.FieldUpdateTime:
 			values[i] = new(sql.NullTime)
 		case item.FieldID:
 			values[i] = new(uuid.UUID)
@@ -84,17 +84,17 @@ func (i *Item) assignValues(columns []string, values []interface{}) error {
 			} else if value != nil {
 				i.ID = *value
 			}
-		case item.FieldCreatedAt:
+		case item.FieldCreateTime:
 			if value, ok := values[j].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field created_at", values[j])
+				return fmt.Errorf("unexpected type %T for field create_time", values[j])
 			} else if value.Valid {
-				i.CreatedAt = value.Time
+				i.CreateTime = value.Time
 			}
-		case item.FieldUpdatedAt:
+		case item.FieldUpdateTime:
 			if value, ok := values[j].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_at", values[j])
+				return fmt.Errorf("unexpected type %T for field update_time", values[j])
 			} else if value.Valid {
-				i.UpdatedAt = value.Time
+				i.UpdateTime = value.Time
 			}
 		case item.FieldSku:
 			if value, ok := values[j].(*sql.NullString); !ok {
@@ -147,10 +147,10 @@ func (i *Item) String() string {
 	var builder strings.Builder
 	builder.WriteString("Item(")
 	builder.WriteString(fmt.Sprintf("id=%v", i.ID))
-	builder.WriteString(", created_at=")
-	builder.WriteString(i.CreatedAt.Format(time.ANSIC))
-	builder.WriteString(", updated_at=")
-	builder.WriteString(i.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(", create_time=")
+	builder.WriteString(i.CreateTime.Format(time.ANSIC))
+	builder.WriteString(", update_time=")
+	builder.WriteString(i.UpdateTime.Format(time.ANSIC))
 	builder.WriteString(", sku=")
 	builder.WriteString(i.Sku)
 	builder.WriteString(", desc=")

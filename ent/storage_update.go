@@ -29,9 +29,9 @@ func (su *StorageUpdate) Where(ps ...predicate.Storage) *StorageUpdate {
 	return su
 }
 
-// SetUpdatedAt sets the "updated_at" field.
-func (su *StorageUpdate) SetUpdatedAt(t time.Time) *StorageUpdate {
-	su.mutation.SetUpdatedAt(t)
+// SetUpdateTime sets the "update_time" field.
+func (su *StorageUpdate) SetUpdateTime(t time.Time) *StorageUpdate {
+	su.mutation.SetUpdateTime(t)
 	return su
 }
 
@@ -145,9 +145,9 @@ func (su *StorageUpdate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (su *StorageUpdate) defaults() {
-	if _, ok := su.mutation.UpdatedAt(); !ok {
-		v := storage.UpdateDefaultUpdatedAt()
-		su.mutation.SetUpdatedAt(v)
+	if _, ok := su.mutation.UpdateTime(); !ok {
+		v := storage.UpdateDefaultUpdateTime()
+		su.mutation.SetUpdateTime(v)
 	}
 }
 
@@ -169,11 +169,11 @@ func (su *StorageUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
-	if value, ok := su.mutation.UpdatedAt(); ok {
+	if value, ok := su.mutation.UpdateTime(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeTime,
 			Value:  value,
-			Column: storage.FieldUpdatedAt,
+			Column: storage.FieldUpdateTime,
 		})
 	}
 	if value, ok := su.mutation.Name(); ok {
@@ -263,9 +263,9 @@ type StorageUpdateOne struct {
 	mutation *StorageMutation
 }
 
-// SetUpdatedAt sets the "updated_at" field.
-func (suo *StorageUpdateOne) SetUpdatedAt(t time.Time) *StorageUpdateOne {
-	suo.mutation.SetUpdatedAt(t)
+// SetUpdateTime sets the "update_time" field.
+func (suo *StorageUpdateOne) SetUpdateTime(t time.Time) *StorageUpdateOne {
+	suo.mutation.SetUpdateTime(t)
 	return suo
 }
 
@@ -386,9 +386,9 @@ func (suo *StorageUpdateOne) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (suo *StorageUpdateOne) defaults() {
-	if _, ok := suo.mutation.UpdatedAt(); !ok {
-		v := storage.UpdateDefaultUpdatedAt()
-		suo.mutation.SetUpdatedAt(v)
+	if _, ok := suo.mutation.UpdateTime(); !ok {
+		v := storage.UpdateDefaultUpdateTime()
+		suo.mutation.SetUpdateTime(v)
 	}
 }
 
@@ -427,11 +427,11 @@ func (suo *StorageUpdateOne) sqlSave(ctx context.Context) (_node *Storage, err e
 			}
 		}
 	}
-	if value, ok := suo.mutation.UpdatedAt(); ok {
+	if value, ok := suo.mutation.UpdateTime(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeTime,
 			Value:  value,
-			Column: storage.FieldUpdatedAt,
+			Column: storage.FieldUpdateTime,
 		})
 	}
 	if value, ok := suo.mutation.Name(); ok {
