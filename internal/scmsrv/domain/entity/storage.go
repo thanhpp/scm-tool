@@ -1,9 +1,7 @@
 package entity
 
-import "github.com/google/uuid"
-
 type Storage struct {
-	ID       uuid.UUID
+	ID       int
 	Name     string
 	Desc     string
 	Location string

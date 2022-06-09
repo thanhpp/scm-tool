@@ -1,6 +1,10 @@
 package entity
 
-import "time"
+import (
+	"time"
+
+	"github.com/thanhpp/scm/pkg/enum"
+)
 
 type ImportTicketStatus int
 
@@ -12,7 +16,7 @@ type ImportTicket struct {
 	ID           int
 	FromSupplier Supplier
 	ToStorage    Storage
-	Status       ImportTicketStatus
+	Status       enum.ImportTicketStatus
 	SendTime     time.Time
 	ReceiveTime  time.Time
 	Fee          float64
