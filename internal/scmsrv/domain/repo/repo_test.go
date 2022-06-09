@@ -2,9 +2,11 @@ package repo_test
 
 import (
 	"fmt"
+	"log"
+	"os"
 	"testing"
 
-	"github.com/thanhpp/scm/cmd/scmsrv/domain/repo"
+	"github.com/thanhpp/scm/internal/scmsrv/domain/repo"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -29,7 +31,13 @@ func newPostgresDB() (*gorm.DB, error) {
 				host, port, user, password, dbname, sslmode),
 		),
 		&gorm.Config{
-			Logger: logger.Default.LogMode(logger.Info),
+			Logger: logger.New(
+				log.New(os.Stdout, "\n", log.LstdFlags),
+				logger.Config{
+					LogLevel: logger.Info,
+					Colorful: false,
+				},
+			),
 			NamingStrategy: schema.NamingStrategy{
 				SingularTable: true,
 			},

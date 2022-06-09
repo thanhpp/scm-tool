@@ -1,0 +1,8 @@
+http_server:
+  host: 127.0.0.1
+  port: 10000
+
+logger:
+  color: true
+  logger_name: scmsrv
+  level: debug

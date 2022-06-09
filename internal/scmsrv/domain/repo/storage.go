@@ -2,14 +2,12 @@ package repo
 
 import (
 	"time"
-
-	"github.com/google/uuid"
 )
 
 type Storage struct {
-	ID       uuid.UUID `gorm:"column:id;type:uuid;primaryKey"`
-	Name     string    `gorm:"column:name;type:text"`
-	Location string    `gorm:"column:name;type:text"`
+	ID       int    `gorm:"column:id;type:int;primaryKey;autoIncrement"`
+	Name     string `gorm:"column:name;type:text"`
+	Location string `gorm:"column:name;type:text"`
 
 	Serials []Serial `gorm:"foreignKey:StorageID;references:ID"`
 
