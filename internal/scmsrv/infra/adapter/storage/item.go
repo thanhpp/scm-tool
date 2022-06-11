@@ -59,8 +59,9 @@ func (d ItemDB) unmarshal(in repo.Item) *entity.Item {
 		item.Serials = append(
 			item.Serials,
 			&entity.Serial{
-				Seri:    in.Serials[i].Seri,
-				ItemSKU: in.SKU,
+				Seri: in.Serials[i].Seri,
+				Item: item,
+				// ? storage
 			})
 	}
 

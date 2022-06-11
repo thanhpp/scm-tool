@@ -10,6 +10,7 @@ type Serial struct {
 	StorageID      int    `gorm:"column:storage_id;type:int"`
 	ImportTicketID int    `gorm:"column:import_ticket_id;type:int"`
 
+	Item         Item         `gorm:"foreignKey:ItemSKU;references:SKU"`
 	Storage      Storage      `gorm:"foreignKey:StorageID;references:ID"`
 	ImportTicket ImportTicket `gorm:"foreignKey:ImportTicketID;references:ID"`
 

@@ -1,6 +1,8 @@
 package entity
 
 type Serial struct {
-	Seri    string
-	ItemSKU string
+	Seri         string
+	Item         *Item
+	Storage      *Storage
+	ImportTicket *ImportTicket
 }
