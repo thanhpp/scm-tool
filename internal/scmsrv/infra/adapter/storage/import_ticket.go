@@ -71,10 +71,10 @@ func (d ImportTicketDB) Create(ctx context.Context, in *entity.ImportTicket) err
 		if in.ID == 0 {
 			var maxID int
 			if err := tx.
-				Model(&repo.ImportTicket{}).
-				Select("MAX(id) AS max_id").
-				Pluck("max_id", &maxID).
-				Error; err != nil {
+				Raw(`
+					select case when max(id) is null then 0 else max(id) end
+					from import_ticket;
+				`).Scan(&maxID).Error; err != nil {
 				return err
 			}
 

@@ -1,6 +1,7 @@
 package ctrl
 
 import (
+	"log"
 	"net/http"
 	"time"
 
@@ -31,7 +32,8 @@ func (ctrl ImportTicketCtrl) Create(c *gin.Context) {
 		c, req.FromSupplierID, req.ToStorageID,
 		req.SendTime, time.Time{}, req.Fee, nil)
 	if err != nil {
-		c.Abort()
+		log.Println(err)
+		c.AbortWithError(http.StatusInternalServerError, err)
 		return
 	}
 

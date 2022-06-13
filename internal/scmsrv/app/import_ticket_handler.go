@@ -46,5 +46,5 @@ func (h ImportTicketHandler) Create(
 		return nil, err
 	}
 
-	return nil, nil
+	return newImportTicket, nil
 }

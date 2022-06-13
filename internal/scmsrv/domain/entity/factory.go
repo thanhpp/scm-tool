@@ -8,6 +8,7 @@ type Factory interface {
 		billImagePaths []string, productImagePaths []string,
 	) (*ImportTicket, error)
 	NewSupplier(name, phone, email string) *Supplier
+	NewStorage(name, desc, location string) *Storage
 }
 
 type factoryImpl struct{}
@@ -41,5 +42,13 @@ func (f factoryImpl) NewSupplier(name, phone, email string) *Supplier {
 		Name:  name,
 		Phone: phone,
 		Email: email,
+	}
+}
+
+func (f factoryImpl) NewStorage(name, desc, location string) *Storage {
+	return &Storage{
+		Name:     name,
+		Desc:     desc,
+		Location: location,
 	}
 }

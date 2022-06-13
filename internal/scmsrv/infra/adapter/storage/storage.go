@@ -59,3 +59,15 @@ func (s StorageDB) Get(ctx context.Context, id int) (*entity.Storage, error) {
 
 	return s.unmarshal(storageDB), nil
 }
+
+func (s StorageDB) Create(ctx context.Context, storage *entity.Storage) error {
+	storageDB := s.marshal(storage)
+
+	if err := s.gdb.WithContext(ctx).Create(storageDB).Error; err != nil {
+		return err
+	}
+
+	storage.ID = storageDB.ID
+
+	return nil
+}

@@ -48,5 +48,11 @@ func (d SupplierDB) Get(ctx context.Context, id int) (*entity.Supplier, error) {
 func (d SupplierDB) Create(ctx context.Context, supplier *entity.Supplier) error {
 	supplierDB := d.marshal(supplier)
 
-	return d.gdb.WithContext(ctx).Create(supplierDB).Error
+	if err := d.gdb.WithContext(ctx).Create(supplierDB).Error; err != nil {
+		return err
+	}
+
+	supplier.ID = supplierDB.ID
+
+	return nil
 }

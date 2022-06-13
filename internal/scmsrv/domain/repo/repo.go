@@ -32,5 +32,9 @@ type SupplierRepo interface {
 }
 
 type StorageRepo interface {
+	// Read
 	Get(ctx context.Context, id int) (*entity.Storage, error)
+
+	// Write
+	Create(ctx context.Context, storage *entity.Storage) error
 }

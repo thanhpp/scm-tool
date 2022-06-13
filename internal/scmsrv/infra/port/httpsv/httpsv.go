@@ -68,6 +68,7 @@ func (s HTTPServer) newRouter() *gin.Engine {
 	// init
 	importTicketCtrl := ctrl.NewImportTicket(s.app.ImportTicketHandler)
 	supplierCtrl := ctrl.NewSupplier(s.app.SupplierHandler)
+	storageCtrl := ctrl.NewStorageCtrl(s.app.StorageHandler)
 
 	importTicketGr := r.Group("import_ticket")
 	{
@@ -77,6 +78,11 @@ func (s HTTPServer) newRouter() *gin.Engine {
 	supplierGr := r.Group("supplier")
 	{
 		supplierGr.POST("", supplierCtrl.Create)
+	}
+
+	storageGr := r.Group("storage")
+	{
+		storageGr.POST("", storageCtrl.Create)
 	}
 	return r
 }
