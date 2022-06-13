@@ -8,6 +8,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
+	"github.com/thanhpp/scm/internal/scmsrv/app"
 	"github.com/thanhpp/scm/internal/scmsrv/infra/port/httpsv/ctrl"
 	"github.com/thanhpp/scm/pkg/booting"
 	"github.com/thanhpp/scm/pkg/configx"
@@ -16,11 +17,15 @@ import (
 
 type HTTPServer struct {
 	cfg configx.HTTPServerConfig
+	app *app.App
 }
 
-func NewHTTPServer(cfg configx.HTTPServerConfig) *HTTPServer {
+func NewHTTPServer(
+	cfg configx.HTTPServerConfig, app *app.App,
+) *HTTPServer {
 	httpServer := &HTTPServer{
 		cfg: cfg,
+		app: app,
 	}
 
 	return httpServer
@@ -61,7 +66,7 @@ func (s HTTPServer) Daemon() booting.Daemon {
 func (s HTTPServer) newRouter() *gin.Engine {
 	r := gin.New()
 	// init
-	importTicketCtrl := new(ctrl.ImportTicketCtrl)
+	importTicketCtrl := ctrl.NewImportTicket(s.app.ImportTicketHandler)
 
 	r.POST("import_ticket", importTicketCtrl.Create)
 	return r

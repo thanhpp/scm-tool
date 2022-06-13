@@ -6,3 +6,10 @@ logger:
   color: true
   logger_name: scmsrv
   level: debug
+
+database:
+  host: 127.0.0.1
+  port: 5432
+  user: user
+  pass: password
+  database: scm

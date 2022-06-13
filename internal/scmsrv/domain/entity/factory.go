@@ -11,6 +11,10 @@ type Factory interface {
 
 type factoryImpl struct{}
 
+func NewFactory() Factory {
+	return factoryImpl{}
+}
+
 func (f factoryImpl) NewImportTicket(
 	fromSupplier Supplier, toStorage Storage, sendTime time.Time, fee float64, details []ImportTicketDetails,
 	billImagePaths []string, productImagePaths []string,

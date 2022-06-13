@@ -7,7 +7,7 @@ import (
 )
 
 type App struct {
-	importTicketHandler ImportTicketHandler
+	ImportTicketHandler ImportTicketHandler
 }
 
 func New(
@@ -17,7 +17,7 @@ func New(
 	fileUtil fileutil.FileUtil,
 ) App {
 	return App{
-		importTicketHandler: ImportTicketHandler{
+		ImportTicketHandler: ImportTicketHandler{
 			itemRepo:         itemRepo,
 			supplierRepo:     supplierRepo,
 			storageRepo:      storageRepo,

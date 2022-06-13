@@ -13,6 +13,12 @@ type ImportTicketCtrl struct {
 	importTickerHanlder app.ImportTicketHandler
 }
 
+func NewImportTicket(importTicketHandler app.ImportTicketHandler) *ImportTicketCtrl {
+	return &ImportTicketCtrl{
+		importTickerHanlder: importTicketHandler,
+	}
+}
+
 func (ctrl ImportTicketCtrl) Create(c *gin.Context) {
 	req := new(dto.CreateImportTicketReq)
 
