@@ -7,6 +7,7 @@ type Factory interface {
 		fromSupplier Supplier, toStorage Storage, sendTime time.Time, fee float64, details []ImportTicketDetails,
 		billImagePaths []string, productImagePaths []string,
 	) (*ImportTicket, error)
+	NewSupplier(name, phone, email string) *Supplier
 }
 
 type factoryImpl struct{}
@@ -33,4 +34,12 @@ func (f factoryImpl) NewImportTicket(
 	}
 
 	return importTicket, nil
+}
+
+func (f factoryImpl) NewSupplier(name, phone, email string) *Supplier {
+	return &Supplier{
+		Name:  name,
+		Phone: phone,
+		Email: email,
+	}
 }

@@ -8,6 +8,7 @@ import (
 
 type App struct {
 	ImportTicketHandler ImportTicketHandler
+	SupplierHandler     SupplierHanlder
 }
 
 func New(
@@ -24,6 +25,9 @@ func New(
 			importTicketRepo: importTicketRepo,
 			fac:              fac,
 			fileUtil:         fileUtil,
+		},
+		SupplierHandler: SupplierHanlder{
+			supplierRepo: supplierRepo,
 		},
 	}
 }

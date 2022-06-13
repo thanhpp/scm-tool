@@ -23,7 +23,7 @@ func (ctrl ImportTicketCtrl) Create(c *gin.Context) {
 	req := new(dto.CreateImportTicketReq)
 
 	if err := c.ShouldBind(req); err != nil {
-		c.Abort()
+		c.AbortWithStatusJSON(http.StatusNotAcceptable, req)
 		return
 	}
 

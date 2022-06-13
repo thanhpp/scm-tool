@@ -2,6 +2,7 @@ package storage
 
 import (
 	"github.com/thanhpp/scm/internal/scmsrv/domain/repo"
+	"github.com/thanhpp/scm/pkg/logger"
 	"gorm.io/gorm"
 )
 
@@ -18,9 +19,15 @@ type DB struct {
 }
 
 func NewDB(gormDB *gorm.DB) *DB {
-	return &DB{
+	db := &DB{
 		gdb: gormDB,
 	}
+
+	if err := db.AutoMigrate(); err != nil {
+		logger.Fatalf("migrate db err %v", err)
+	}
+
+	return db
 }
 
 func (d DB) AutoMigrate() error {

@@ -44,3 +44,9 @@ func (d SupplierDB) Get(ctx context.Context, id int) (*entity.Supplier, error) {
 
 	return d.unmarshal(supplierDB), nil
 }
+
+func (d SupplierDB) Create(ctx context.Context, supplier *entity.Supplier) error {
+	supplierDB := d.marshal(supplier)
+
+	return d.gdb.WithContext(ctx).Create(supplierDB).Error
+}

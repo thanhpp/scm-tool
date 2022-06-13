@@ -24,7 +24,11 @@ type ImportTicketRepo interface {
 }
 
 type SupplierRepo interface {
+	// Read
 	Get(ctx context.Context, id int) (*entity.Supplier, error)
+
+	// Write
+	Create(ctx context.Context, supplier *entity.Supplier) error
 }
 
 type StorageRepo interface {
