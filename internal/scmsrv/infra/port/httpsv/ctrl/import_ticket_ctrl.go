@@ -28,9 +28,18 @@ func (ctrl ImportTicketCtrl) Create(c *gin.Context) {
 		return
 	}
 
+	form, err := c.MultipartForm()
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusNotAcceptable, req)
+		return
+	}
+
+	billImages := form.File["bill_images"]
+	productImages := form.File["product_images"]
+
 	importTicket, err := ctrl.importTickerHanlder.Create(
 		c, req.FromSupplierID, req.ToStorageID,
-		req.SendTime, time.Time{}, req.Fee, nil)
+		req.SendTime, time.Time{}, req.Fee, nil, billImages, productImages)
 	if err != nil {
 		log.Println(err)
 		c.AbortWithError(http.StatusInternalServerError, err)
