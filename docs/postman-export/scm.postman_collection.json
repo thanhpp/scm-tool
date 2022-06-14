@@ -1,0 +1,85 @@
+{
+	"info": {
+		"_postman_id": "7074f53c-e623-4ce9-837e-3a625925456a",
+		"name": "scm",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "10191781"
+	},
+	"item": [
+		{
+			"name": "import_ticket",
+			"item": [
+				{
+					"name": "New",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"from_supplier_id\": 1,\n    \"to_storage_id\": 1,\n    \"send_time\": \"0001-01-01T00:00:00Z\",\n    \"fee\": 500,\n    \"details\": null\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base}}/import_ticket",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"import_ticket"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "supplier",
+			"item": [
+				{
+					"name": "New supplier",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base}}/supplier",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"supplier"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "storage",
+			"item": [
+				{
+					"name": "New Request",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base}}/storage",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"storage"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
