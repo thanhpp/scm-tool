@@ -1,14 +1,19 @@
 package entity
 
-import "time"
+import (
+	"time"
+
+	"github.com/pkg/errors"
+)
 
 type Factory interface {
 	NewImportTicket(
 		fromSupplier Supplier, toStorage Storage, sendTime time.Time, fee float64, details []ImportTicketDetails,
 		billImagePaths []string, productImagePaths []string,
 	) (*ImportTicket, error)
-	NewSupplier(name, phone, email string) *Supplier
-	NewStorage(name, desc, location string) *Storage
+	NewImportTicketDetails(item Item, buyQuantity, receiveQuantity int, buyPrice float64) (*ImportTicketDetails, error)
+	NewSupplier(name, phone, email string) (*Supplier, error)
+	NewStorage(name, desc, location string) (*Storage, error)
 }
 
 type factoryImpl struct{}
@@ -21,6 +26,22 @@ func (f factoryImpl) NewImportTicket(
 	fromSupplier Supplier, toStorage Storage, sendTime time.Time, fee float64, details []ImportTicketDetails,
 	billImagePaths []string, productImagePaths []string,
 ) (*ImportTicket, error) {
+	if sendTime.IsZero() {
+		return nil, errors.New("create import ticket: empty send time")
+	}
+
+	if len(details) == 0 {
+		return nil, errors.New("create import ticket: empty details")
+	}
+
+	skuMap := make(map[string]struct{}, len(details))
+	for i := range details {
+		if _, ok := skuMap[details[i].Item.SKU]; ok {
+			return nil, errors.New("create import ticket: duplicate sku" + details[i].Item.SKU)
+		}
+		skuMap[details[i].Item.SKU] = struct{}{}
+	}
+
 	importTicket := &ImportTicket{
 		FromSupplier: fromSupplier,
 		ToStorage:    toStorage,
@@ -37,18 +58,53 @@ func (f factoryImpl) NewImportTicket(
 	return importTicket, nil
 }
 
-func (f factoryImpl) NewSupplier(name, phone, email string) *Supplier {
+func (factoryImpl) NewImportTicketDetails(
+	item Item, buyQuantity, receiveQuantity int, buyPrice float64,
+) (*ImportTicketDetails, error) {
+	if item.IsEmpty() {
+		return nil, errors.New("create import ticket detail: empty item")
+	}
+
+	if buyQuantity == 0 {
+		return nil, errors.New("create import ticket detail: zero buy quantity")
+	}
+
+	return &ImportTicketDetails{
+		Item:            item,
+		BuyQuantity:     buyQuantity,
+		ReceiveQuantity: receiveQuantity,
+		BuyPrice:        buyPrice,
+	}, nil
+}
+
+func (f factoryImpl) NewSupplier(name, phone, email string) (*Supplier, error) {
+	if len(name) == 0 {
+		return nil, errors.New("create supplier: empty name")
+	}
+
+	if len(phone)+len(email) == 0 {
+		return nil, errors.New("create supplier: empty contact")
+	}
+
 	return &Supplier{
 		Name:  name,
 		Phone: phone,
 		Email: email,
-	}
+	}, nil
 }
 
-func (f factoryImpl) NewStorage(name, desc, location string) *Storage {
+func (f factoryImpl) NewStorage(name, desc, location string) (*Storage, error) {
+	if len(name) == 0 {
+		return nil, errors.New("create storage: empty name")
+	}
+
+	if len(location) == 0 {
+		return nil, errors.New("create storage: empty location")
+	}
+
 	return &Storage{
 		Name:     name,
 		Desc:     desc,
 		Location: location,
-	}
+	}, nil
 }

@@ -13,7 +13,10 @@ type StorageHandler struct {
 }
 
 func (h StorageHandler) Create(ctx context.Context, name, desc, location string) (*entity.Storage, error) {
-	newStorage := h.fac.NewStorage(name, desc, location)
+	newStorage, err := h.fac.NewStorage(name, desc, location)
+	if err != nil {
+		return nil, err
+	}
 
 	if err := h.storageRepo.Create(ctx, newStorage); err != nil {
 		return nil, err

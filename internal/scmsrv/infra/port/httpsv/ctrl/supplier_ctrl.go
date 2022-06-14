@@ -26,7 +26,7 @@ func (ctrl SupplierCtrl) Create(c *gin.Context) {
 		return
 	}
 
-	newSupplier, err := ctrl.supplierHandler.Create(c, req.Name, req.Email, req.Phone)
+	newSupplier, err := ctrl.supplierHandler.Create(c.Request.Context(), req.Name, req.Email, req.Phone)
 	if err != nil {
 		c.AbortWithError(http.StatusInternalServerError, err)
 		return

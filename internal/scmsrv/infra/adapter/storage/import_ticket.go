@@ -2,10 +2,12 @@ package storage
 
 import (
 	"context"
+	"log"
 
 	"github.com/thanhpp/scm/internal/scmsrv/domain/entity"
 	"github.com/thanhpp/scm/internal/scmsrv/domain/repo"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 type ImportTicketDB struct {
@@ -78,12 +80,14 @@ func (d ImportTicketDB) Create(ctx context.Context, in *entity.ImportTicket) err
 				return err
 			}
 
+			log.Println("maxID", maxID)
+
 			in.ID = maxID + 1
 		}
 
 		dbImportTicket := d.marshalImportTicket(*in)
 
-		if err := tx.Model(&repo.ImportTicket{}).Create(dbImportTicket).Error; err != nil {
+		if err := tx.Omit(clause.Associations).Create(dbImportTicket).Error; err != nil {
 			return err
 		}
 

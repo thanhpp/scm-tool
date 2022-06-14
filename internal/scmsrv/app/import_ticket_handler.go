@@ -2,6 +2,7 @@ package app
 
 import (
 	"context"
+	"log"
 	"mime/multipart"
 	"path/filepath"
 	"time"
@@ -46,7 +47,7 @@ func (h ImportTicketHandler) Create(
 
 	productsImagesPath, err := h.
 		fileUtil.
-		SaveFilesFromMultipart(h.importTicketImageDir, "import_ticket-product_images", billImages)
+		SaveFilesFromMultipart(h.importTicketImageDir, "import_ticket-product_images", productImages)
 	if err != nil {
 		return nil, err
 	}
@@ -69,11 +70,30 @@ func (h ImportTicketHandler) Create(
 		return nil, err
 	}
 
+	log.Printf("newImportTicket entity: %+v", newImportTicket)
+
 	if err := h.importTicketRepo.Create(ctx, newImportTicket); err != nil {
 		return nil, err
 	}
 
 	return newImportTicket, nil
+}
+
+// NewImportDetails too many queries. But who knows :D
+func (h ImportTicketHandler) CreateImportDetails(
+	ctx context.Context, sku string, buyQty, receiveQty int, butPrice float64,
+) (*entity.ImportTicketDetails, error) {
+	item, err := h.itemRepo.GetBySKU(ctx, sku)
+	if err != nil {
+		return nil, err
+	}
+
+	detail, err := h.fac.NewImportTicketDetails(*item, buyQty, receiveQty, butPrice)
+	if err != nil {
+		return nil, err
+	}
+
+	return detail, nil
 }
 
 var (

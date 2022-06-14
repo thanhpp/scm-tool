@@ -13,7 +13,10 @@ type SupplierHanlder struct {
 }
 
 func (h SupplierHanlder) Create(ctx context.Context, name, email, phone string) (*entity.Supplier, error) {
-	newSupplier := h.fac.NewSupplier(name, email, phone)
+	newSupplier, err := h.fac.NewSupplier(name, email, phone)
+	if err != nil {
+		return nil, err
+	}
 
 	if err := h.supplierRepo.Create(ctx, newSupplier); err != nil {
 		return nil, err

@@ -26,7 +26,7 @@ func (ctrl StorageCtrl) Create(c *gin.Context) {
 		return
 	}
 
-	newStorage, err := ctrl.storageHandler.Create(c, req.Name, req.Desc, req.Location)
+	newStorage, err := ctrl.storageHandler.Create(c.Request.Context(), req.Name, req.Desc, req.Location)
 	if err != nil {
 		c.AbortWithError(http.StatusInternalServerError, err)
 		return

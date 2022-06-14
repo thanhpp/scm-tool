@@ -39,7 +39,7 @@ func (fu fileUtilImpl) SaveFilesFromMultipart(dir, suffix string, files []*multi
 		}
 		tmpFile, err := os.CreateTemp(
 			dir,
-			fmt.Sprintf("%s-%d-*.%s", suffix, time.Now().UnixMilli(), filepath.Ext(files[i].Filename)))
+			fmt.Sprintf("%s-%d-*%s", suffix, time.Now().UnixMilli(), filepath.Ext(files[i].Filename)))
 		if err != nil {
 			shouldCleanUp = true
 			return nil, err

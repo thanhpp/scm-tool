@@ -1,13 +1,14 @@
 package ctrl
 
 import (
-	"log"
 	"net/http"
 	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/thanhpp/scm/internal/scmsrv/app"
+	"github.com/thanhpp/scm/internal/scmsrv/domain/entity"
 	"github.com/thanhpp/scm/internal/scmsrv/infra/port/httpsv/dto"
+	"github.com/thanhpp/scm/pkg/ginutil"
 )
 
 type ImportTicketCtrl struct {
@@ -21,28 +22,40 @@ func NewImportTicket(importTicketHandler app.ImportTicketHandler) *ImportTicketC
 }
 
 func (ctrl ImportTicketCtrl) Create(c *gin.Context) {
-	req := new(dto.CreateImportTicketReq)
-
-	if err := c.ShouldBind(req); err != nil {
-		c.AbortWithStatusJSON(http.StatusNotAcceptable, req)
+	req, err := dto.CustomBindCreateImportTicketReq(c)
+	if err != nil {
+		ginutil.RespErr(c, http.StatusNotAcceptable, err, ginutil.WithData(dto.CreateImportTicketReq{}))
 		return
 	}
 
 	form, err := c.MultipartForm()
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusNotAcceptable, req)
+		ginutil.RespErr(c, http.StatusNotAcceptable, err, ginutil.WithData(req))
 		return
 	}
 
 	billImages := form.File["bill_images"]
 	productImages := form.File["product_images"]
 
+	details := make([]entity.ImportTicketDetails, 0, len(req.Details))
+	for i := range req.Details {
+		detail, err := ctrl.importTickerHanlder.CreateImportDetails(
+			c.Request.Context(), req.Details[i].ItemSKU, req.Details[i].BuyQuantity,
+			0, req.Details[i].BuyPrice,
+		)
+		if err != nil {
+			ginutil.RespErr(c, http.StatusNotAcceptable, err, ginutil.WithData(req.Details[i]))
+			return
+		}
+
+		details = append(details, *detail)
+	}
+
 	importTicket, err := ctrl.importTickerHanlder.Create(
-		c, req.FromSupplierID, req.ToStorageID,
-		req.SendTime, time.Time{}, req.Fee, nil, billImages, productImages)
+		c.Request.Context(), req.FromSupplierID, req.ToStorageID,
+		req.SendTime, time.Time{}, req.Fee, details, billImages, productImages)
 	if err != nil {
-		log.Println(err)
-		c.AbortWithError(http.StatusInternalServerError, err)
+		ginutil.RespErr(c, http.StatusNotAcceptable, err)
 		return
 	}
 

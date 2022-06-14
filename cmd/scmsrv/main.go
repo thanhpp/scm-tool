@@ -13,6 +13,7 @@ import (
 	"github.com/thanhpp/scm/internal/scmsrv/scmcfg"
 	"github.com/thanhpp/scm/pkg/booting"
 	"github.com/thanhpp/scm/pkg/configx"
+	"github.com/thanhpp/scm/pkg/fileutil"
 	"github.com/thanhpp/scm/pkg/logger"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -42,7 +43,7 @@ func main() {
 	scmApp := app.New(
 		entity.NewFactory(),
 		db.ItemDB(), db.SupplierDB(), db.StorageDB(),
-		db.ImportTicketDB(), nil,
+		db.ImportTicketDB(), fileutil.NewFileUtil(),
 	)
 
 	httpServer := httpsv.NewHTTPServer(mainCfg.HTTPServer, &scmApp)
