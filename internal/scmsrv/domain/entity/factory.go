@@ -14,6 +14,7 @@ type Factory interface {
 	NewImportTicketDetails(item Item, buyQuantity, receiveQuantity int, buyPrice float64) (*ImportTicketDetails, error)
 	NewSupplier(name, phone, email string) (*Supplier, error)
 	NewStorage(name, desc, location string) (*Storage, error)
+	NewItem(sku, name, desc string, itemType ItemType, imagePaths []string) (*Item, error)
 }
 
 type factoryImpl struct{}
@@ -107,4 +108,20 @@ func (f factoryImpl) NewStorage(name, desc, location string) (*Storage, error) {
 		Desc:     desc,
 		Location: location,
 	}, nil
+}
+
+func (factoryImpl) NewItem(sku, name, desc string, itemType ItemType, imagePaths []string) (*Item, error) {
+	if len(sku) == 0 {
+		return nil, errors.New("create item: empty sku")
+	}
+
+	newItem := &Item{
+		SKU:  sku,
+		Name: name,
+		Desc: desc,
+		Type: itemType,
+	}
+	newItem.Images = imagePaths
+
+	return newItem, nil
 }

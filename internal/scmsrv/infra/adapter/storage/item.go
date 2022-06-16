@@ -18,7 +18,7 @@ func (d DB) ItemDB() *ItemDB {
 	}
 }
 
-func (d ItemDB) marshal(in entity.Item) *repo.Item {
+func (d ItemDB) marshalItem(in entity.Item) *repo.Item {
 	item := &repo.Item{
 		SKU:       in.SKU,
 		Name:      in.Name,
@@ -45,7 +45,7 @@ func (d ItemDB) marshal(in entity.Item) *repo.Item {
 	return item
 }
 
-func (d ItemDB) unmarshal(in repo.Item) *entity.Item {
+func (d ItemDB) unmarshalItem(in repo.Item) *entity.Item {
 	item := &entity.Item{
 		SKU:       in.SKU,
 		Name:      in.Name,
@@ -77,10 +77,31 @@ func (d ItemDB) GetBySKU(ctx context.Context, sku string) (*entity.Item, error) 
 		return nil, err
 	}
 
-	return d.unmarshal(*itemDB), nil
+	return d.unmarshalItem(*itemDB), nil
 }
 
 // ? create serial and images -> returns if error (conflict)
 func (d ItemDB) Create(ctx context.Context, item entity.Item) error {
-	return d.gdb.WithContext(ctx).Model(&repo.Item{}).Create(d.marshal(item)).Error
+	return d.gdb.WithContext(ctx).Model(&repo.Item{}).Create(d.marshalItem(item)).Error
+}
+
+// ----------------------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------- ITEM TYPE ---------------------------------------------------------------
+
+func (d ItemDB) unmarshalItemType(in *repo.ItemType) *entity.ItemType {
+	return &entity.ItemType{
+		ID:   in.ID,
+		Name: in.Name,
+		Desc: in.Desc,
+	}
+}
+
+func (d ItemDB) GetItemType(ctx context.Context, itemTypeID int) (*entity.ItemType, error) {
+	itemDB := new(repo.ItemType)
+
+	if err := d.gdb.WithContext(ctx).Where("id = ?", itemTypeID).Take(itemDB).Error; err != nil {
+		return nil, err
+	}
+
+	return d.unmarshalItemType(itemDB), nil
 }

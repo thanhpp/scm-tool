@@ -10,6 +10,7 @@ type App struct {
 	ImportTicketHandler ImportTicketHandler
 	SupplierHandler     SupplierHanlder
 	StorageHandler      StorageHandler
+	ItemHandler         ItemHandler
 }
 
 func New(
@@ -34,6 +35,11 @@ func New(
 		StorageHandler: StorageHandler{
 			fac:         fac,
 			storageRepo: storageRepo,
+		},
+		ItemHandler: ItemHandler{
+			fac:      fac,
+			itemRepo: itemRepo,
+			fileUtil: fileUtil,
 		},
 	}
 }

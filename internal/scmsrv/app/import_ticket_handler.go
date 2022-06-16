@@ -28,7 +28,6 @@ func (h ImportTicketHandler) Create(
 	sendTime, receiveTime time.Time, fee float64,
 	details []entity.ImportTicketDetails,
 	billImages, productImages []*multipart.FileHeader,
-	// * images
 ) (*entity.ImportTicket, error) {
 	if err := h.imagesTypeCheck(billImages); err != nil {
 		return nil, err

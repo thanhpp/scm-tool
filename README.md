@@ -13,7 +13,7 @@
   - [ ] Sửa kho
   - [ ] Lấy thông tin kho
 - [ ] Quản lý sản phẩm
-  - [ ] Tạo sản phẩm
+  - [x] Tạo sản phẩm
   - [ ] Sửa sản phẩm
   - [ ] Lấy thông tin sản phẩm
 - [ ] Quản lý nhập xuất
@@ -33,3 +33,7 @@
   - [ ] Phân quyền
 - [ ] Tạo số seri -> blockchain
 - [ ] Tra cứu thông tin theo số seri
+
+## Side request
+
+- [ ] gin OK resp

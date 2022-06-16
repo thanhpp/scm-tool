@@ -11,6 +11,7 @@ type ItemUpdateFn func(ctx context.Context, item *Item) (*Item, error)
 type ItemRepo interface {
 	// Read
 	GetBySKU(ctx context.Context, sku string) (*entity.Item, error)
+	GetItemType(ctx context.Context, itemTypeID int) (*entity.ItemType, error)
 
 	// Write
 	Create(ctx context.Context, item entity.Item) error
