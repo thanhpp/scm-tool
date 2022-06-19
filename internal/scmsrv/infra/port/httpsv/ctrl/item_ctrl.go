@@ -20,7 +20,7 @@ func NewItemCtrl(itemHandler app.ItemHandler) *ItemCtrl {
 	}
 }
 
-func (ctrl ItemCtrl) Create(c *gin.Context) {
+func (ctrl ItemCtrl) CreateItem(c *gin.Context) {
 	req := new(dto.CreateItemReq)
 
 	if err := c.ShouldBind(req); err != nil {
@@ -36,7 +36,7 @@ func (ctrl ItemCtrl) Create(c *gin.Context) {
 
 	images := form.File["images"]
 
-	newItem, err := ctrl.itemHandler.Create(
+	newItem, err := ctrl.itemHandler.CreateItem(
 		c.Request.Context(), req.SKU, req.Name, req.Desc,
 		req.ItemTypeID, images,
 	)
@@ -46,4 +46,25 @@ func (ctrl ItemCtrl) Create(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, newItem)
+}
+
+func (ctrl ItemCtrl) CreateItemType(c *gin.Context) {
+	req := new(dto.CreateItemTypeReq)
+
+	if err := c.ShouldBind(req); err != nil {
+		ginutil.RespErr(c, http.StatusNotAcceptable, err, ginutil.WithData(req))
+		return
+	}
+
+	newItemType, err := ctrl.itemHandler.CreateItemType(c.Request.Context(), req.Name, req.Desc)
+	if err != nil {
+		ginutil.RespErr(c, http.StatusInternalServerError, err)
+		return
+	}
+
+	resp := new(dto.ItemTypeInfoResp)
+	resp.Set200OK()
+	resp.SetData(newItemType)
+
+	c.JSON(http.StatusOK, resp)
 }

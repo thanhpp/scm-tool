@@ -32,5 +32,9 @@ func (ctrl SupplierCtrl) Create(c *gin.Context) {
 		return
 	}
 
+	resp := new(dto.SupplierInfoResp)
+	resp.Set200OK()
+	resp.SetData(newSupplier)
+
 	c.JSON(http.StatusOK, newSupplier)
 }

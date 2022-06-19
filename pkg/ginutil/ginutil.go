@@ -1,6 +1,10 @@
 package ginutil
 
-import "github.com/gin-gonic/gin"
+import (
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+)
 
 type RespTemplate struct {
 	RespTemplateError
@@ -24,6 +28,11 @@ func (r *RespTemplateError) SetCode(code int) {
 
 func (r *RespTemplateError) SetMessage(msg string) {
 	r.Error.Message = msg
+}
+
+func (r *RespTemplateError) Set200OK() {
+	r.Error.Code = http.StatusOK
+	r.Error.Message = "OK"
 }
 
 func RespErr(c *gin.Context, httpCode int, err error, opts ...RespErrorOpt) {

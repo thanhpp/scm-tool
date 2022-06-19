@@ -14,14 +14,15 @@
   - [ ] Lấy thông tin kho
 - [ ] Quản lý sản phẩm
   - [x] Tạo sản phẩm
+  - [x] Tao kieu san pham
   - [ ] Sửa sản phẩm
   - [ ] Lấy thông tin sản phẩm
 - [ ] Quản lý nhập xuất
-  - [x] Tạo phiếu nhập
+  - [x] **Tạo phiếu nhập**
   - [ ] Tạo số seri
   - [ ] Truy xuất phiếu nhập
   - [ ] Lấy thông tin phiếu nhập
-  - [ ] Tạo phiếu xuất
+  - [ ] **Tạo phiếu xuất**
   - [ ] Lấy thông tin phiếu xuất
   - [x] Tạo nhà cung cấp
   - [ ] Sửa thông tin nhà cung cấp 

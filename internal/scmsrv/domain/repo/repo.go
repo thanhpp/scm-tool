@@ -14,9 +14,11 @@ type ItemRepo interface {
 	GetItemType(ctx context.Context, itemTypeID int) (*entity.ItemType, error)
 
 	// Write
-	Create(ctx context.Context, item entity.Item) error
+	CreateItem(ctx context.Context, item entity.Item) error
 	// Update(ctx context.Context, sku string, fn ItemUpdateFn) error
 	// Delete(ctx context.Context, sku string) error
+
+	CreateItemType(ctx context.Context, itemType *entity.ItemType) error
 }
 
 type ImportTicketRepo interface {

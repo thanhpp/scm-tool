@@ -95,6 +95,20 @@ func (h ImportTicketHandler) CreateImportDetails(
 	return detail, nil
 }
 
+func (h ImportTicketHandler) GenSerials(
+	ctx context.Context, importTicketID int,
+) ([]entity.Serial, error) {
+	// check import ticket
+
+	// for each item - check if serials exist
+
+	// create serials
+
+	// save serials
+
+	return nil, nil
+}
+
 var (
 	imageTypes = []string{".jpg", ".jpeg", ".png"}
 )

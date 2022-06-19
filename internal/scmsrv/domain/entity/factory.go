@@ -15,6 +15,7 @@ type Factory interface {
 	NewSupplier(name, phone, email string) (*Supplier, error)
 	NewStorage(name, desc, location string) (*Storage, error)
 	NewItem(sku, name, desc string, itemType ItemType, imagePaths []string) (*Item, error)
+	NewItemType(name, desc string) (*ItemType, error)
 }
 
 type factoryImpl struct{}
@@ -124,4 +125,15 @@ func (factoryImpl) NewItem(sku, name, desc string, itemType ItemType, imagePaths
 	newItem.Images = imagePaths
 
 	return newItem, nil
+}
+
+func (factoryImpl) NewItemType(name, desc string) (*ItemType, error) {
+	if len(name) == 0 {
+		return nil, errors.New("create item type: empty name")
+	}
+
+	return &ItemType{
+		Name: name,
+		Desc: desc,
+	}, nil
 }

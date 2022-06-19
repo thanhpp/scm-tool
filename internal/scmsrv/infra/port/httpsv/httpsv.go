@@ -88,7 +88,12 @@ func (s HTTPServer) newRouter() *gin.Engine {
 
 	itemGr := r.Group("item")
 	{
-		itemGr.POST("", itemCtrl.Create)
+		itemGr.POST("", itemCtrl.CreateItem)
+	}
+
+	itemTypeGr := r.Group("item-type")
+	{
+		itemTypeGr.POST("", itemCtrl.CreateItemType)
 	}
 	return r
 }

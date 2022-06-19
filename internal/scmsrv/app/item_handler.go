@@ -15,7 +15,7 @@ type ItemHandler struct {
 	fileUtil fileutil.FileUtil
 }
 
-func (h ItemHandler) Create(
+func (h ItemHandler) CreateItem(
 	ctx context.Context,
 	sku, name, desc string, itemTypeID int,
 	images []*multipart.FileHeader,
@@ -37,4 +37,20 @@ func (h ItemHandler) Create(
 	}
 
 	return newItem, nil
+}
+
+func (h ItemHandler) CreateItemType(
+	ctx context.Context,
+	name, desc string,
+) (*entity.ItemType, error) {
+	newItemType, err := h.fac.NewItemType(name, desc)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := h.itemRepo.CreateItemType(ctx, newItemType); err != nil {
+		return nil, err
+	}
+
+	return newItemType, nil
 }

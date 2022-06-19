@@ -32,5 +32,9 @@ func (ctrl StorageCtrl) Create(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, newStorage)
+	resp := new(dto.StorageInfoResp)
+	resp.Set200OK()
+	resp.SetData(newStorage)
+
+	c.JSON(http.StatusOK, resp)
 }

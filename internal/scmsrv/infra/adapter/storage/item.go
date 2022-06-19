@@ -81,7 +81,7 @@ func (d ItemDB) GetBySKU(ctx context.Context, sku string) (*entity.Item, error) 
 }
 
 // ? create serial and images -> returns if error (conflict)
-func (d ItemDB) Create(ctx context.Context, item entity.Item) error {
+func (d ItemDB) CreateItem(ctx context.Context, item entity.Item) error {
 	return d.gdb.WithContext(ctx).Model(&repo.Item{}).Create(d.marshalItem(item)).Error
 }
 
@@ -96,6 +96,13 @@ func (d ItemDB) unmarshalItemType(in *repo.ItemType) *entity.ItemType {
 	}
 }
 
+func (ItemDB) marshalItemType(in *entity.ItemType) *repo.ItemType {
+	return &repo.ItemType{
+		Name: in.Name,
+		Desc: in.Desc,
+	}
+}
+
 func (d ItemDB) GetItemType(ctx context.Context, itemTypeID int) (*entity.ItemType, error) {
 	itemDB := new(repo.ItemType)
 
@@ -104,4 +111,16 @@ func (d ItemDB) GetItemType(ctx context.Context, itemTypeID int) (*entity.ItemTy
 	}
 
 	return d.unmarshalItemType(itemDB), nil
+}
+
+func (d ItemDB) CreateItemType(ctx context.Context, itemType *entity.ItemType) error {
+	itemTypeDB := d.marshalItemType(itemType)
+
+	if err := d.gdb.WithContext(ctx).Create(itemTypeDB).Error; err != nil {
+		return err
+	}
+
+	itemType.ID = itemTypeDB.ID
+
+	return nil
 }
