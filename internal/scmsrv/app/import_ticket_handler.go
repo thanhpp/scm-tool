@@ -19,6 +19,7 @@ type ImportTicketHandler struct {
 	supplierRepo         repo.SupplierRepo
 	storageRepo          repo.StorageRepo
 	importTicketRepo     repo.ImportTicketRepo
+	serialRepo           repo.SerialRepo
 	fac                  entity.Factory
 	fileUtil             fileutil.FileUtil
 }
@@ -97,16 +98,40 @@ func (h ImportTicketHandler) CreateImportDetails(
 
 func (h ImportTicketHandler) GenSerials(
 	ctx context.Context, importTicketID int,
-) ([]entity.Serial, error) {
+) ([]*entity.Serial, error) {
 	// check import ticket
+	importTicket, err := h.importTicketRepo.Get(ctx, importTicketID)
+	if err != nil {
+		return nil, err
+	}
+	// for each item details -
+	var serials []*entity.Serial
+	for i := range importTicket.Details {
+		//  check if serials exist
+		n, err := h.serialRepo.Count(ctx, importTicketID, importTicket.Details[i].Item.SKU)
+		if err != nil {
+			return nil, err
+		}
+		if n != 0 {
+			return nil, errors.New("serial exists")
+		}
 
-	// for each item - check if serials exist
+		// create serials
+		detailSerials, err := h.fac.
+			NewSerials(importTicket, &importTicket.Details[i].Item, importTicket.Details[i].BuyQuantity)
+		if err != nil {
+			return nil, err
+		}
 
-	// create serials
+		serials = append(serials, detailSerials...)
+	}
 
 	// save serials
+	if err := h.serialRepo.CreateBatch(ctx, serials); err != nil {
+		return nil, err
+	}
 
-	return nil, nil
+	return serials, nil
 }
 
 var (

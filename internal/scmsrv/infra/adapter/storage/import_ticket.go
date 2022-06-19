@@ -68,6 +68,40 @@ func (d ImportTicketDB) marshalImportTicket(in entity.ImportTicket) *repo.Import
 	return out
 }
 
+func (ImportTicketDB) unmarshal(in *repo.ImportTicket) *entity.ImportTicket {
+	out := &entity.ImportTicket{
+		ID:           in.ID,
+		FromSupplier: *unmarshalSupplier(&in.FromSupplier),
+		ToStorage:    *unmarshalStorage(&in.ToStorage),
+		Status:       in.Status,
+		SendTime:     in.SendTime,
+		ReceiveTime:  in.ReceiveTime,
+		Fee:          in.Fee,
+	}
+
+	out.BillImagePaths = make([]string, 0, len(in.BillImages))
+	for i := range in.BillImages {
+		out.BillImagePaths = append(out.BillImagePaths, in.BillImages[i].BillImagePath)
+	}
+
+	out.ProductImagePaths = make([]string, 0, len(in.ProductImages))
+	for i := range in.ProductImages {
+		out.ProductImagePaths = append(out.ProductImagePaths, in.ProductImages[i].ProductImagePath)
+	}
+
+	out.Details = make([]entity.ImportTicketDetails, 0, len(in.Details))
+	for i := range in.Details {
+		out.Details = append(out.Details, entity.ImportTicketDetails{
+			Item:            *unmarshalItem(in.Details[i].Item),
+			BuyQuantity:     in.Details[i].BuyQuantity,
+			ReceiveQuantity: in.Details[i].ReceiveQuantity,
+			BuyPrice:        in.Details[i].BuyPrice,
+		})
+	}
+
+	return out
+}
+
 func (d ImportTicketDB) Create(ctx context.Context, in *entity.ImportTicket) error {
 	return d.gdb.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
 		if in.ID == 0 {
@@ -111,4 +145,19 @@ func (d ImportTicketDB) Create(ctx context.Context, in *entity.ImportTicket) err
 
 		return nil
 	})
+}
+
+func (d ImportTicketDB) Get(ctx context.Context, importTicketID int) (*entity.ImportTicket, error) {
+	importTicketDB := new(repo.ImportTicket)
+
+	if err := d.gdb.WithContext(ctx).Preload(clause.Associations).Where("id = ?", importTicketID).
+		Take(importTicketDB).Error; err != nil {
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	importTicket := d.unmarshal(importTicketDB)
+
+	return importTicket, nil
 }

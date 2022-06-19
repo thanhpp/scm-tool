@@ -9,7 +9,6 @@ func marshalSerial(in entity.Serial) repo.Serial {
 	return repo.Serial{
 		Seri:           in.Seri,
 		ItemSKU:        in.Item.SKU,
-		StorageID:      in.Storage.ID,
 		ImportTicketID: in.ImportTicket.ID,
 	}
 }

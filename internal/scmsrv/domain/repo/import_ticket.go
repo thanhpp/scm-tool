@@ -45,4 +45,6 @@ type ImportTicketDetails struct {
 	BuyQuantity     int     `gorm:"column:buy_quantity;type:int"`
 	ReceiveQuantity int     `gorm:"column:receive_quantity;type:int"`
 	BuyPrice        float64 `gorm:"buy_price;type:float8"`
+
+	Item Item `gorm:"foreignKey:ItemSKU; references:SKU"`
 }

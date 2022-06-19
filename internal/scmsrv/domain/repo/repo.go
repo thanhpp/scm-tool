@@ -24,6 +24,9 @@ type ItemRepo interface {
 type ImportTicketRepo interface {
 	// Write
 	Create(ctx context.Context, importTicket *entity.ImportTicket) error
+
+	// Read
+	Get(ctx context.Context, importTicketID int) (*entity.ImportTicket, error)
 }
 
 type SupplierRepo interface {
@@ -40,4 +43,12 @@ type StorageRepo interface {
 
 	// Write
 	Create(ctx context.Context, storage *entity.Storage) error
+}
+
+type SerialRepo interface {
+	// Read
+	Count(ctx context.Context, importTicketID int, itemSKU string) (int, error)
+
+	// Write
+	CreateBatch(ctx context.Context, serials []*entity.Serial) error
 }

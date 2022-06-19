@@ -1,9 +1,12 @@
 package entity
 
 import (
+	"fmt"
+	"strings"
 	"time"
 
 	"github.com/pkg/errors"
+	"github.com/rs/xid"
 )
 
 type Factory interface {
@@ -16,6 +19,7 @@ type Factory interface {
 	NewStorage(name, desc, location string) (*Storage, error)
 	NewItem(sku, name, desc string, itemType ItemType, imagePaths []string) (*Item, error)
 	NewItemType(name, desc string) (*ItemType, error)
+	NewSerials(importTicket *ImportTicket, item *Item, num int) ([]*Serial, error)
 }
 
 type factoryImpl struct{}
@@ -136,4 +140,40 @@ func (factoryImpl) NewItemType(name, desc string) (*ItemType, error) {
 		Name: name,
 		Desc: desc,
 	}, nil
+}
+
+func (factoryImpl) NewSerials(importTicket *ImportTicket, item *Item, num int) ([]*Serial, error) {
+	if importTicket == nil {
+		return nil, errors.New("create serials: empty import ticket")
+	}
+
+	if item == nil {
+		return nil, errors.New("create serials: empty item")
+	}
+
+	if num == 0 {
+		return nil, errors.New("create serials: zero num")
+	}
+
+	serials := make([]*Serial, num)
+	for i := range serials {
+		serials[i] = &Serial{
+			Seri:         stringToInt(xid.New().String()),
+			ImportTicket: importTicket,
+			Item:         item,
+		}
+	}
+
+	return serials, nil
+}
+
+func stringToInt(in string) string {
+	b := new(strings.Builder)
+	b.Grow(len(in))
+
+	for i := range in {
+		b.WriteString(fmt.Sprintf("%d", in[i]))
+	}
+
+	return b.String()
 }

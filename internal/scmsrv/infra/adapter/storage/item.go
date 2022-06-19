@@ -45,7 +45,7 @@ func (d ItemDB) marshalItem(in entity.Item) *repo.Item {
 	return item
 }
 
-func (d ItemDB) unmarshalItem(in repo.Item) *entity.Item {
+func unmarshalItem(in repo.Item) *entity.Item {
 	item := &entity.Item{
 		SKU:       in.SKU,
 		Name:      in.Name,
@@ -77,7 +77,7 @@ func (d ItemDB) GetBySKU(ctx context.Context, sku string) (*entity.Item, error) 
 		return nil, err
 	}
 
-	return d.unmarshalItem(*itemDB), nil
+	return unmarshalItem(*itemDB), nil
 }
 
 // ? create serial and images -> returns if error (conflict)

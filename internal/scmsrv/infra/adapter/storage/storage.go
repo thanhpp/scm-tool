@@ -33,7 +33,7 @@ func (s StorageDB) marshal(in *entity.Storage) *repo.Storage {
 	return storage
 }
 
-func (StorageDB) unmarshal(in *repo.Storage) *entity.Storage {
+func unmarshalStorage(in *repo.Storage) *entity.Storage {
 	storage := &entity.Storage{
 		ID:       in.ID,
 		Name:     in.Name,
@@ -57,7 +57,7 @@ func (s StorageDB) Get(ctx context.Context, id int) (*entity.Storage, error) {
 		return nil, err
 	}
 
-	return s.unmarshal(storageDB), nil
+	return unmarshalStorage(storageDB), nil
 }
 
 func (s StorageDB) Create(ctx context.Context, storage *entity.Storage) error {
