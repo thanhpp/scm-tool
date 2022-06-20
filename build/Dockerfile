@@ -1,4 +1,4 @@
-FROM golang:1.18-alpine3.16
+FROM golang:1.18-alpine3.16 AS builder
 
 # set ENV variables
 ENV GO111MODULE=on \
@@ -9,7 +9,6 @@ WORKDIR /go/src/github.com/thanhpp/scm
 
 COPY pkg pkg/
 COPY cmd cmd/
-COPY config config/
 COPY internal internal/
 COPY go.mod go.mod
 
@@ -19,14 +18,14 @@ WORKDIR /go/src/github.com/thanhpp/scm/cmd/scmsrv
 
 RUN go build -v -o scmsrv
 
+
 # ----------------------------------------------------------------------------
 
-FROM alpine:3.16
+FROM alpine
 
-WORKDIR /app
 COPY --from=builder ["/go/src/github.com/thanhpp/scm/cmd/scmsrv/scmsrv", "scmsrv"]
-COPY --from=builder ["/go/src/github.com/thanhpp/scm/cmd/config.yml", "config.yml"]
+COPY --from=builder ["/go/src/github.com/thanhpp/scm/cmd/scmsrv/config.yml", "config.yml"]
 
 EXPOSE 10000
 
-CMD /app/scmsrv
+CMD scmsrv
