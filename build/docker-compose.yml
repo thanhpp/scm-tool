@@ -8,8 +8,8 @@ services:
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=scm
-    ports:
-      - 5432:5432
+    networks:
+      - intranet
     volumes:
       - ./data/pgdata:/var/lib/postgresql/data
 
@@ -25,3 +25,6 @@ services:
           max_attempts: 5
     ports:
       - 10000:10000
+
+networks:
+  intranet:
