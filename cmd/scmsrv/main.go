@@ -33,6 +33,7 @@ func main() {
 		log.Fatal("set log err", err)
 	}
 
+	logger.Debugf("dsn %s", mainCfg.Database.DSN())
 	gdb, err := newGormDB(mainCfg.Database.DSN())
 	if err != nil {
 		panic(err)

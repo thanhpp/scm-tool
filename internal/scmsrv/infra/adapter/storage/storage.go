@@ -25,11 +25,6 @@ func (s StorageDB) marshal(in *entity.Storage) *repo.Storage {
 		Location: in.Location,
 	} // ! Desc
 
-	storage.Serials = make([]repo.Serial, 0, len(in.Serials))
-	for i := range in.Serials {
-		storage.Serials = append(storage.Serials, marshalSerial(in.Serials[i]))
-	}
-
 	return storage
 }
 
@@ -39,13 +34,6 @@ func unmarshalStorage(in *repo.Storage) *entity.Storage {
 		Name:     in.Name,
 		Location: in.Location,
 		// ! Desc
-	}
-
-	storage.Serials = make([]entity.Serial, 0, len(in.Serials))
-	for i := range in.Serials {
-		storage.Serials = append(storage.Serials, unmarshalSeri(
-			in.Serials[i],
-		))
 	}
 
 	return storage

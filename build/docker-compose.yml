@@ -5,13 +5,11 @@ services:
     image: postgres:13
     restart: always
     environment:
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=scm
+      - POSTGRES_USER=scmuser
+      - POSTGRES_PASSWORD=scmpassword
+      - POSTGRES_DB=scmdb
     networks:
       - intranet
-    volumes:
-      - ./data/pgdata:/var/lib/postgresql/data
 
   scmsrv:
     build:
@@ -25,6 +23,8 @@ services:
           max_attempts: 5
     ports:
       - 10000:10000
+    networks:
+      - intranet
 
 networks:
   intranet:

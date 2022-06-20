@@ -1,5 +1,5 @@
 http_server:
-  host: 127.0.0.1
+  host: 0.0.0.0
   port: 10000
 
 logger:
@@ -8,8 +8,8 @@ logger:
   level: debug
 
 database:
-  host: 127.0.0.1
+  host: pgdatabase
   port: 5432
-  user: user
-  pass: password
-  database: scm
+  user: scmuser
+  pass: scmpassword
+  database: scmdb
