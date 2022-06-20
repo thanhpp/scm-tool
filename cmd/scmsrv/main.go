@@ -43,7 +43,8 @@ func main() {
 	scmApp := app.New(
 		entity.NewFactory(),
 		db.ItemDB(), db.SupplierDB(), db.StorageDB(),
-		db.ImportTicketDB(), fileutil.NewFileUtil(),
+		db.ImportTicketDB(), db.SerialDB(),
+		fileutil.NewFileUtil(),
 	)
 
 	httpServer := httpsv.NewHTTPServer(mainCfg.HTTPServer, &scmApp)

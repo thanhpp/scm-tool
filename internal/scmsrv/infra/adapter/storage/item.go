@@ -37,7 +37,6 @@ func (d ItemDB) marshalItem(in entity.Item) *repo.Item {
 		item.Serials = append(item.Serials, repo.Serial{
 			Seri:           in.Serials[i].Seri,
 			ItemSKU:        in.SKU,
-			StorageID:      item.Serials[i].StorageID,
 			ImportTicketID: item.Serials[i].ImportTicketID,
 		})
 	}

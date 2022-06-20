@@ -10,3 +10,16 @@ services:
       - POSTGRES_DB=scm
     ports:
       - 5432:5432
+
+  scmsrv:
+    build:
+      context: ..
+      dockerfile: ./build/Dockerfile
+    depends_on:
+      - pgdatabase
+    deploy:
+      restart_policy:
+          condition: on-failure
+          max_attempts: 5
+    ports:
+      - 10000:10000

@@ -7,6 +7,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
+	"github.com/thanhpp/scm/internal/scmsrv/domain/entity"
+	"github.com/thanhpp/scm/pkg/ginutil"
 )
 
 type CreateImportTicketReq struct {
@@ -46,4 +48,39 @@ type CreateImportTicketReqDetails struct {
 	ItemSKU     string  `json:"item_sku" form:"item_sku"`
 	BuyQuantity int     `json:"buy_quantity" form:"buy_quantity"`
 	BuyPrice    float64 `json:"buy_price" form:"buy_price"`
+}
+
+type GenSerialReq struct {
+	ImportTicketID int `json:"import_ticket_id"`
+}
+
+type GenSerialRespData struct {
+	ImportTicketID int      `json:"import_ticket_id"`
+	ItemSKU        string   `json:"item_sku"`
+	Serials        []string `json:"serials"`
+}
+
+type GenSerialResp struct {
+	ginutil.RespTemplateError
+	Data []*GenSerialRespData `json:"data"`
+}
+
+func (resp *GenSerialResp) SetData(serials []*entity.Serial) {
+	m := make(map[string]*GenSerialRespData) // itemSKU - GenSerialRespData
+
+	for i := range serials {
+		if data, ok := m[serials[i].Item.SKU]; ok {
+			data.Serials = append(data.Serials, serials[i].Seri)
+			continue
+		}
+
+		data := &GenSerialRespData{
+			ImportTicketID: serials[i].ImportTicket.ID,
+			ItemSKU:        serials[i].Item.SKU,
+			Serials:        []string{serials[i].Seri},
+		}
+		m[serials[i].Item.SKU] = data
+
+		resp.Data = append(resp.Data, data)
+	}
 }

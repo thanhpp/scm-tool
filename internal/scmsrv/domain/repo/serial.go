@@ -7,7 +7,6 @@ import (
 type Serial struct {
 	Seri           string `gorm:"column:seri;type:text;primaryKey"`
 	ItemSKU        string `gorm:"column:item_sku;type:text;primaryKey"`
-	StorageID      int    `gorm:"column:storage_id;type:int"`
 	ImportTicketID int    `gorm:"column:import_ticket_id;type:int"`
 
 	Item         Item         `gorm:"foreignKey:ItemSKU;references:SKU"`

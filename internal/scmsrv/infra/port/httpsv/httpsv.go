@@ -74,6 +74,7 @@ func (s HTTPServer) newRouter() *gin.Engine {
 	importTicketGr := r.Group("import_ticket")
 	{
 		importTicketGr.POST("", importTicketCtrl.Create)
+		importTicketGr.POST("serials", importTicketCtrl.GenSerial)
 	}
 
 	supplierGr := r.Group("supplier")

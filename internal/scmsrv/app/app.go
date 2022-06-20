@@ -16,7 +16,7 @@ type App struct {
 func New(
 	fac entity.Factory,
 	itemRepo repo.ItemRepo, supplierRepo repo.SupplierRepo, storageRepo repo.StorageRepo,
-	importTicketRepo repo.ImportTicketRepo,
+	importTicketRepo repo.ImportTicketRepo, serialRepo repo.SerialRepo,
 	fileUtil fileutil.FileUtil,
 ) App {
 	return App{
@@ -25,6 +25,7 @@ func New(
 			supplierRepo:     supplierRepo,
 			storageRepo:      storageRepo,
 			importTicketRepo: importTicketRepo,
+			serialRepo:       serialRepo,
 			fac:              fac,
 			fileUtil:         fileUtil,
 		},

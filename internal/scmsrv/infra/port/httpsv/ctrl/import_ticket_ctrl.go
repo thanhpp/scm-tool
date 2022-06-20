@@ -61,3 +61,24 @@ func (ctrl ImportTicketCtrl) Create(c *gin.Context) {
 
 	c.JSON(http.StatusOK, importTicket)
 }
+
+func (ctrl ImportTicketCtrl) GenSerial(c *gin.Context) {
+	req := new(dto.GenSerialReq)
+
+	if err := c.ShouldBind(req); err != nil {
+		ginutil.RespErr(c, http.StatusNotAcceptable, err, ginutil.WithData(req))
+		return
+	}
+
+	serials, err := ctrl.importTickerHanlder.GenSerials(c.Request.Context(), req.ImportTicketID)
+	if err != nil {
+		ginutil.RespErr(c, http.StatusInternalServerError, err, ginutil.WithData(req))
+		return
+	}
+
+	resp := new(dto.GenSerialResp)
+	resp.Set200OK()
+	resp.SetData(serials)
+
+	c.JSON(http.StatusOK, resp)
+}
