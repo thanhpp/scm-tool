@@ -12,6 +12,7 @@ type CreateStorageReq struct {
 }
 
 type StorageInfoRespData struct {
+	ID       int    `json:"id"`
 	Name     string `json:"name"`
 	Location string `json:"location"`
 	Desc     string `json:"desc"`
@@ -24,6 +25,7 @@ type StorageInfoResp struct {
 
 func (resp *StorageInfoResp) SetData(stg *entity.Storage) {
 	resp.Data = StorageInfoRespData{
+		ID:       stg.ID,
 		Name:     stg.Name,
 		Location: stg.Location,
 		Desc:     stg.Desc,

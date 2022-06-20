@@ -12,6 +12,7 @@ type CreateSupplierReq struct {
 }
 
 type SupplierInfoRespData struct {
+	ID    int    `json:"id"`
 	Name  string `json:"name"`
 	Phone string `json:"phone"`
 	Email string `json:"email"`
@@ -24,6 +25,7 @@ type SupplierInfoResp struct {
 
 func (resp *SupplierInfoResp) SetData(supplier *entity.Supplier) {
 	resp.Data = SupplierInfoRespData{
+		ID:    supplier.ID,
 		Name:  supplier.Name,
 		Phone: supplier.Phone,
 		Email: supplier.Email,
