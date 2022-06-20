@@ -1,0 +1,37 @@
+run:
+  deadline: 5m
+
+linters:
+  enable-all: true
+  disable:
+    - maligned
+    - interfacer
+    - scopelint
+    - gomoddirectives
+    - nolintlint
+    - exhaustivestruct
+    - gochecknoinits
+    - varnamelen
+    - ireturn
+    - gochecknoglobals
+    - goerr113
+    - golint
+    - tagliatelle
+    - wrapcheck
+    - gomnd
+    - paralleltest
+    - wsl
+    - exhaustruct
+    - nonamedreturns
+    - gofumpt
+    - nlreturn
+    - cyclop
+    - exhaustruct
+    - godox
+
+issues:
+  exclude-rules:
+    - linters:
+        - funlen
+        - gosec
+      path: _test\.go

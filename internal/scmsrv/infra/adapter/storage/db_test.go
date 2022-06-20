@@ -22,7 +22,6 @@ func newPostgresDB() (*gorm.DB, error) {
 		dbname   = "scm"
 		sslmode  = "disable"
 	)
-	const dsn = "host=localhost port=5432 user=user password=password dbname=scm sslmode=disable"
 
 	return gorm.Open(
 		postgres.Open(

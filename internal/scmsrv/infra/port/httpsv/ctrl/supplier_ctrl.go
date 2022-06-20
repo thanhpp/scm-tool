@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/thanhpp/scm/internal/scmsrv/app"
 	"github.com/thanhpp/scm/internal/scmsrv/infra/port/httpsv/dto"
+	"github.com/thanhpp/scm/pkg/ginutil"
 )
 
 type SupplierCtrl struct {
@@ -22,13 +23,13 @@ func (ctrl SupplierCtrl) Create(c *gin.Context) {
 	req := new(dto.CreateSupplierReq)
 
 	if err := c.ShouldBind(req); err != nil {
-		c.AbortWithError(http.StatusNotAcceptable, err)
+		ginutil.RespErr(c, http.StatusNotAcceptable, err, ginutil.WithData(req))
 		return
 	}
 
 	newSupplier, err := ctrl.supplierHandler.Create(c.Request.Context(), req.Name, req.Email, req.Phone)
 	if err != nil {
-		c.AbortWithError(http.StatusInternalServerError, err)
+		ginutil.RespErr(c, http.StatusInternalServerError, err, ginutil.WithData(req))
 		return
 	}
 

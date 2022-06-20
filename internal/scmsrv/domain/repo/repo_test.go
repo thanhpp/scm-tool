@@ -57,7 +57,7 @@ func TestDBMigration(t *testing.T) {
 		}
 	)
 
-	db.Migrator().DropTable(tables...)
+	_ = db.Migrator().DropTable(tables...)
 
 	if err := db.AutoMigrate(tables...); err != nil {
 		t.Error(err)
@@ -65,5 +65,5 @@ func TestDBMigration(t *testing.T) {
 		return
 	}
 
-	db.Migrator().DropTable(tables...)
+	_ = db.Migrator().DropTable(tables...)
 }
