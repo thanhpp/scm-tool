@@ -12,11 +12,14 @@
   - [x] Thêm kho
   - [ ] Sửa kho
   - [ ] Lấy thông tin kho
+  - [x] Lấy danh sách kho
 - [ ] Quản lý sản phẩm
   - [x] Tạo sản phẩm
+  - [ ] Lưu ảnh sản phẩm
   - [x] Tao kieu san pham
   - [ ] Sửa sản phẩm
   - [ ] Lấy thông tin sản phẩm
+  - [ ] Lấy danh sách sản phẩm
 - [ ] Quản lý nhập xuất
   - [x] **Tạo phiếu nhập**
   - [ ] Tạo số seri
@@ -25,6 +28,7 @@
   - [ ] **Tạo phiếu xuất**
   - [ ] Lấy thông tin phiếu xuất
   - [x] Tạo nhà cung cấp
+  - [x] Lấy danh sách nhà cung cấp
   - [ ] Sửa thông tin nhà cung cấp 
 - [ ] Xác thực/Phân quyền
   - [ ] Đăng nhập

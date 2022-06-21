@@ -2,8 +2,7 @@
 	"info": {
 		"_postman_id": "7074f53c-e623-4ce9-837e-3a625925456a",
 		"name": "scm",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "10191781"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
@@ -45,6 +44,32 @@
 					"request": {
 						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"name\",\n    \"phone\": \"phone\",\n    \"email\": \"email\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base}}/supplier",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"supplier"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get",
+					"request": {
+						"method": "GET",
+						"header": [],
 						"url": {
 							"raw": "{{base}}/supplier",
 							"host": [
@@ -66,6 +91,32 @@
 					"name": "New Request",
 					"request": {
 						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"Name\": \"test\",\n    \"Desc\": \"\",\n    \"Location\": \"---\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base}}/storage",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"storage"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get",
+					"request": {
+						"method": "GET",
 						"header": [],
 						"url": {
 							"raw": "{{base}}/storage",
