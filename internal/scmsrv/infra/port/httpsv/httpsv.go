@@ -65,6 +65,9 @@ func (s HTTPServer) Daemon() booting.Daemon {
 
 func (s HTTPServer) newRouter() *gin.Engine {
 	r := gin.New()
+	r.Use(gin.Logger())
+	r.Use(gin.Recovery())
+
 	// init
 	importTicketCtrl := ctrl.NewImportTicket(s.app.ImportTicketHandler)
 	supplierCtrl := ctrl.NewSupplier(s.app.SupplierHandler)
