@@ -5,26 +5,33 @@ services:
     image: postgres:13
     restart: always
     environment:
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=scm
+      - POSTGRES_USER=scmuser
+      - POSTGRES_PASSWORD=scmpassword
+      - POSTGRES_DB=scmdb
+    healthcheck:
+      test: ["CMD", "psql", "-U", "scmuser", "-d", "scmdb", "-c", "SELECT 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
     networks:
       - intranet
-    volumes:
-      - ./data/pgdata:/var/lib/postgresql/data
 
   scmsrv:
     build:
       context: ..
       dockerfile: ./build/Dockerfile
     depends_on:
-      - pgdatabase
+      pgdatabase:
+        condition: service_healthy
     deploy:
       restart_policy:
           condition: on-failure
           max_attempts: 5
     ports:
       - 10000:10000
+    networks:
+      - intranet
 
 networks:
   intranet:

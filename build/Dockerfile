@@ -1,4 +1,4 @@
-FROM golang:1.18-alpine3.16 AS builder
+FROM golang:1.18-alpine AS builder
 
 # set ENV variables
 ENV GO111MODULE=on \
@@ -28,4 +28,4 @@ COPY --from=builder ["/go/src/github.com/thanhpp/scm/cmd/scmsrv/config.yml", "co
 
 EXPOSE 10000
 
-CMD scmsrv
+CMD ["./scmsrv"]

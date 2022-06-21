@@ -37,5 +37,5 @@ func (ctrl SupplierCtrl) Create(c *gin.Context) {
 	resp.Set200OK()
 	resp.SetData(newSupplier)
 
-	c.JSON(http.StatusOK, newSupplier)
+	c.JSON(http.StatusOK, resp)
 }
