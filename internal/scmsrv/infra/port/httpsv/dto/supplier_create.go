@@ -18,16 +18,31 @@ type SupplierInfoRespData struct {
 	Email string `json:"email"`
 }
 
+func (d *SupplierInfoRespData) set(supplier *entity.Supplier) {
+	d.ID = supplier.ID
+	d.Name = supplier.Name
+	d.Phone = supplier.Phone
+	d.Email = supplier.Email
+}
+
 type SupplierInfoResp struct {
 	ginutil.RespTemplateError
 	Data SupplierInfoRespData `json:"data"`
 }
 
 func (resp *SupplierInfoResp) SetData(supplier *entity.Supplier) {
-	resp.Data = SupplierInfoRespData{
-		ID:    supplier.ID,
-		Name:  supplier.Name,
-		Phone: supplier.Phone,
-		Email: supplier.Email,
+	resp.Data.set(supplier)
+}
+
+type GetListSupplierResp struct {
+	ginutil.RespTemplateError
+	Data []SupplierInfoRespData `json:"data"`
+}
+
+func (resp *GetListSupplierResp) SetData(suppliers []*entity.Supplier) {
+	resp.Data = make([]SupplierInfoRespData, len(suppliers))
+
+	for i := range suppliers {
+		resp.Data[i].set(suppliers[i])
 	}
 }

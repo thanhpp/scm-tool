@@ -39,6 +39,7 @@ func (ctrl StorageCtrl) Create(c *gin.Context) {
 
 	c.JSON(http.StatusOK, resp)
 }
+
 func (ctrl StorageCtrl) GetList(c *gin.Context) {
 	pagination := ginutil.NewPaginationQuery(c)
 

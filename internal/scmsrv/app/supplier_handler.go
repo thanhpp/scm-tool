@@ -24,3 +24,12 @@ func (h SupplierHanlder) Create(ctx context.Context, name, email, phone string) 
 
 	return newSupplier, nil
 }
+
+func (h SupplierHanlder) GetList(ctx context.Context, page, size int) ([]*entity.Supplier, error) {
+	offset, limit := genOffsetLimit(page, size)
+
+	return h.supplierRepo.GetList(ctx, repo.SupplierFiler{
+		Offset: offset,
+		Limit:  limit,
+	})
+}

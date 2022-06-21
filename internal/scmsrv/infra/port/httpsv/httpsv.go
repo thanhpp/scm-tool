@@ -79,11 +79,13 @@ func (s HTTPServer) newRouter() *gin.Engine {
 
 	supplierGr := r.Group("supplier")
 	{
+		supplierGr.GET("", storageCtrl.GetList)
 		supplierGr.POST("", supplierCtrl.Create)
 	}
 
 	storageGr := r.Group("storage")
 	{
+		storageGr.GET("", storageCtrl.GetList)
 		storageGr.POST("", storageCtrl.Create)
 	}
 

@@ -56,3 +56,21 @@ func (d SupplierDB) Create(ctx context.Context, supplier *entity.Supplier) error
 
 	return nil
 }
+
+func (d SupplierDB) GetList(ctx context.Context, filter repo.SupplierFiler) ([]*entity.Supplier, error) {
+	supplierDBs := make([]*repo.Supplier, filter.Limit)
+
+	if err := d.gdb.WithContext(ctx).Model(&repo.Supplier{}).
+		Limit(filter.Limit).Offset(filter.Offset).
+		Find(&supplierDBs).Error; err != nil {
+		return nil, err
+	}
+
+	suppliers := make([]*entity.Supplier, len(supplierDBs))
+
+	for i := range suppliers {
+		suppliers[i] = unmarshalSupplier(supplierDBs[i])
+	}
+
+	return suppliers, nil
+}

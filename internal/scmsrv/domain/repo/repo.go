@@ -32,9 +32,15 @@ type ImportTicketRepo interface {
 	Get(ctx context.Context, importTicketID int) (*entity.ImportTicket, error)
 }
 
+type SupplierFiler struct {
+	Limit  int
+	Offset int
+}
+
 type SupplierRepo interface {
 	// Read
 	Get(ctx context.Context, id int) (*entity.Supplier, error)
+	GetList(ctx context.Context, filter SupplierFiler) ([]*entity.Supplier, error)
 
 	// Write
 	Create(ctx context.Context, supplier *entity.Supplier) error

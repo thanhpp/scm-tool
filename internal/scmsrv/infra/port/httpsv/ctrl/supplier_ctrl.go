@@ -39,3 +39,19 @@ func (ctrl SupplierCtrl) Create(c *gin.Context) {
 
 	c.JSON(http.StatusOK, resp)
 }
+
+func (ctrl SupplierCtrl) GetList(c *gin.Context) {
+	pagination := ginutil.NewPaginationQuery(c)
+
+	suppliers, err := ctrl.supplierHandler.GetList(c, pagination.Page, pagination.Size)
+	if err != nil {
+		ginutil.RespErr(c, http.StatusInternalServerError, err)
+		return
+	}
+
+	resp := new(dto.GetListSupplierResp)
+	resp.Set200OK()
+	resp.SetData(suppliers)
+
+	c.JSON(http.StatusOK, resp)
+}
