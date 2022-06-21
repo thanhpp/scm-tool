@@ -39,3 +39,18 @@ func (ctrl StorageCtrl) Create(c *gin.Context) {
 
 	c.JSON(http.StatusOK, resp)
 }
+func (ctrl StorageCtrl) GetList(c *gin.Context) {
+	pagination := ginutil.NewPaginationQuery(c)
+
+	storages, err := ctrl.storageHandler.GetListStorages(c, pagination.Page, pagination.Size)
+	if err != nil {
+		ginutil.RespErr(c, http.StatusInternalServerError, err)
+		return
+	}
+
+	resp := new(dto.GetListStoragesResp)
+	resp.Set200OK()
+	resp.SetData(storages)
+
+	c.JSON(http.StatusOK, resp)
+}

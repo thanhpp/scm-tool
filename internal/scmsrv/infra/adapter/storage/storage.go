@@ -71,3 +71,20 @@ func (s StorageDB) Create(ctx context.Context, storage *entity.Storage) error {
 
 	return nil
 }
+
+func (s StorageDB) GetList(ctx context.Context, filter repo.StorageFiler) ([]*entity.Storage, error) {
+	storagesDB := make([]*repo.Storage, 0, filter.Limit)
+
+	if err := s.gdb.WithContext(ctx).Model(&repo.Storage{}).
+		Offset(filter.Offset).Limit(filter.Limit).
+		Find(&storagesDB).Error; err != nil {
+		return nil, err
+	}
+
+	storages := make([]*entity.Storage, len(storagesDB))
+	for i := range storages {
+		storages[i] = unmarshalStorage(storagesDB[i])
+	}
+
+	return storages, nil
+}

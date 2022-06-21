@@ -2,6 +2,7 @@ package ginutil
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -77,4 +78,40 @@ func WithData(in interface{}) RespErrorOpt {
 	return func(rt *RespTemplate) {
 		rt.SetData(in)
 	}
+}
+
+const (
+	MinSize     = 1
+	MaxSize     = 100
+	DefaultSize = 10
+	MinPage     = 1
+	DefaultPage = 1
+)
+
+type PaginationQuery struct {
+	Page int
+	Size int
+}
+
+func NewPaginationQuery(c *gin.Context) PaginationQuery {
+	var p PaginationQuery
+
+	strPage := c.Query("page")
+	strSize := c.Query("size")
+
+	iPage, err := strconv.Atoi(strPage)
+	if err == nil && p.Page >= MinPage {
+		p.Page = iPage
+	} else {
+		p.Page = DefaultPage
+	}
+
+	iSize, err := strconv.Atoi(strSize)
+	if err == nil && iSize >= MinPage && iSize <= MaxSize {
+		p.Size = iSize
+	} else {
+		p.Size = DefaultSize
+	}
+
+	return p
 }

@@ -24,3 +24,19 @@ func (h StorageHandler) Create(ctx context.Context, name, desc, location string)
 
 	return newStorage, nil
 }
+
+func (h StorageHandler) GetListStorages(ctx context.Context, page, size int) ([]*entity.Storage, error) {
+	offset, limit := genOffsetLimit(page, size)
+
+	return h.storageRepo.GetList(ctx, repo.StorageFiler{
+		Offset: offset,
+		Limit:  limit,
+	})
+}
+
+func genOffsetLimit(page, size int) (offset, limit int) {
+	offset = (page - 1) * size
+	limit = size
+
+	return
+}

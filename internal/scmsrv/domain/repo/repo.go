@@ -21,6 +21,9 @@ type ItemRepo interface {
 	CreateItemType(ctx context.Context, itemType *entity.ItemType) error
 }
 
+type ImportTicketRepoFiler struct {
+}
+
 type ImportTicketRepo interface {
 	// Write
 	Create(ctx context.Context, importTicket *entity.ImportTicket) error
@@ -37,9 +40,15 @@ type SupplierRepo interface {
 	Create(ctx context.Context, supplier *entity.Supplier) error
 }
 
+type StorageFiler struct {
+	Limit  int
+	Offset int
+}
+
 type StorageRepo interface {
 	// Read
 	Get(ctx context.Context, id int) (*entity.Storage, error)
+	GetList(ctx context.Context, filter StorageFiler) ([]*entity.Storage, error)
 
 	// Write
 	Create(ctx context.Context, storage *entity.Storage) error

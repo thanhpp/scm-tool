@@ -29,3 +29,20 @@ func (resp *StorageInfoResp) SetData(stg *entity.Storage) {
 		Desc:     stg.Desc,
 	}
 }
+
+type GetListStoragesResp struct {
+	ginutil.RespTemplateError
+	Data []StorageInfoRespData `json:"data"`
+}
+
+func (resp *GetListStoragesResp) SetData(storages []*entity.Storage) {
+	resp.Data = make([]StorageInfoRespData, len(storages))
+
+	for i := range storages {
+		resp.Data[i] = StorageInfoRespData{
+			Name:     storages[i].Name,
+			Location: storages[i].Location,
+			Desc:     storages[i].Desc,
+		}
+	}
+}
