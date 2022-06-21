@@ -82,7 +82,7 @@ func (s HTTPServer) newRouter() *gin.Engine {
 
 	supplierGr := r.Group("supplier")
 	{
-		supplierGr.GET("", storageCtrl.GetList)
+		supplierGr.GET("", supplierCtrl.GetList)
 		supplierGr.POST("", supplierCtrl.Create)
 	}
 
