@@ -12,9 +12,3 @@ func marshalSerial(in entity.Serial) repo.Serial {
 		ImportTicketID: in.ImportTicket.ID,
 	}
 }
-
-func unmarshalSeri(in repo.Serial) entity.Serial {
-	return entity.Serial{
-		Seri: in.Seri,
-	}
-}

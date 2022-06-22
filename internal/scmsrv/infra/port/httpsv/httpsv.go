@@ -73,6 +73,7 @@ func (s HTTPServer) newRouter() *gin.Engine {
 	supplierCtrl := ctrl.NewSupplier(s.app.SupplierHandler)
 	storageCtrl := ctrl.NewStorageCtrl(s.app.StorageHandler)
 	itemCtrl := ctrl.NewItemCtrl(s.app.ItemHandler)
+	filesCtrl := ctrl.NewFileCtrl()
 
 	importTicketGr := r.Group("import_ticket")
 	{
@@ -103,5 +104,8 @@ func (s HTTPServer) newRouter() *gin.Engine {
 		itemTypeGr.GET("", itemCtrl.GetAllItemType)
 		itemTypeGr.POST("", itemCtrl.CreateItemType)
 	}
+
+	r.GET("files/:filename", filesCtrl.ServeFile)
+
 	return r
 }

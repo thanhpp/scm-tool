@@ -1,6 +1,9 @@
 package dto
 
 import (
+	"fmt"
+	"path/filepath"
+
 	"github.com/thanhpp/scm/internal/scmsrv/domain/entity"
 	"github.com/thanhpp/scm/pkg/ginutil"
 )
@@ -13,10 +16,11 @@ type CreateItemReq struct {
 }
 
 type ItemInfoRespData struct {
-	SKU        string `json:"sku" form:"sku"`
-	Name       string `json:"name" form:"name"`
-	Desc       string `json:"desc" form:"desc"`
-	ItemTypeID int    `json:"item_type_id" form:"item_type_id"`
+	SKU        string   `json:"sku" form:"sku"`
+	Name       string   `json:"name" form:"name"`
+	Desc       string   `json:"desc" form:"desc"`
+	ItemTypeID int      `json:"item_type_id" form:"item_type_id"`
+	Images     []string `json:"images"`
 }
 
 func (d *ItemInfoRespData) set(item *entity.Item) {
@@ -24,6 +28,15 @@ func (d *ItemInfoRespData) set(item *entity.Item) {
 	d.Name = item.Name
 	d.Desc = item.Desc
 	d.ItemTypeID = item.Type.ID
+	d.Images = make([]string, len(item.Images))
+
+	for i := range d.Images {
+		d.Images[i] = buildFileURL(item.Images[i])
+	}
+}
+
+func buildFileURL(filename string) string {
+	return fmt.Sprintf("%s/files/%s", "165.22.49.78:10000", filepath.Base(filename))
 }
 
 type ItemInfoResp struct {

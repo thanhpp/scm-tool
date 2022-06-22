@@ -6,6 +6,7 @@ import (
 
 	"github.com/thanhpp/scm/internal/scmsrv/domain/entity"
 	"github.com/thanhpp/scm/internal/scmsrv/domain/repo"
+	"github.com/thanhpp/scm/pkg/constx"
 	"github.com/thanhpp/scm/pkg/fileutil"
 )
 
@@ -26,7 +27,7 @@ func (h ItemHandler) CreateItem(
 	}
 
 	// ! remove images if error
-	imagePaths, err := h.fileUtil.SaveFilesFromMultipart("", "item-images-"+sku, images)
+	imagePaths, err := h.fileUtil.SaveFilesFromMultipart(constx.SaveFilePaths, "item-images-"+sku, images)
 	if err != nil {
 		return nil, err
 	}

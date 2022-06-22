@@ -13,6 +13,7 @@ import (
 	"github.com/thanhpp/scm/internal/scmsrv/scmcfg"
 	"github.com/thanhpp/scm/pkg/booting"
 	"github.com/thanhpp/scm/pkg/configx"
+	"github.com/thanhpp/scm/pkg/constx"
 	"github.com/thanhpp/scm/pkg/fileutil"
 	"github.com/thanhpp/scm/pkg/logger"
 	"gorm.io/driver/postgres"
@@ -23,6 +24,8 @@ import (
 
 func main() {
 	mainCfg := new(scmcfg.MainConfig)
+
+	_ = os.MkdirAll(constx.SaveFilePaths, os.ModePerm)
 
 	if err := configx.ReadConfigFromFile("config.yml", mainCfg); err != nil {
 		panic(err)

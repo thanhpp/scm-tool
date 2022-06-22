@@ -10,18 +10,18 @@ import (
 	"github.com/pkg/errors"
 	"github.com/thanhpp/scm/internal/scmsrv/domain/entity"
 	"github.com/thanhpp/scm/internal/scmsrv/domain/repo"
+	"github.com/thanhpp/scm/pkg/constx"
 	"github.com/thanhpp/scm/pkg/fileutil"
 )
 
 type ImportTicketHandler struct {
-	importTicketImageDir string
-	itemRepo             repo.ItemRepo
-	supplierRepo         repo.SupplierRepo
-	storageRepo          repo.StorageRepo
-	importTicketRepo     repo.ImportTicketRepo
-	serialRepo           repo.SerialRepo
-	fac                  entity.Factory
-	fileUtil             fileutil.FileUtil
+	itemRepo         repo.ItemRepo
+	supplierRepo     repo.SupplierRepo
+	storageRepo      repo.StorageRepo
+	importTicketRepo repo.ImportTicketRepo
+	serialRepo       repo.SerialRepo
+	fac              entity.Factory
+	fileUtil         fileutil.FileUtil
 }
 
 func (h ImportTicketHandler) Create(
@@ -40,14 +40,14 @@ func (h ImportTicketHandler) Create(
 
 	billImagesPath, err := h.
 		fileUtil.
-		SaveFilesFromMultipart(h.importTicketImageDir, "import_ticket-bill_images", billImages)
+		SaveFilesFromMultipart(constx.SaveFilePaths, "import_ticket-bill_images", billImages)
 	if err != nil {
 		return nil, err
 	}
 
 	productsImagesPath, err := h.
 		fileUtil.
-		SaveFilesFromMultipart(h.importTicketImageDir, "import_ticket-product_images", productImages)
+		SaveFilesFromMultipart(constx.SaveFilePaths, "import_ticket-product_images", productImages)
 	if err != nil {
 		return nil, err
 	}
