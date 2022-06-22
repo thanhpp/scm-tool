@@ -19,7 +19,8 @@
   - [x] Tao kieu san pham
   - [ ] Sửa sản phẩm
   - [ ] Lấy thông tin sản phẩm
-  - [ ] Lấy danh sách sản phẩm
+  - [x] Lấy danh sách sản phẩm
+  - [x] Lấy danh sách kiểu sản phẩm 
 - [ ] Quản lý nhập xuất
   - [x] **Tạo phiếu nhập**
   - [ ] Tạo số seri
@@ -41,4 +42,4 @@
 
 ## Side request
 
-- [ ] gin OK resp
+- [x] gin OK resp

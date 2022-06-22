@@ -39,6 +39,15 @@ func (h ItemHandler) CreateItem(
 	return newItem, nil
 }
 
+func (h ItemHandler) GetList(ctx context.Context, page, size int) ([]*entity.Item, error) {
+	offset, limit := genOffsetLimit(page, size)
+
+	return h.itemRepo.GetList(ctx, repo.ItemFilter{
+		Offset: offset,
+		Limit:  limit,
+	})
+}
+
 func (h ItemHandler) CreateItemType(
 	ctx context.Context,
 	name, desc string,
@@ -53,4 +62,8 @@ func (h ItemHandler) CreateItemType(
 	}
 
 	return newItemType, nil
+}
+
+func (h ItemHandler) GetAllItemType(ctx context.Context) ([]*entity.ItemType, error) {
+	return h.itemRepo.GetAllItemType(ctx)
 }

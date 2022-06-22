@@ -48,6 +48,22 @@ func (ctrl ItemCtrl) CreateItem(c *gin.Context) {
 	c.JSON(http.StatusOK, newItem)
 }
 
+func (ctrl ItemCtrl) GetList(c *gin.Context) {
+	pagination := ginutil.NewPaginationQuery(c)
+
+	items, err := ctrl.itemHandler.GetList(c.Request.Context(), pagination.Page, pagination.Size)
+	if err != nil {
+		ginutil.RespErr(c, http.StatusInternalServerError, err)
+		return
+	}
+
+	resp := new(dto.GetListItemInfoResp)
+	resp.Set200OK()
+	resp.SetData(items)
+
+	c.JSON(http.StatusOK, resp)
+}
+
 func (ctrl ItemCtrl) CreateItemType(c *gin.Context) {
 	req := new(dto.CreateItemTypeReq)
 
@@ -65,6 +81,20 @@ func (ctrl ItemCtrl) CreateItemType(c *gin.Context) {
 	resp := new(dto.ItemTypeInfoResp)
 	resp.Set200OK()
 	resp.SetData(newItemType)
+
+	c.JSON(http.StatusOK, resp)
+}
+
+func (ctrl ItemCtrl) GetAllItemType(c *gin.Context) {
+	itemTypes, err := ctrl.itemHandler.GetAllItemType(c.Request.Context())
+	if err != nil {
+		ginutil.RespErr(c, http.StatusInternalServerError, err)
+		return
+	}
+
+	resp := new(dto.GetAllItemTypeResp)
+	resp.Set200OK()
+	resp.SetData(itemTypes)
 
 	c.JSON(http.StatusOK, resp)
 }

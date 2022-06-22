@@ -84,6 +84,21 @@ func (d ItemDB) CreateItem(ctx context.Context, item entity.Item) error {
 	return d.gdb.WithContext(ctx).Model(&repo.Item{}).Create(d.marshalItem(item)).Error
 }
 
+func (d ItemDB) GetList(ctx context.Context, filer repo.ItemFilter) ([]*entity.Item, error) {
+	itemsDB := make([]*repo.Item, filer.Limit)
+
+	if err := d.gdb.WithContext(ctx).Model(&repo.Item{}).Limit(filer.Limit).Offset(filer.Offset).Find(&itemsDB).Error; err != nil {
+		return nil, err
+	}
+
+	items := make([]*entity.Item, len(itemsDB))
+	for i := range items {
+		items[i] = unmarshalItem(*itemsDB[i])
+	}
+
+	return nil, nil
+}
+
 // ----------------------------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------- ITEM TYPE ---------------------------------------------------------------
 
@@ -122,4 +137,20 @@ func (d ItemDB) CreateItemType(ctx context.Context, itemType *entity.ItemType) e
 	itemType.ID = itemTypeDB.ID
 
 	return nil
+}
+
+func (d ItemDB) GetAllItemType(ctx context.Context) ([]*entity.ItemType, error) {
+	var itemTypeDBs []*repo.ItemType
+
+	if err := d.gdb.WithContext(ctx).Model(&repo.ItemType{}).Find(&itemTypeDBs).Error; err != nil {
+		return nil, err
+	}
+
+	itemTypes := make([]*entity.ItemType, len(itemTypeDBs))
+
+	for i := range itemTypeDBs {
+		itemTypes[i] = d.unmarshalItemType(itemTypeDBs[i])
+	}
+
+	return itemTypes, nil
 }

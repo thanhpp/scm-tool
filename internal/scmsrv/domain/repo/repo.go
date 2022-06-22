@@ -8,10 +8,17 @@ import (
 
 type ItemUpdateFn func(ctx context.Context, item *Item) (*Item, error)
 
+type ItemFilter struct {
+	Limit  int
+	Offset int
+}
+
 type ItemRepo interface {
 	// Read
 	GetBySKU(ctx context.Context, sku string) (*entity.Item, error)
+	GetList(ctx context.Context, filer ItemFilter) ([]*entity.Item, error)
 	GetItemType(ctx context.Context, itemTypeID int) (*entity.ItemType, error)
+	GetAllItemType(ctx context.Context) ([]*entity.ItemType, error)
 
 	// Write
 	CreateItem(ctx context.Context, item entity.Item) error
