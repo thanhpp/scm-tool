@@ -14,6 +14,8 @@ services:
       timeout: 5s
       retries: 10
       start_period: 10s
+    volumes:
+      - ./data/pgdata:/var/lib/postgresql/data
     networks:
       - intranet
 
@@ -31,7 +33,7 @@ services:
     ports:
       - 10000:10000
     volumes:
-      - ./files:./files
+      - ./files:/files
     networks:
       - intranet
 
