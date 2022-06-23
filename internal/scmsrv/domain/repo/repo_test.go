@@ -17,9 +17,9 @@ func newPostgresDB() (*gorm.DB, error) {
 	const (
 		host     = "localhost"
 		port     = "5432"
-		user     = "user"
-		password = "password"
-		dbname   = "scm"
+		user     = "scmuser"
+		password = "scmpassword"
+		dbname   = "scmdb"
 		sslmode  = "disable"
 	)
 
@@ -53,7 +53,7 @@ func TestDBMigration(t *testing.T) {
 
 	var (
 		tables []interface{} = []interface{}{
-			repo.Item{}, repo.ItemType{}, repo.Serial{}, repo.Storage{},
+			repo.ItemType{},
 		}
 	)
 

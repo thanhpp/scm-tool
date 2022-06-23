@@ -3,12 +3,13 @@ package repo
 import "time"
 
 type Item struct {
-	SKU       string  `gorm:"column:sku;type:text; primaryKey"`
-	Name      string  `gorm:"column:name;type:text"`
-	Desc      string  `gorm:"column:desc;type:text"`
-	SellPrice float64 `gorm:"column:sell_price;type:float(8)"`
+	SKU        string  `gorm:"column:sku;type:text; primaryKey"`
+	Name       string  `gorm:"column:name;type:text"`
+	Desc       string  `gorm:"column:desc;type:text"`
+	SellPrice  float64 `gorm:"column:sell_price;type:float(8)"`
+	ItemTypeID int     `gorm:"column:item_type_id;type:int"`
 
-	ItemType ItemType `gorm:"foreignKey:ID"`
+	ItemType ItemType `gorm:"foreignKey:ItemTypeID; references:ID"`
 	Serials  []Serial `gorm:"foreignKey:ItemSKU;references:SKU"`
 
 	CreatedAt time.Time `gorm:"column:created_at;autoCreateTime"`
@@ -16,7 +17,7 @@ type Item struct {
 }
 
 type ItemType struct {
-	ID   int    `gorm:"column:id;type:int;primaryKey;autoIncrement"`
+	ID   int    `gorm:"column:id;type:bigint;primaryKey;autoIncrement"`
 	Name string `gorm:"column:name;type:text"`
 	Desc string `gorm:"column:desc;type:text"`
 
