@@ -4,6 +4,7 @@ import (
 	"context"
 	"mime/multipart"
 
+	"github.com/pkg/errors"
 	"github.com/thanhpp/scm/internal/scmsrv/domain/entity"
 	"github.com/thanhpp/scm/internal/scmsrv/domain/repo"
 	"github.com/thanhpp/scm/pkg/constx"
@@ -23,13 +24,13 @@ func (h ItemHandler) CreateItem(
 ) (*entity.Item, error) {
 	itemType, err := h.itemRepo.GetItemType(ctx, itemTypeID)
 	if err != nil {
-		return nil, err
+		return nil, errors.WithMessage(err, "get item type")
 	}
 
 	// ! remove images if error
 	imagePaths, err := h.fileUtil.SaveFilesFromMultipart(constx.SaveFilePaths, "item-images-"+sku, images)
 	if err != nil {
-		return nil, err
+		return nil, errors.WithMessage(err, "save images")
 	}
 
 	newItem, err := h.fac.NewItem(sku, name, desc, *itemType, imagePaths)
