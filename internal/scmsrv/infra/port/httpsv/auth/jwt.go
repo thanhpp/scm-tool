@@ -43,11 +43,11 @@ type JWTSrv interface {
 }
 
 type jwtSrvImpl struct {
-	secret string
-	issuer string
 }
 
-func NewJWTSrvImpl() JWTSrv
+func NewJWTSrvImpl() JWTSrv {
+	return &jwtSrvImpl{}
+}
 
 func (f jwtSrvImpl) GenToken(user *entity.User) (*Token, error) {
 	claims := &Claims{
