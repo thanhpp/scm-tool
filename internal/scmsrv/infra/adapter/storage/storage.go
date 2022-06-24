@@ -76,3 +76,25 @@ func (s StorageDB) GetList(ctx context.Context, filter repo.StorageFiler) ([]*en
 
 	return storages, nil
 }
+
+type StorageUpdateFn func(*entity.Storage) (*entity.Storage, error)
+
+func (s StorageDB) Update(ctx context.Context, storageID int, fn StorageUpdateFn) error {
+	return s.gdb.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+		storage,err := s.Get(ctx, storageID)
+		if err != nil {
+			return err
+		}
+
+		newStorage, err := fn(storage)
+		if err != nil {
+			return err
+		}
+
+		if err := tx.WithContext(ctx).Model(&repo.Storage{}).Updates(newStorage).Error; err != nil {
+			return err
+		}
+
+		return nil
+	})
+}

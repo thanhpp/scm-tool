@@ -9,6 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
 	"github.com/thanhpp/scm/internal/scmsrv/app"
+	"github.com/thanhpp/scm/internal/scmsrv/infra/port/httpsv/auth"
 	"github.com/thanhpp/scm/internal/scmsrv/infra/port/httpsv/ctrl"
 	"github.com/thanhpp/scm/pkg/booting"
 	"github.com/thanhpp/scm/pkg/configx"
@@ -74,6 +75,7 @@ func (s HTTPServer) newRouter() *gin.Engine {
 	storageCtrl := ctrl.NewStorageCtrl(s.app.StorageHandler)
 	itemCtrl := ctrl.NewItemCtrl(s.app.ItemHandler)
 	filesCtrl := ctrl.NewFileCtrl()
+	userCtrl := ctrl.NewUserCtrl(s.app.UserHandler, auth.NewJWTSrvImpl())
 
 	importTicketGr := r.Group("import_ticket")
 	{
@@ -104,6 +106,9 @@ func (s HTTPServer) newRouter() *gin.Engine {
 		itemTypeGr.GET("", itemCtrl.GetAllItemType)
 		itemTypeGr.POST("", itemCtrl.CreateItemType)
 	}
+
+	r.POST("signup", userCtrl.NewUser)
+	r.POST("login", userCtrl.Login)
 
 	r.GET("files/:filename", filesCtrl.ServeFile)
 

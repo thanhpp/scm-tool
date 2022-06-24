@@ -47,7 +47,7 @@ func main() {
 	scmApp := app.New(
 		entity.NewFactory(),
 		db.ItemDB(), db.SupplierDB(), db.StorageDB(),
-		db.ImportTicketDB(), db.SerialDB(),
+		db.ImportTicketDB(), db.SerialDB(), db.UserDB(),
 		fileutil.NewFileUtil(),
 	)
 

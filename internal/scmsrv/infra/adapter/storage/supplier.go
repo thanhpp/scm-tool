@@ -74,3 +74,8 @@ func (d SupplierDB) GetList(ctx context.Context, filter repo.SupplierFiler) ([]*
 
 	return suppliers, nil
 }
+
+func (d SupplierDB) Update(ctx context.Context, suplier *entity.Supplier) error {
+	suplierDB := marshalSupplier(suplier)
+	return d.gdb.WithContext(ctx).Updates(suplierDB).Error
+}

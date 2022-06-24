@@ -20,6 +20,7 @@ type Factory interface {
 	NewItem(sku, name, desc string, itemType ItemType, imagePaths []string) (*Item, error)
 	NewItemType(name, desc string) (*ItemType, error)
 	NewSerials(importTicket *ImportTicket, item *Item, num int) ([]*Serial, error)
+	NewUser(name, username, password string) (*User, error)
 }
 
 type factoryImpl struct{}

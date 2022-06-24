@@ -11,12 +11,13 @@ type App struct {
 	SupplierHandler     SupplierHanlder
 	StorageHandler      StorageHandler
 	ItemHandler         ItemHandler
+	UserHandler         UserHandler
 }
 
 func New(
 	fac entity.Factory,
 	itemRepo repo.ItemRepo, supplierRepo repo.SupplierRepo, storageRepo repo.StorageRepo,
-	importTicketRepo repo.ImportTicketRepo, serialRepo repo.SerialRepo,
+	importTicketRepo repo.ImportTicketRepo, serialRepo repo.SerialRepo, userRepo repo.UserRepo,
 	fileUtil fileutil.FileUtil,
 ) App {
 	return App{
@@ -41,6 +42,10 @@ func New(
 			fac:      fac,
 			itemRepo: itemRepo,
 			fileUtil: fileUtil,
+		},
+		UserHandler: UserHandler{
+			f:        fac,
+			userRepo: userRepo,
 		},
 	}
 }

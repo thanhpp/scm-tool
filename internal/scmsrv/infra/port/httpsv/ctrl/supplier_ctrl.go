@@ -55,3 +55,16 @@ func (ctrl SupplierCtrl) GetList(c *gin.Context) {
 
 	c.JSON(http.StatusOK, resp)
 }
+
+func (ctrl SupplierCtrl) Update(c *gin.Context) {
+	req := new(dto.UpdagteSuplierRq)
+	if err := c.ShouldBind(req); err != nil {
+		ginutil.RespErr(c, http.StatusNotAcceptable, err, ginutil.WithData(req))
+		return
+	}
+	if err := ctrl.supplierHandler.Update(c, req.ID, req.Name, req.Email, req.Phone); err != nil {
+		ginutil.RespErr(c, http.StatusNotAcceptable, err, ginutil.WithData(req))
+		return
+	}
+	c.Status(http.StatusOK)
+}

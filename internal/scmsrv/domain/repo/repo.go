@@ -51,6 +51,9 @@ type SupplierRepo interface {
 
 	// Write
 	Create(ctx context.Context, supplier *entity.Supplier) error
+
+	// Update
+	Update(context.Context, *entity.Supplier) error
 }
 
 type StorageFiler struct {
@@ -73,4 +76,12 @@ type SerialRepo interface {
 
 	// Write
 	CreateBatch(ctx context.Context, serials []*entity.Serial) error
+}
+
+type UserRepo interface {
+	// Read
+	GetByUsername(ctx context.Context, username string) (*entity.User, error)
+
+	// Create
+	NewUser(ctx context.Context, user *entity.User) error
 }

@@ -33,3 +33,24 @@ func (h SupplierHanlder) GetList(ctx context.Context, page, size int) ([]*entity
 		Limit:  limit,
 	})
 }
+
+func (h SupplierHanlder) Update(ctx context.Context, id int, name, email, phone string) error {
+	oldSupplier, err := h.supplierRepo.Get(ctx, id)
+	if err != nil {
+		return err
+	}
+
+	if name != "" {
+		oldSupplier.Name = name
+	}
+
+	if email != "" {
+		oldSupplier.Email = email
+	}
+
+	if phone != "" {
+		oldSupplier.Phone = phone
+	}
+
+	return h.supplierRepo.Update(ctx, oldSupplier)
+}
