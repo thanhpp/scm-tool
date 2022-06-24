@@ -31,6 +31,8 @@ func main() {
 		panic(err)
 	}
 
+	mainCfg.Database.OverideWithEnv()
+
 	// setup
 	if err := logger.SetLog(mainCfg.Logger); err != nil {
 		log.Fatal("set log err", err)

@@ -34,6 +34,8 @@ services:
           max_attempts: 5
     ports:
       - 10000:10000
+    environment:
+      - DB_HOST=pgdatabase
     volumes:
       - scmfiles:/files
     networks:
