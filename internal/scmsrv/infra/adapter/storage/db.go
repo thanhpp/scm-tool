@@ -11,6 +11,7 @@ var (
 		repo.Item{}, repo.ItemType{}, repo.Storage{}, repo.Serial{},
 		repo.Supplier{}, repo.ImportTicket{},
 		repo.ImportTicketBillImage{}, repo.ImportTicketProductImage{}, repo.ImportTicketDetails{},
+		repo.User{},
 	}
 )
 
