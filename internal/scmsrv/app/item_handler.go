@@ -38,6 +38,10 @@ func (h ItemHandler) CreateItem(
 		return nil, err
 	}
 
+	if err := h.itemRepo.CreateItem(ctx, *newItem); err != nil {
+		return nil, err
+	}
+
 	return newItem, nil
 }
 

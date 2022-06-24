@@ -45,7 +45,11 @@ func (ctrl ItemCtrl) CreateItem(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, newItem)
+	resp := new(dto.ItemInfoResp)
+	resp.Set200OK()
+	resp.SetData(newItem)
+
+	c.JSON(http.StatusOK, resp)
 }
 
 func (ctrl ItemCtrl) GetList(c *gin.Context) {

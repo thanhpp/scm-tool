@@ -17,7 +17,7 @@ type Item struct {
 }
 
 type ItemType struct {
-	ID   int    `gorm:"column:id;type:bigint;primaryKey;autoIncrement"`
+	ID   int    `gorm:"column:id; type:int; primaryKey; autoIncrement"`
 	Name string `gorm:"column:name;type:text"`
 	Desc string `gorm:"column:desc;type:text"`
 
