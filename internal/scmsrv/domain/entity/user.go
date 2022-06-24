@@ -21,7 +21,7 @@ func (u User) CompareUsernameAndPass(username string, password string) bool {
 }
 
 func (f factoryImpl) NewUser(name, username, password string) (*User, error) {
-	if len(username)*len(password) != 0 {
+	if len(username)*len(password) == 0 {
 		return nil, errors.New("create user: username and password must not be empty")
 	}
 
