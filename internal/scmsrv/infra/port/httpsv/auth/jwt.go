@@ -11,7 +11,7 @@ import (
 const (
 	expire = time.Hour * 24
 	issuer = "scmsrv"
-	secret = "secret"
+	secret = "secretsecretsecretsecret"
 )
 
 type Token struct {
@@ -60,9 +60,9 @@ func (f jwtSrvImpl) GenToken(user *entity.User) (*Token, error) {
 	claims.Set(user)
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	t, err := token.SignedString(secret)
+	t, err := token.SignedString([]byte(secret))
 	if err != nil {
-		return nil, err
+		return nil, errors.WithMessage(err, "signing token")
 	}
 
 	return &Token{
@@ -75,7 +75,7 @@ func (f jwtSrvImpl) Validate(token string) (*jwt.Token, error) {
 			return nil, errors.New("invalid token: signing method")
 		}
 
-		return secret, nil
+		return []byte(secret), nil
 	})
 }
 
