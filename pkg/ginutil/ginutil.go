@@ -58,6 +58,14 @@ func RespErr(c *gin.Context, httpCode int, err error, opts ...RespErrorOpt) {
 	)
 }
 
+func RespOK(c *gin.Context, data interface{}) {
+	resp := new(RespTemplate)
+	resp.Set200OK()
+	resp.SetData(data)
+
+	c.JSON(http.StatusOK, resp)
+}
+
 type respErrorOptsFn func(*RespTemplate)
 
 type RespErrorOpt respErrorOptsFn

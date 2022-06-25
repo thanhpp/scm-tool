@@ -15,7 +15,7 @@
   - [x] Lấy danh sách kho
 - [ ] Quản lý sản phẩm
   - [x] Tạo sản phẩm
-  - [ ] Lưu ảnh sản phẩm
+  - [x] Lưu ảnh sản phẩm
   - [x] Tao kieu san pham
   - [ ] Sửa sản phẩm
   - [ ] Lấy thông tin sản phẩm
@@ -32,8 +32,8 @@
   - [x] Lấy danh sách nhà cung cấp
   - [ ] Sửa thông tin nhà cung cấp 
 - [ ] Xác thực/Phân quyền
-  - [ ] Đăng nhập
-  - [ ] Tạo tài khoản
+  - [x] Đăng nhập
+  - [x] Tạo tài khoản
   - [ ] Sửa tài khoản
   - [ ] Quên mật khẩu
   - [ ] Phân quyền

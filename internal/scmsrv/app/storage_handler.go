@@ -34,6 +34,24 @@ func (h StorageHandler) GetListStorages(ctx context.Context, page, size int) ([]
 	})
 }
 
+func (h StorageHandler) UpdateStorage(ctx context.Context, id int, name, desc, location string) error {
+	return h.storageRepo.Update(ctx, id, func(s *entity.Storage) (*entity.Storage, error) {
+		if len(name) != 0 {
+			s.Name = name
+		}
+
+		if len(desc) != 0 {
+			s.Desc = desc
+		}
+
+		if len(location) != 0 {
+			s.Location = location
+		}
+
+		return s, nil
+	})
+}
+
 func genOffsetLimit(page, size int) (offset, limit int) {
 	offset = (page - 1) * size
 	limit = size

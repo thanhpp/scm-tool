@@ -77,11 +77,9 @@ func (s StorageDB) GetList(ctx context.Context, filter repo.StorageFiler) ([]*en
 	return storages, nil
 }
 
-type StorageUpdateFn func(*entity.Storage) (*entity.Storage, error)
-
-func (s StorageDB) Update(ctx context.Context, storageID int, fn StorageUpdateFn) error {
+func (s StorageDB) Update(ctx context.Context, storageID int, fn repo.StorageUpdateFn) error {
 	return s.gdb.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
-		storage,err := s.Get(ctx, storageID)
+		storage, err := s.Get(ctx, storageID)
 		if err != nil {
 			return err
 		}

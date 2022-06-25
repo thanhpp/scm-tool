@@ -61,6 +61,8 @@ type StorageFiler struct {
 	Offset int
 }
 
+type StorageUpdateFn func(*entity.Storage) (*entity.Storage, error)
+
 type StorageRepo interface {
 	// Read
 	Get(ctx context.Context, id int) (*entity.Storage, error)
@@ -68,6 +70,7 @@ type StorageRepo interface {
 
 	// Write
 	Create(ctx context.Context, storage *entity.Storage) error
+	Update(ctx context.Context, storageID int, fn StorageUpdateFn) error
 }
 
 type SerialRepo interface {
