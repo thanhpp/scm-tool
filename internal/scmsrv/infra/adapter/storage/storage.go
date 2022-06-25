@@ -89,7 +89,10 @@ func (s StorageDB) Update(ctx context.Context, storageID int, fn repo.StorageUpd
 			return err
 		}
 
-		if err := tx.WithContext(ctx).Model(&repo.Storage{}).Updates(newStorage).Error; err != nil {
+		if err := tx.WithContext(ctx).
+			Model(&repo.Storage{}).
+			Where("id = ?", storageID).
+			Updates(newStorage).Error; err != nil {
 			return err
 		}
 
