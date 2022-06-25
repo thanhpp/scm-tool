@@ -11,11 +11,6 @@ type CreateSupplierReq struct {
 	Email string `json:"email"`
 }
 
-type UpdagteSuplierRq struct {
-	ID int `json:"id"`
-	CreateSupplierReq
-}
-
 type SupplierInfoRespData struct {
 	ID    int    `json:"id"`
 	Name  string `json:"name"`

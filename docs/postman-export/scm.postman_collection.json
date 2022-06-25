@@ -130,6 +130,33 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"test\",\n    \"desc\": \"testDesc\",\n    \"location\": \"testLocation\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base}}/storage/1",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"storage",
+								"1"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},

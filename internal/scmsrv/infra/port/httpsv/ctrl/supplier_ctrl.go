@@ -57,14 +57,22 @@ func (ctrl SupplierCtrl) GetList(c *gin.Context) {
 }
 
 func (ctrl SupplierCtrl) Update(c *gin.Context) {
-	req := new(dto.UpdagteSuplierRq)
+	id, err := getIDFromParam(c)
+	if err != nil {
+		ginutil.RespErr(c, http.StatusNotAcceptable, err)
+		return
+	}
+
+	req := new(dto.CreateSupplierReq)
 	if err := c.ShouldBind(req); err != nil {
 		ginutil.RespErr(c, http.StatusNotAcceptable, err, ginutil.WithData(req))
 		return
 	}
-	if err := ctrl.supplierHandler.Update(c, req.ID, req.Name, req.Email, req.Phone); err != nil {
+
+	if err := ctrl.supplierHandler.Update(c, id, req.Name, req.Email, req.Phone); err != nil {
 		ginutil.RespErr(c, http.StatusNotAcceptable, err, ginutil.WithData(req))
 		return
 	}
-	c.Status(http.StatusOK)
+
+	ginutil.RespOK(c, nil)
 }

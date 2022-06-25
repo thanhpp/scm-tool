@@ -87,6 +87,8 @@ func (s HTTPServer) newRouter() *gin.Engine {
 	{
 		supplierGr.GET("", supplierCtrl.GetList)
 		supplierGr.POST("", supplierCtrl.Create)
+
+		supplierGr.PUT("/:id", supplierCtrl.Update)
 	}
 
 	storageGr := r.Group("storage")
