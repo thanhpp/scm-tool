@@ -13,6 +13,14 @@ var (
 	ErrNilConfig = errors.New("nil log config")
 )
 
+func SetDefaultLog() {
+	_ = SetLog(configx.LogConfig{
+		Level:      "debug",
+		Color:      true,
+		LoggerName: "scmsrv-default",
+	})
+}
+
 func SetLog(cfg configx.LogConfig) error {
 	var (
 		zapCfg = zap.NewDevelopmentConfig()
@@ -125,4 +133,32 @@ func Debug(message string) {
 
 func Debugf(template string, args ...interface{}) {
 	zap.S().Debugf(template, args...)
+}
+
+func Fatalw(message string, kvs ...interface{}) {
+	zap.S().Fatalw(message, kvs...)
+}
+
+func Panicw(message string, kvs ...interface{}) {
+	zap.S().Panicw(message, kvs...)
+}
+
+func DPanicw(message string, kvs ...interface{}) {
+	zap.S().DPanicw(message, kvs...)
+}
+
+func Errorw(message string, kvs ...interface{}) {
+	zap.S().Errorw(message, kvs...)
+}
+
+func Warnw(message string, kvs ...interface{}) {
+	zap.S().Warnw(message, kvs...)
+}
+
+func Infow(message string, kvs ...interface{}) {
+	zap.S().Infow(message, kvs...)
+}
+
+func Debugw(message string, kvs ...interface{}) {
+	zap.S().Debugw(message, kvs...)
 }

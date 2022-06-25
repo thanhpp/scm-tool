@@ -2,7 +2,8 @@
 	"info": {
 		"_postman_id": "7074f53c-e623-4ce9-837e-3a625925456a",
 		"name": "scm",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "10191781"
 	},
 	"item": [
 		{
@@ -127,6 +128,180 @@
 								"storage"
 							]
 						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "new user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"thanhpp\",\n    \"username\": \"thanhpp\",\n    \"password\": \"hello\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base}}/signup",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"thanhpp\",\n    \"password\": \"hello\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base}}/login",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "item",
+			"item": [
+				{
+					"name": "new item",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "sku",
+								"value": "sku1",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "name",
+								"value": "name1",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "desc",
+								"value": "descs1",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "item_type_id",
+								"value": "1",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "images",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "sku",
+									"value": "sku1",
+									"type": "text"
+								},
+								{
+									"key": "name",
+									"value": "name1",
+									"type": "text"
+								},
+								{
+									"key": "desc",
+									"value": "desc1",
+									"type": "text"
+								},
+								{
+									"key": "item_type_id",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "images",
+									"type": "file",
+									"src": "/home/thanhpp/Pictures/Screenshot from 2022-06-25 00-33-33.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base}}/item",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"item"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "new item type",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"type1\",\n    \"desc\": \"desc1\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base}}/item-type",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"item-type"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get items",
+					"request": {
+						"method": "GET",
+						"header": []
 					},
 					"response": []
 				}

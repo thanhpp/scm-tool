@@ -8,6 +8,7 @@ import (
 	"github.com/thanhpp/scm/internal/scmsrv/app"
 	"github.com/thanhpp/scm/internal/scmsrv/infra/port/httpsv/dto"
 	"github.com/thanhpp/scm/pkg/ginutil"
+	"github.com/thanhpp/scm/pkg/logger"
 )
 
 type ItemCtrl struct {
@@ -60,10 +61,12 @@ func (ctrl ItemCtrl) GetList(c *gin.Context) {
 		ginutil.RespErr(c, http.StatusInternalServerError, err)
 		return
 	}
+	logger.Debugw("Get list item", "items", items)
 
 	resp := new(dto.GetListItemInfoResp)
 	resp.Set200OK()
 	resp.SetData(items)
+	logger.Debugw("Get list item", "resp", resp.Data)
 
 	c.JSON(http.StatusOK, resp)
 }
