@@ -125,23 +125,23 @@ func (d ImportTicketDB) Create(ctx context.Context, in *entity.ImportTicket) err
 			return err
 		}
 
-		if err := tx.
-			Model(&repo.ImportTicketBillImage{}).
-			CreateInBatches(dbImportTicket.BillImages, len(dbImportTicket.BillImages)).Error; err != nil {
-			return err
-		}
+		// if err := tx.
+		// 	Model(&repo.ImportTicketBillImage{}).
+		// 	CreateInBatches(dbImportTicket.BillImages, len(dbImportTicket.BillImages)).Error; err != nil {
+		// 	return err
+		// }
 
-		if err := tx.
-			Model(&repo.ImportTicketBillImage{}).
-			CreateInBatches(dbImportTicket.ProductImages, len(dbImportTicket.ProductImages)).Error; err != nil {
-			return err
-		}
+		// if err := tx.
+		// 	Model(&repo.ImportTicketBillImage{}).
+		// 	CreateInBatches(dbImportTicket.ProductImages, len(dbImportTicket.ProductImages)).Error; err != nil {
+		// 	return err
+		// }
 
-		if err := tx.
-			Model(&repo.ImportTicketBillImage{}).
-			CreateInBatches(dbImportTicket.Details, len(dbImportTicket.Details)).Error; err != nil {
-			return err
-		}
+		// if err := tx.
+		// 	Model(&repo.ImportTicketBillImage{}).
+		// 	CreateInBatches(dbImportTicket.Details, len(dbImportTicket.Details)).Error; err != nil {
+		// 	return err
+		// }
 
 		return nil
 	})
