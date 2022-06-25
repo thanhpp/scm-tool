@@ -2,7 +2,6 @@ package ctrl
 
 import (
 	"net/http"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/thanhpp/scm/internal/scmsrv/app"
@@ -53,7 +52,7 @@ func (ctrl ImportTicketCtrl) Create(c *gin.Context) {
 
 	importTicket, err := ctrl.importTickerHanlder.Create(
 		c.Request.Context(), req.FromSupplierID, req.ToStorageID,
-		req.SendTime, time.Time{}, req.Fee, details, billImages, productImages)
+		req.SendTime, req.ReceiveTime, req.Fee, details, billImages, productImages)
 	if err != nil {
 		ginutil.RespErr(c, http.StatusNotAcceptable, err)
 		return

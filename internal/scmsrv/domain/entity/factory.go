@@ -11,7 +11,7 @@ import (
 
 type Factory interface {
 	NewImportTicket(
-		fromSupplier Supplier, toStorage Storage, sendTime time.Time, fee float64, details []ImportTicketDetails,
+		fromSupplier Supplier, toStorage Storage, sendTime, receiveTime time.Time, fee float64, details []ImportTicketDetails,
 		billImagePaths []string, productImagePaths []string,
 	) (*ImportTicket, error)
 	NewImportTicketDetails(item Item, buyQuantity, receiveQuantity int, buyPrice float64) (*ImportTicketDetails, error)
@@ -30,7 +30,7 @@ func NewFactory() Factory {
 }
 
 func (f factoryImpl) NewImportTicket(
-	fromSupplier Supplier, toStorage Storage, sendTime time.Time, fee float64, details []ImportTicketDetails,
+	fromSupplier Supplier, toStorage Storage, sendTime, receiveTime time.Time, fee float64, details []ImportTicketDetails,
 	billImagePaths []string, productImagePaths []string,
 ) (*ImportTicket, error) {
 	if sendTime.IsZero() {
@@ -54,7 +54,7 @@ func (f factoryImpl) NewImportTicket(
 		ToStorage:    toStorage,
 		Status:       ImportTicketStatusNew,
 		SendTime:     sendTime,
-		ReceiveTime:  time.Time{},
+		ReceiveTime:  receiveTime,
 
 		BillImagePaths:    billImagePaths,
 		ProductImagePaths: productImagePaths,

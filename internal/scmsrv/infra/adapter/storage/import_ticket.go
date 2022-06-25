@@ -6,6 +6,7 @@ import (
 
 	"github.com/thanhpp/scm/internal/scmsrv/domain/entity"
 	"github.com/thanhpp/scm/internal/scmsrv/domain/repo"
+	"github.com/thanhpp/scm/pkg/logger"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 )
@@ -120,6 +121,7 @@ func (d ImportTicketDB) Create(ctx context.Context, in *entity.ImportTicket) err
 		}
 
 		dbImportTicket := d.marshalImportTicket(*in)
+		logger.Debugw("create importTicket", "importTicket db", dbImportTicket)
 
 		if err := tx.Omit(clause.Associations).Create(dbImportTicket).Error; err != nil {
 			return err

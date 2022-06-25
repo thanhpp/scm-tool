@@ -63,7 +63,7 @@ func (h ImportTicketHandler) Create(
 	}
 
 	newImportTicket, err := h.fac.NewImportTicket(
-		*supplier, *storage, sendTime, fee,
+		*supplier, *storage, sendTime, receiveTime, fee,
 		details, billImagesPath, productsImagesPath,
 	)
 	if err != nil {

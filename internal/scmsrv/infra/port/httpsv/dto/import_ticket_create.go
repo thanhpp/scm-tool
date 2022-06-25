@@ -15,6 +15,7 @@ type CreateImportTicketReq struct {
 	FromSupplierID int                            `json:"from_supplier_id" form:"from_supplier_id"`
 	ToStorageID    int                            `json:"to_storage_id" form:"to_storage_id"`
 	SendTime       time.Time                      `json:"send_time" form:"send_time"`
+	ReceiveTime    time.Time                      `json:"receive_time" form:"receive_time"`
 	Fee            float64                        `json:"fee" form:"fee"`
 	Details        []CreateImportTicketReqDetails `json:"-" form:"-"`
 }
