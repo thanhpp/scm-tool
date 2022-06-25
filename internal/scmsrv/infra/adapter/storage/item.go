@@ -95,7 +95,7 @@ func (d ItemDB) CreateItem(ctx context.Context, item entity.Item) error {
 		itemDB := d.marshalItem(item)
 
 		if err := tx.Model(&repo.Item{}).Omit(clause.Associations).
-			Create(item).Error; err != nil {
+			Create(itemDB).Error; err != nil {
 			return err
 		}
 
