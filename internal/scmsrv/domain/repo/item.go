@@ -9,7 +9,7 @@ type Item struct {
 	SellPrice  float64 `gorm:"column:sell_price;type:float(8)"`
 	ItemTypeID int     `gorm:"column:item_type_id;type:int"`
 
-	Images   []ItemImage `gorm:"foreignKey:ItemSKU;associationForeignKey:SKU"`
+	Images   []ItemImage `gorm:"foreignKey:ItemSKU; references:SKU"`
 	ItemType ItemType    `gorm:"foreignKey:ItemTypeID; references:ID"`
 	Serials  []Serial    `gorm:"foreignKey:ItemSKU;references:SKU"`
 

@@ -21,15 +21,11 @@ func (d DB) ItemDB() *ItemDB {
 
 func (d ItemDB) marshalItem(in entity.Item) *repo.Item {
 	item := &repo.Item{
-		SKU:       in.SKU,
-		Name:      in.Name,
-		Desc:      in.Desc,
-		SellPrice: in.SellPrice,
-		ItemType: repo.ItemType{
-			ID:   in.Type.ID,
-			Name: in.Type.Name,
-			Desc: in.Type.Desc,
-		},
+		SKU:        in.SKU,
+		Name:       in.Name,
+		Desc:       in.Desc,
+		SellPrice:  in.SellPrice,
+		ItemTypeID: in.Type.ID,
 	}
 
 	for i := range in.Images {
@@ -95,7 +91,14 @@ func (d ItemDB) GetBySKU(ctx context.Context, sku string) (*entity.Item, error) 
 
 // ? create serial and images -> returns if error (conflict)
 func (d ItemDB) CreateItem(ctx context.Context, item entity.Item) error {
-	return d.gdb.WithContext(ctx).Model(&repo.Item{}).Create(d.marshalItem(item)).Error
+	return d.gdb.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+		if err := tx.Model(&repo.Item{}).Clauses(clause.OnConflict{UpdateAll: true}).
+			Create(d.marshalItem(item)).Error; err != nil {
+			return err
+		}
+
+		return nil
+	})
 }
 
 func (d ItemDB) GetList(ctx context.Context, filer repo.ItemFilter) ([]*entity.Item, error) {
