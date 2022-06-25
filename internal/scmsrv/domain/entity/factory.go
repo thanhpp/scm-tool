@@ -121,6 +121,8 @@ func (factoryImpl) NewItem(sku, name, desc string, itemType ItemType, imagePaths
 		return nil, errors.New("create item: empty sku")
 	}
 
+	sku = strings.ReplaceAll(sku, " ", "")
+
 	newItem := &Item{
 		SKU:  sku,
 		Name: name,
