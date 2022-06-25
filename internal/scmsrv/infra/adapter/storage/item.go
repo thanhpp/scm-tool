@@ -92,8 +92,16 @@ func (d ItemDB) GetBySKU(ctx context.Context, sku string) (*entity.Item, error) 
 // ? create serial and images -> returns if error (conflict)
 func (d ItemDB) CreateItem(ctx context.Context, item entity.Item) error {
 	return d.gdb.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+		itemDB := d.marshalItem(item)
+
 		if err := tx.Model(&repo.Item{}).Omit(clause.Associations).
-			Create(d.marshalItem(item)).Error; err != nil {
+			Create(item).Error; err != nil {
+			return err
+		}
+
+		if err := tx.Model(&repo.ItemImage{}).CreateInBatches(
+			itemDB.Images, len(itemDB.Images),
+		).Error; err != nil {
 			return err
 		}
 
