@@ -22,7 +22,7 @@ type ImportTicket struct {
 	Details       []ImportTicketDetails      `gorm:"foreignKey:ImportTicketID; references:ID"`
 
 	CreatedAt time.Time `gorm:"column:created_at;autoCreateTime"`
-	UpdatedAt time.Time `gorm:"column:updated_at;autoUpdateTime:milli"`
+	UpdatedAt time.Time `gorm:"column:updated_at;autoUpdateTime"`
 }
 
 type ImportTicketProductImage struct {
