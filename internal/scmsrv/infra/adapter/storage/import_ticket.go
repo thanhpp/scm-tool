@@ -93,7 +93,7 @@ func (ImportTicketDB) unmarshal(in *repo.ImportTicket) *entity.ImportTicket {
 	out.Details = make([]entity.ImportTicketDetails, 0, len(in.Details))
 	for i := range in.Details {
 		out.Details = append(out.Details, entity.ImportTicketDetails{
-			Item:            *unmarshalItem(in.Details[i].Item),
+			// Item:            *unmarshalItem(in.Details[i].Item),
 			BuyQuantity:     in.Details[i].BuyQuantity,
 			ReceiveQuantity: in.Details[i].ReceiveQuantity,
 			BuyPrice:        in.Details[i].BuyPrice,
