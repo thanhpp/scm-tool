@@ -5,6 +5,7 @@ import (
 
 	"github.com/thanhpp/scm/internal/scmsrv/domain/entity"
 	"github.com/thanhpp/scm/internal/scmsrv/domain/repo"
+	"github.com/thanhpp/scm/pkg/logger"
 	"gorm.io/gorm"
 )
 
@@ -23,6 +24,7 @@ func (s StorageDB) marshal(in *entity.Storage) *repo.Storage {
 		ID:       in.ID,
 		Name:     in.Name,
 		Location: in.Location,
+		Desc:     in.Desc,
 	} // ! Desc
 
 	return storage
@@ -33,7 +35,7 @@ func unmarshalStorage(in *repo.Storage) *entity.Storage {
 		ID:       in.ID,
 		Name:     in.Name,
 		Location: in.Location,
-		// ! Desc
+		Desc:     in.Desc,
 	}
 
 	return storage
@@ -88,8 +90,10 @@ func (s StorageDB) Update(ctx context.Context, storageID int, fn repo.StorageUpd
 		if err != nil {
 			return err
 		}
+		logger.Debugw("db: update storage", "storage", newStorage)
 
 		storageDB := s.marshal(newStorage)
+		logger.Debugw("db: update storage", "storageDB", storageDB)
 
 		if err := tx.WithContext(ctx).
 			Model(&repo.Storage{}).
