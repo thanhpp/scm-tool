@@ -96,7 +96,7 @@ func (d ItemDB) GetList(ctx context.Context, filer repo.ItemFilter) ([]*entity.I
 		items[i] = unmarshalItem(*itemsDB[i])
 	}
 
-	return nil, nil
+	return items, nil
 }
 
 // ----------------------------------------------------------------------------------------------------------------------------------
