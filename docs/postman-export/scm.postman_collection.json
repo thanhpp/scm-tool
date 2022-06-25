@@ -304,6 +304,46 @@
 						"header": []
 					},
 					"response": []
+				},
+				{
+					"name": "get item types",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base}}/item-type",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"item-type"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get item images",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://165.22.49.78:10000/files/item-images-sku1-1656133046908-2880865052.jpg",
+							"protocol": "http",
+							"host": [
+								"165",
+								"22",
+								"49",
+								"78"
+							],
+							"port": "10000",
+							"path": [
+								"files",
+								"item-images-sku1-1656133046908-2880865052.jpg"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}
