@@ -9,11 +9,17 @@ type Item struct {
 	SellPrice  float64 `gorm:"column:sell_price;type:float(8)"`
 	ItemTypeID int     `gorm:"column:item_type_id;type:int"`
 
-	ItemType ItemType `gorm:"foreignKey:ItemTypeID; references:ID"`
-	Serials  []Serial `gorm:"foreignKey:ItemSKU;references:SKU"`
+	Images   []ItemImage `gorm:"foreignKey:ItemSKU;associationForeignKey:SKU"`
+	ItemType ItemType    `gorm:"foreignKey:ItemTypeID; references:ID"`
+	Serials  []Serial    `gorm:"foreignKey:ItemSKU;references:SKU"`
 
 	CreatedAt time.Time `gorm:"column:created_at;autoCreateTime"`
 	UpdatedAt time.Time `gorm:"column:updated_at;autoUpdateTime:milli"`
+}
+
+type ItemImage struct {
+	ItemSKU string `gorm:"column:item_sku;type:text"`
+	Image   string `gorm:"column:image;type:text"`
 }
 
 type ItemType struct {

@@ -6,6 +6,7 @@ import (
 	"github.com/thanhpp/scm/internal/scmsrv/domain/entity"
 	"github.com/thanhpp/scm/internal/scmsrv/domain/repo"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 type ItemDB struct {
@@ -31,7 +32,14 @@ func (d ItemDB) marshalItem(in entity.Item) *repo.Item {
 		},
 	}
 
-	// ! missing Item images
+	for i := range in.Images {
+		item.Images = append(
+			item.Images,
+			repo.ItemImage{
+				ItemSKU: item.SKU,
+				Image:   in.Images[i],
+			})
+	}
 
 	for i := range in.Serials {
 		item.Serials = append(item.Serials, repo.Serial{
@@ -50,9 +58,16 @@ func unmarshalItem(in repo.Item) *entity.Item {
 		Name:      in.Name,
 		Desc:      in.Desc,
 		SellPrice: in.SellPrice,
+		Type: entity.ItemType{
+			ID:   in.ItemType.ID,
+			Name: in.ItemType.Name,
+			Desc: in.ItemType.Desc,
+		},
 	}
 
-	// ! missing Item images
+	for i := range in.Images {
+		item.Images = append(item.Images, in.Images[i].Image)
+	}
 
 	for i := range in.Serials {
 		item.Serials = append(
@@ -60,7 +75,6 @@ func unmarshalItem(in repo.Item) *entity.Item {
 			&entity.Serial{
 				Seri: in.Serials[i].Seri,
 				Item: item,
-				// ? storage
 			})
 	}
 
@@ -87,7 +101,9 @@ func (d ItemDB) CreateItem(ctx context.Context, item entity.Item) error {
 func (d ItemDB) GetList(ctx context.Context, filer repo.ItemFilter) ([]*entity.Item, error) {
 	itemsDB := make([]*repo.Item, filer.Limit)
 
-	if err := d.gdb.WithContext(ctx).Model(&repo.Item{}).Limit(filer.Limit).Offset(filer.Offset).Find(&itemsDB).Error; err != nil {
+	if err := d.gdb.
+		WithContext(ctx).Preload(clause.Associations).
+		Model(&repo.Item{}).Limit(filer.Limit).Offset(filer.Offset).Find(&itemsDB).Error; err != nil {
 		return nil, err
 	}
 
