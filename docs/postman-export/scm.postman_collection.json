@@ -82,6 +82,33 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"name-1\",\n    \"phone\": \"email\",\n    \"email\": \"phone\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base}}/supplier/1",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"supplier",
+								"1"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
