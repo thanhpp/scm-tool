@@ -59,7 +59,7 @@ func (ctrl StorageCtrl) GetList(c *gin.Context) {
 }
 
 func (ctrl StorageCtrl) Update(c *gin.Context) {
-	id, err := getIDFromQuery(c)
+	id, err := getIDFromParam(c)
 	if err != nil {
 		ginutil.RespErr(c, http.StatusNotAcceptable, err)
 		return
@@ -79,8 +79,8 @@ func (ctrl StorageCtrl) Update(c *gin.Context) {
 	ginutil.RespOK(c, nil)
 }
 
-func getIDFromQuery(c *gin.Context) (int, error) {
-	strID := c.Query("id")
+func getIDFromParam(c *gin.Context) (int, error) {
+	strID := c.Param("id")
 
 	iID, err := strconv.Atoi(strID)
 	if err != nil {
