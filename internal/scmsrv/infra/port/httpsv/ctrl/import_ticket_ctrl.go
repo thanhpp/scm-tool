@@ -58,7 +58,11 @@ func (ctrl ImportTicketCtrl) Create(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, importTicket)
+	resp := new(dto.ImportTicketInfoResp)
+	resp.Set200OK()
+	resp.SetData(importTicket)
+
+	c.JSON(http.StatusOK, resp)
 }
 
 func (ctrl ImportTicketCtrl) GenSerial(c *gin.Context) {
