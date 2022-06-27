@@ -165,6 +165,7 @@ func (d ImportTicketDB) Get(ctx context.Context, importTicketID int) (*entity.Im
 
 	var details []repo.ImportTicketDetails
 	if err := d.gdb.WithContext(ctx).
+		Preload(clause.Associations).
 		Model(&repo.ImportTicketDetails{}).
 		Where("import_ticket_id = ?", importTicketID).Find(&details).Error; err != nil {
 		return nil, err
