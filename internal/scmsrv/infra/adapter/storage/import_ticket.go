@@ -70,6 +70,8 @@ func (d ImportTicketDB) marshalImportTicket(in entity.ImportTicket) *repo.Import
 }
 
 func (ImportTicketDB) unmarshal(in *repo.ImportTicket) *entity.ImportTicket {
+	logger.Debugw("unmarshal importTicket", "importTicket db", in)
+
 	out := &entity.ImportTicket{
 		ID:           in.ID,
 		FromSupplier: *unmarshalSupplier(&in.FromSupplier),
@@ -99,6 +101,8 @@ func (ImportTicketDB) unmarshal(in *repo.ImportTicket) *entity.ImportTicket {
 			BuyPrice:        in.Details[i].BuyPrice,
 		})
 	}
+
+	logger.Debugw("unmarshal importTicket", "importTicket", out)
 
 	return out
 }

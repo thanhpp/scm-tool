@@ -104,6 +104,7 @@ func (h ImportTicketHandler) GenSerials(
 	if err != nil {
 		return nil, err
 	}
+
 	// for each item details -
 	var serials []*entity.Serial
 	for i := range importTicket.Details {
