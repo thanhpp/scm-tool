@@ -22,7 +22,7 @@ func (d SerialDB) Count(ctx context.Context, importTicketID int, itemSKU string)
 	var seriCount int64
 
 	if err := d.gdb.
-		WithContext(ctx).Model(&SerialDB{}).
+		WithContext(ctx).Model(&repo.Serial{}).
 		Where("import_ticket_id = ? AND item_sku = ?", importTicketID, itemSKU).
 		Count(&seriCount).Error; err != nil {
 		return 0, err
