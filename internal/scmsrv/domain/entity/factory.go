@@ -49,6 +49,10 @@ func (f factoryImpl) NewImportTicket(
 		skuMap[details[i].Item.SKU] = struct{}{}
 	}
 
+	if receiveTime.IsZero() {
+		receiveTime = sendTime
+	}
+
 	importTicket := &ImportTicket{
 		FromSupplier: fromSupplier,
 		ToStorage:    toStorage,

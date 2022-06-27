@@ -42,7 +42,7 @@ func (d SerialDB) CreateBatch(ctx context.Context, serials []*entity.Serial) err
 	if err := d.gdb.
 		WithContext(ctx).
 		Model(&repo.Serial{}).
-		CreateInBatches(serials, len(serials)).Error; err != nil {
+		CreateInBatches(serialsDB, len(serialsDB)).Error; err != nil {
 		return err
 	}
 
