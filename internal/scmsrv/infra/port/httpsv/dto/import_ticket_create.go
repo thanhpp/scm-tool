@@ -81,10 +81,10 @@ func (d *ImportTicketInfoRespData) set(in *entity.ImportTicket) {
 	d.ReceiveTime = in.ReceiveTime
 	d.Fee = in.Fee
 
-	for i := range d.BillImagePaths {
+	for i := range in.BillImagePaths {
 		d.BillImagePaths = append(d.BillImagePaths, buildFileURL(in.BillImagePaths[i]))
 	}
-	for i := range d.ProductImagePaths {
+	for i := range in.ProductImagePaths {
 		d.ProductImagePaths = append(d.ProductImagePaths, buildFileURL(in.ProductImagePaths[i]))
 	}
 
