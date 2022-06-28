@@ -83,7 +83,7 @@ func (s HTTPServer) newRouter() *gin.Engine {
 		importTicketGr.POST("serials", importTicketCtrl.GenSerial)
 	}
 
-	r.GET("serial/:seri", importTicketCtrl.GenSerial)
+	r.GET("serial/:seri", importTicketCtrl.GetSeriData)
 
 	supplierGr := r.Group("supplier")
 	{
