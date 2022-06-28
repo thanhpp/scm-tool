@@ -10,6 +10,7 @@ import (
 type StorageHandler struct {
 	fac         entity.Factory
 	storageRepo repo.StorageRepo
+	itemRepo    repo.ItemRepo
 }
 
 func (h StorageHandler) Create(ctx context.Context, name, desc, location string) (*entity.Storage, error) {
@@ -32,6 +33,28 @@ func (h StorageHandler) GetListStorages(ctx context.Context, page, size int) ([]
 		Offset: offset,
 		Limit:  limit,
 	})
+}
+
+type StorageInfo struct {
+	Storage        *entity.Storage
+	AvailableItems int
+}
+
+func (h StorageHandler) GetStorageInfo(ctx context.Context, id int) (*StorageInfo, error) {
+	storage, err := h.storageRepo.Get(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+
+	itemCount, err := h.itemRepo.CoundAvailabeByStorageID(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+
+	return &StorageInfo{
+		Storage:        storage,
+		AvailableItems: itemCount,
+	}, nil
 }
 
 func (h StorageHandler) UpdateStorage(ctx context.Context, id int, name, desc, location string) error {

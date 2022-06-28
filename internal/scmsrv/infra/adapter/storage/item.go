@@ -5,6 +5,7 @@ import (
 
 	"github.com/thanhpp/scm/internal/scmsrv/domain/entity"
 	"github.com/thanhpp/scm/internal/scmsrv/domain/repo"
+	"github.com/thanhpp/scm/pkg/enum"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 )
@@ -87,6 +88,22 @@ func (d ItemDB) GetBySKU(ctx context.Context, sku string) (*entity.Item, error) 
 	}
 
 	return unmarshalItem(*itemDB), nil
+}
+
+func (d ItemDB) CoundAvailabeByStorageID(ctx context.Context, storageID int) (int, error) {
+	var count int64
+	if err := d.gdb.WithContext(ctx).Model(&repo.Serial{}).
+		Joins(`
+		JOIN import_ticket ON serial.import_ticket_id = import_ticket.id
+		AND import_ticket.to_storage_id = ?
+		`, storageID).
+		Where("status = ?", enum.SerialStatusNew).
+		Group("item_sku").
+		Count(&count).Error; err != nil {
+		return 0, err
+	}
+
+	return int(count), nil
 }
 
 // ? create serial and images -> returns if error (conflict)

@@ -15,13 +15,91 @@
 						"method": "POST",
 						"header": [],
 						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"from_supplier_id\": 1,\n    \"to_storage_id\": 1,\n    \"send_time\": \"0001-01-01T00:00:00Z\",\n    \"fee\": 500,\n    \"details\": null\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "from_supplier_id",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "to_storage_id",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "send_time",
+									"value": "2006-01-02T15:04:05Z",
+									"type": "text"
+								},
+								{
+									"key": "fee",
+									"value": "1000",
+									"type": "text"
+								},
+								{
+									"key": "details",
+									"value": "\"[\\n  {\\n    \\\"item_sku\\\": \\\"sku1\\\",\\n    \\\"buy_quantity\\\": 100,\\n    \\\"buy_price\\\": 10000\\n  }\\n]\"",
+									"type": "text"
+								},
+								{
+									"key": "receive_time",
+									"value": "2006-01-02T15:04:05Z",
+									"type": "text"
+								},
+								{
+									"key": "bill_images",
+									"type": "file",
+									"src": "/home/thanhpp/Downloads/mockup-catalogue-inkythuatso-03-16-13-21.jpg"
 								}
-							}
+							]
+						},
+						"url": {
+							"raw": "{{base}}/import_ticket",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"import_ticket"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Copy",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "from_supplier_id",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "to_storage_id",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "send_time",
+									"value": "2006-01-02T15:04:05Z",
+									"type": "text"
+								},
+								{
+									"key": "fee",
+									"value": "1000",
+									"type": "text"
+								},
+								{
+									"key": "details",
+									"value": "\"[\\n  {\\n    \\\"item_sku\\\": \\\"sku1\\\",\\n    \\\"buy_quantity\\\": 100,\\n    \\\"buy_price\\\": 10000\\n  }\\n]\"",
+									"type": "text"
+								}
+							]
 						},
 						"url": {
 							"raw": "{{base}}/import_ticket",
@@ -400,6 +478,24 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "get seri data",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base}}/serial/999711610610710211551110971159910410398481095352103",
+					"host": [
+						"{{base}}"
+					],
+					"path": [
+						"serial",
+						"999711610610710211551110971159910410398481095352103"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }

@@ -19,6 +19,7 @@ type ItemRepo interface {
 	GetList(ctx context.Context, filer ItemFilter) ([]*entity.Item, error)
 	GetItemType(ctx context.Context, itemTypeID int) (*entity.ItemType, error)
 	GetAllItemType(ctx context.Context) ([]*entity.ItemType, error)
+	CoundAvailabeByStorageID(ctx context.Context, storageID int) (int, error)
 
 	// Write
 	CreateItem(ctx context.Context, item entity.Item) error

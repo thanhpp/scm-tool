@@ -7,6 +7,7 @@ import (
 
 	"github.com/pkg/errors"
 	"github.com/rs/xid"
+	"github.com/thanhpp/scm/pkg/enum"
 )
 
 type Factory interface {
@@ -56,7 +57,7 @@ func (f factoryImpl) NewImportTicket(
 	importTicket := &ImportTicket{
 		FromSupplier: fromSupplier,
 		ToStorage:    toStorage,
-		Status:       ImportTicketStatusNew,
+		Status:       enum.ImportTicketStatusNew,
 		SendTime:     sendTime,
 		ReceiveTime:  receiveTime,
 
@@ -166,6 +167,7 @@ func (factoryImpl) NewSerials(importTicket *ImportTicket, item *Item, num int) (
 	for i := range serials {
 		serials[i] = &Serial{
 			Seri:         stringToInt(xid.New().String()),
+			Status:       enum.SerialStatusNew,
 			ImportTicket: importTicket,
 			Item:         item,
 		}

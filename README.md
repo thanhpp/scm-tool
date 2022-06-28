@@ -8,10 +8,10 @@
 
 ## Tính năng
 
-- [ ] Quản lý kho
+- [x] Quản lý kho
   - [x] Thêm kho
   - [x] Sửa kho
-  - [ ] Lấy thông tin kho
+  - [x] Lấy thông tin kho
   - [x] Lấy danh sách kho
 - [ ] Quản lý sản phẩm
   - [x] Tạo sản phẩm
@@ -30,7 +30,7 @@
   - [ ] Lấy thông tin phiếu xuất
   - [x] Tạo nhà cung cấp
   - [x] Lấy danh sách nhà cung cấp
-  - [xe] Sửa thông tin nhà cung cấp 
+  - [x] Sửa thông tin nhà cung cấp 
 - [ ] Xác thực/Phân quyền
   - [x] Đăng nhập
   - [x] Tạo tài khoản

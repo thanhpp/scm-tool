@@ -58,6 +58,26 @@ func (ctrl StorageCtrl) GetList(c *gin.Context) {
 	c.JSON(http.StatusOK, resp)
 }
 
+func (ctrl StorageCtrl) Get(c *gin.Context) {
+	id, err := getIDFromParam(c)
+	if err != nil {
+		ginutil.RespErr(c, http.StatusNotAcceptable, err)
+		return
+	}
+
+	info, err := ctrl.storageHandler.GetStorageInfo(c.Request.Context(), id)
+	if err != nil {
+		ginutil.RespErr(c, http.StatusInternalServerError, err)
+		return
+	}
+
+	resp := new(dto.StorageDetailResp)
+	resp.Set200OK()
+	resp.SetData(info.Storage, info.AvailableItems)
+
+	c.JSON(http.StatusOK, resp)
+}
+
 func (ctrl StorageCtrl) Update(c *gin.Context) {
 	id, err := getIDFromParam(c)
 	if err != nil {

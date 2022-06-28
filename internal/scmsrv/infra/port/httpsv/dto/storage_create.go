@@ -46,3 +46,22 @@ func (resp *GetListStoragesResp) SetData(storages []*entity.Storage) {
 		resp.Data[i].set(storages[i])
 	}
 }
+
+type StorageDetailRespData struct {
+	Storage        StorageInfoRespData `json:"storage"`
+	AvailableItems int                 `json:"available_items"`
+}
+
+func (data *StorageDetailRespData) set(stg *entity.Storage, availableItems int) {
+	data.Storage.set(stg)
+	data.AvailableItems = availableItems
+}
+
+type StorageDetailResp struct {
+	ginutil.RespTemplateError
+	Data StorageDetailRespData `json:"data"`
+}
+
+func (resp *StorageDetailResp) SetData(stg *entity.Storage, availableItems int) {
+	resp.Data.set(stg, availableItems)
+}

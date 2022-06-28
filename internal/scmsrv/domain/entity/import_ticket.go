@@ -6,12 +6,6 @@ import (
 	"github.com/thanhpp/scm/pkg/enum"
 )
 
-type ImportTicketStatus int
-
-const (
-	ImportTicketStatusNew = 1 + iota
-)
-
 type ImportTicket struct {
 	ID           int
 	FromSupplier Supplier

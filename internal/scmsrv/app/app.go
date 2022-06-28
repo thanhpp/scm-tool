@@ -37,6 +37,7 @@ func New(
 		StorageHandler: StorageHandler{
 			fac:         fac,
 			storageRepo: storageRepo,
+			itemRepo:    itemRepo,
 		},
 		ItemHandler: ItemHandler{
 			fac:      fac,
