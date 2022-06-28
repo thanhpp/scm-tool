@@ -262,6 +262,24 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "get storage info",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base}}/storage/1",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"storage",
+								"1"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
