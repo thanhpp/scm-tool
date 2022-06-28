@@ -96,6 +96,12 @@ func (h ImportTicketHandler) CreateImportDetails(
 	return detail, nil
 }
 
+func (h ImportTicketHandler) GetSerialInfo(
+	ctx context.Context, seri string,
+) (*entity.Serial, error) {
+	return h.serialRepo.Get(ctx, seri)
+}
+
 func (h ImportTicketHandler) GenSerials(
 	ctx context.Context, importTicketID int,
 ) ([]*entity.Serial, error) {

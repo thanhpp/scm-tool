@@ -69,7 +69,7 @@ func (d ImportTicketDB) marshalImportTicket(in entity.ImportTicket) *repo.Import
 	return out
 }
 
-func (ImportTicketDB) unmarshal(in *repo.ImportTicket) *entity.ImportTicket {
+func unmarshalImportTicket(in *repo.ImportTicket) *entity.ImportTicket {
 	logger.Debugw("unmarshal importTicket", "importTicket db", in)
 
 	out := &entity.ImportTicket{
@@ -173,7 +173,7 @@ func (d ImportTicketDB) Get(ctx context.Context, importTicketID int) (*entity.Im
 
 	importTicketDB.Details = details
 
-	importTicket := d.unmarshal(importTicketDB)
+	importTicket := unmarshalImportTicket(importTicketDB)
 
 	return importTicket, nil
 }

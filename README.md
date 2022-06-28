@@ -23,7 +23,7 @@
   - [x] Lấy danh sách kiểu sản phẩm 
 - [ ] Quản lý nhập xuất
   - [x] **Tạo phiếu nhập**
-  - [ ] Tạo số seri
+  - [x] Tạo số seri
   - [ ] Truy xuất phiếu nhập
   - [ ] Lấy thông tin phiếu nhập
   - [ ] **Tạo phiếu xuất**
@@ -38,7 +38,7 @@
   - [ ] Quên mật khẩu
   - [ ] Phân quyền
 - [ ] Tạo số seri -> blockchain
-- [ ] Tra cứu thông tin theo số seri
+- [x] Tra cứu thông tin theo số seri
 
 ## Side request
 

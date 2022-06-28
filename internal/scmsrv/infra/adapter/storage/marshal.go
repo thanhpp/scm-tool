@@ -12,3 +12,11 @@ func marshalSerial(in entity.Serial) repo.Serial {
 		ImportTicketID: in.ImportTicket.ID,
 	}
 }
+
+func unmarshalSerial(in repo.Serial) entity.Serial {
+	return entity.Serial{
+		Seri:         in.Seri,
+		Item:         unmarshalItem(in.Item),
+		ImportTicket: unmarshalImportTicket(&in.ImportTicket),
+	}
+}

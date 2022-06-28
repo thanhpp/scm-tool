@@ -1,7 +1,9 @@
 package ctrl
 
 import (
+	"errors"
 	"net/http"
+	"unicode"
 
 	"github.com/gin-gonic/gin"
 	"github.com/thanhpp/scm/internal/scmsrv/app"
@@ -82,6 +84,35 @@ func (ctrl ImportTicketCtrl) GenSerial(c *gin.Context) {
 	resp := new(dto.GenSerialResp)
 	resp.Set200OK()
 	resp.SetData(serials)
+
+	c.JSON(http.StatusOK, resp)
+}
+
+func (ctrl ImportTicketCtrl) GetSeriData(c *gin.Context) {
+	seri := c.Param("seri")
+
+	if len(seri) == 0 {
+		ginutil.RespErr(c, http.StatusNotAcceptable, errors.New("empty seri"))
+		return
+	}
+
+	var seriRune = []rune(seri)
+	for i := range seriRune {
+		if !unicode.IsNumber(seriRune[i]) {
+			ginutil.RespErr(c, http.StatusNotAcceptable, errors.New("invalid seri"))
+			return
+		}
+	}
+
+	serial, err := ctrl.importTickerHanlder.GetSerialInfo(c, seri)
+	if err != nil {
+		ginutil.RespErr(c, http.StatusInternalServerError, err)
+		return
+	}
+
+	resp := new(dto.SerialInfoResp)
+	resp.Set200OK()
+	resp.SetData(serial)
 
 	c.JSON(http.StatusOK, resp)
 }

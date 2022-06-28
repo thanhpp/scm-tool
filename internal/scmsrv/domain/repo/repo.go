@@ -76,6 +76,7 @@ type StorageRepo interface {
 type SerialRepo interface {
 	// Read
 	Count(ctx context.Context, importTicketID int, itemSKU string) (int, error)
+	Get(ctx context.Context, seri string) (*entity.Serial, error)
 
 	// Write
 	CreateBatch(ctx context.Context, serials []*entity.Serial) error

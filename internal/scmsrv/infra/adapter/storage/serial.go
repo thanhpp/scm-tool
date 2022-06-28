@@ -6,6 +6,7 @@ import (
 	"github.com/thanhpp/scm/internal/scmsrv/domain/entity"
 	"github.com/thanhpp/scm/internal/scmsrv/domain/repo"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 type SerialDB struct {
@@ -29,6 +30,23 @@ func (d SerialDB) Count(ctx context.Context, importTicketID int, itemSKU string)
 	}
 
 	return int(seriCount), nil
+}
+
+func (d SerialDB) Get(ctx context.Context, seri string) (*entity.Serial, error) {
+	serialDB := new(repo.Serial)
+
+	if err := d.gdb.
+		WithContext(ctx).
+		Model(serialDB).
+		Preload(clause.Associations).
+		Where("seri LIKE ?", seri).
+		First(serialDB).Error; err != nil {
+		return nil, err
+	}
+
+	serial := unmarshalSerial(*serialDB)
+
+	return &serial, nil
 }
 
 func (d SerialDB) CreateBatch(ctx context.Context, serials []*entity.Serial) error {
