@@ -97,7 +97,7 @@ func (d ItemDB) CoundAvailabeByStorageID(ctx context.Context, storageID int) (in
 		JOIN import_ticket ON serial.import_ticket_id = import_ticket.id
 		AND import_ticket.to_storage_id = ?
 		`, storageID).
-		Where("status = ?", enum.SerialStatusNew).
+		Where("(serial.status = ? OR serial.status IS NULL)", enum.SerialStatusNew).
 		Group("item_sku").
 		Count(&count).Error; err != nil {
 		return 0, err
