@@ -34,15 +34,36 @@ func (d SerialDB) Count(ctx context.Context, importTicketID int, itemSKU string)
 
 func (d SerialDB) Get(ctx context.Context, seri string) (*entity.Serial, error) {
 	serialDB := new(repo.Serial)
-
 	if err := d.gdb.
 		WithContext(ctx).
 		Model(serialDB).
-		Preload(clause.Associations).
 		Where("seri LIKE ?", seri).
 		First(serialDB).Error; err != nil {
 		return nil, err
 	}
+
+	itemDB := new(repo.Item)
+	if err := d.gdb.
+		WithContext(ctx).
+		Model(itemDB).
+		Preload(clause.Associations).
+		Where("sku LIKE ?", serialDB.ItemSKU).
+		First(itemDB).Error; err != nil {
+		return nil, err
+	}
+
+	importTicketDB := new(repo.ImportTicket)
+	if err := d.gdb.
+		WithContext(ctx).
+		Model(importTicketDB).
+		Preload(clause.Associations).
+		Where("id = ?", serialDB.ImportTicketID).
+		First(importTicketDB).Error; err != nil {
+		return nil, err
+	}
+
+	serialDB.Item = *itemDB
+	serialDB.ImportTicket = *importTicketDB
 
 	serial := unmarshalSerial(*serialDB)
 
