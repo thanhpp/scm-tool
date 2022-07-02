@@ -36,7 +36,7 @@ func (d *ItemInfoRespData) set(item *entity.Item) {
 }
 
 func buildFileURL(filename string) string {
-	return fmt.Sprintf("http://%s/files/%s", "165.22.49.78:10000", filepath.Base(filename))
+	return fmt.Sprintf("%s/files/%s", "https://scm-tool.thanhpp.ninja", filepath.Base(filename))
 }
 
 type ItemInfoResp struct {
