@@ -131,7 +131,8 @@ func (d ItemDB) GetList(ctx context.Context, filer repo.ItemFilter) ([]*entity.I
 
 	if err := d.gdb.
 		WithContext(ctx).Preload(clause.Associations).
-		Model(&repo.Item{}).Limit(filer.Limit).Offset(filer.Offset).Find(&itemsDB).Error; err != nil {
+		Model(&repo.Item{}).Limit(filer.Limit).Offset(filer.Offset).Order("created_at ASC").
+		Find(&itemsDB).Error; err != nil {
 		return nil, err
 	}
 

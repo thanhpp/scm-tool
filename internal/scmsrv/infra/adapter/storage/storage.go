@@ -66,7 +66,7 @@ func (s StorageDB) GetList(ctx context.Context, filter repo.StorageFiler) ([]*en
 	storagesDB := make([]*repo.Storage, 0, filter.Limit)
 
 	if err := s.gdb.WithContext(ctx).Model(&repo.Storage{}).
-		Offset(filter.Offset).Limit(filter.Limit).
+		Offset(filter.Offset).Limit(filter.Limit).Order("id ASC").
 		Find(&storagesDB).Error; err != nil {
 		return nil, err
 	}

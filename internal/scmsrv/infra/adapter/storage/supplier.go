@@ -61,7 +61,7 @@ func (d SupplierDB) GetList(ctx context.Context, filter repo.SupplierFiler) ([]*
 	supplierDBs := make([]*repo.Supplier, filter.Limit)
 
 	if err := d.gdb.WithContext(ctx).Model(&repo.Supplier{}).
-		Limit(filter.Limit).Offset(filter.Offset).
+		Limit(filter.Limit).Offset(filter.Offset).Order("id ASC").
 		Find(&supplierDBs).Error; err != nil {
 		return nil, err
 	}
