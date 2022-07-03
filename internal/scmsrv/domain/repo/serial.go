@@ -8,7 +8,7 @@ import (
 
 type Serial struct {
 	Seri           string            `gorm:"column:seri;type:text;primaryKey"`
-	Status         enum.SerialStatus `gorm:"column:status;type:int"`
+	Status         enum.SerialStatus `gorm:"column:status"`
 	ItemSKU        string            `gorm:"column:item_sku;type:text;primaryKey"`
 	ImportTicketID int               `gorm:"column:import_ticket_id;type:int"`
 
