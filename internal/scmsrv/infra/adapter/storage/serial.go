@@ -5,6 +5,7 @@ import (
 
 	"github.com/thanhpp/scm/internal/scmsrv/domain/entity"
 	"github.com/thanhpp/scm/internal/scmsrv/domain/repo"
+	"github.com/thanhpp/scm/pkg/logger"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 )
@@ -76,6 +77,9 @@ func (d SerialDB) CreateBatch(ctx context.Context, serials []*entity.Serial) err
 	for i := range serials {
 		newSerial := marshalSerial(*serials[i])
 		serialsDB[i] = &newSerial
+		if i == 0 {
+			logger.Debugw("marshal serial", "entity", serials[i], "repo", newSerial)
+		}
 	}
 
 	if err := d.gdb.

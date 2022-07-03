@@ -199,3 +199,15 @@ func (d ItemDB) GetAllItemType(ctx context.Context) ([]*entity.ItemType, error) 
 
 	return itemTypes, nil
 }
+
+/*
+	SELECT item_sku, COUNT(seri)
+	FROM serial AS s
+	WHERE s.import_ticket_id IN (
+		SELECT i.id
+		FROM import_ticket AS i
+		WHERE i.to_storage_id = 1
+	) AND
+	s.status IS NOT NULL
+	GROUP BY item_sku;
+*/
