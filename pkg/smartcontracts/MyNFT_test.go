@@ -14,7 +14,7 @@ import (
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/joho/godotenv"
 	"github.com/stretchr/testify/require"
-	"github.com/thanhpp/scm/smartcontracts"
+	"github.com/thanhpp/scm/pkg/smartcontracts"
 )
 
 const (
