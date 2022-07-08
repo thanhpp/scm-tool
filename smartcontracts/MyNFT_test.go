@@ -76,7 +76,7 @@ func TestMintNFT(t *testing.T) {
 	auth := bind.NewKeyedTransactor(privateKey)
 	auth.Nonce = big.NewInt(int64(nonce))
 	auth.Value = big.NewInt(0)
-	auth.GasLimit = 300000 // 0.1
+	auth.GasLimit = 300000
 	auth.GasPrice = gasPrice
 
 	instance, err := smartcontracts.NewSmartcontracts(common.HexToAddress(contractAddr), client)
@@ -117,7 +117,7 @@ func TestSafeTransfer(t *testing.T) {
 	auth := bind.NewKeyedTransactor(privateKey)
 	auth.Nonce = big.NewInt(int64(nonce))
 	auth.Value = big.NewInt(0)
-	auth.GasLimit = 300000 // 0.1
+	auth.GasLimit = 300000
 	auth.GasPrice = gasPrice
 
 	instance, err := smartcontracts.NewSmartcontracts(common.HexToAddress(contractAddr), client)
@@ -133,7 +133,6 @@ func TestSafeTransfer(t *testing.T) {
 
 	auth.Nonce = big.NewInt(int64(newNonce))
 
-	// for now, the nonce == tokenID
 	transerTx, err := instance.SafeTransferFrom(auth, fromAddr, common.HexToAddress(toAddr), big.NewInt(4))
 	require.NoError(t, err)
 	t.Logf("new transfer tx (%s) %+v", transerTx.Hash().Hex(), transerTx)
