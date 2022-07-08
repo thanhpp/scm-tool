@@ -1,6 +1,6 @@
 # scm
 
-## Documents
+## Tài liệu
 
 - https://dbdiagram.io/d/61efb53a7cf3fc0e7c621c2d
 - https://drive.google.com/drive/folders/1EV529MDBP5CvLXkzccr4G1FMFUlmbNe7?usp=sharing
@@ -45,6 +45,13 @@
 
 - [x] gin OK resp
 
+
+## Overleaf
+
+- https://www.overleaf.com/project/62c687809aee882527f0c10a
 ## Ref
 
 - https://github.com/INFURA/ipfs-upload-client/blob/master/main.go
+- https://ethereum.org/en/developers/tutorials/how-to-view-nft-in-metamask/
+- https://goethereumbook.org/en/smart-contract-write/
+- https://dev.to/rounakbanik/writing-an-nft-collectible-smart-contract-2nh8
