@@ -38,8 +38,13 @@
   - [ ] Quên mật khẩu
   - [ ] Phân quyền
 - [ ] Tạo số seri -> blockchain
+  - [x] MintNFT blockchain 
 - [x] Tra cứu thông tin theo số seri
 
 ## Side request
 
 - [x] gin OK resp
+
+## Ref
+
+- https://github.com/INFURA/ipfs-upload-client/blob/master/main.go
