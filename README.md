@@ -39,7 +39,7 @@
   - [ ] Phân quyền
 - [ ] Tạo số seri -> blockchain
   - [x] MintNFT blockchain 
-  - [ ] Upload lên IPFS
+  - [x] Upload lên IPFS
   - [ ] Server để lưu trữ và mint NFT
 - [x] Tra cứu thông tin theo số seri
 
@@ -50,6 +50,7 @@
 
 ## Overleaf
 
+- https://www.overleaf.com/read/bxyvbfxqdztg
 - https://www.overleaf.com/project/62c687809aee882527f0c10a
 ## Ref
 
