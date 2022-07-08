@@ -39,9 +39,11 @@
   - [ ] Phân quyền
 - [ ] Tạo số seri -> blockchain
   - [x] MintNFT blockchain 
+  - [ ] Upload lên IPFS
+  - [ ] Server để lưu trữ và mint NFT
 - [x] Tra cứu thông tin theo số seri
 
-## Side request
+## Yêu cầu phụ
 
 - [x] gin OK resp
 

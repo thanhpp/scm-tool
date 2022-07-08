@@ -10,6 +10,7 @@ import (
 	ipfsFiles "github.com/ipfs/go-ipfs-files"
 	httpapi "github.com/ipfs/go-ipfs-http-client"
 	caopts "github.com/ipfs/interface-go-ipfs-core/options"
+	path "github.com/ipfs/interface-go-ipfs-core/path"
 )
 
 const (
@@ -39,24 +40,24 @@ func NewIPFSInfuraClient(projectID, projectSecret string) (*IPFSInfuraClient, er
 	return c, nil
 }
 
-func (c IPFSInfuraClient) UploadFile(ctx context.Context, path string) error {
+func (c IPFSInfuraClient) UploadFile(ctx context.Context, path string) (path.Resolved, error) {
 	stat, err := os.Lstat(path)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	file, err := ipfsFiles.NewSerialFile(path, false, stat)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	res, err := c.client.Unixfs().Add(ctx, file, caopts.Unixfs.Pin(true))
 	if err != nil {
-		return err
+		return nil, err
 	}
 	fmt.Printf("[DEBUG] add res %+v\n", res)
 
-	return nil
+	return res, nil
 }
 
 func basicAuth(projectId, projectSecret string) string {
