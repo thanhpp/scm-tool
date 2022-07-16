@@ -17,13 +17,14 @@
   - [x] Khảo sát hiện trạng
   - [ ] Tổng quan chức năng
     - [x] Usecase tổng quát
-    - [ ] Phân rã usecase
+    - [x] Phân rã usecase
       - [x] Usecase quản lý sản phẩm
       - [x] Usecase quản lý phiếu nhập
-      - [ ] Usecase tra cứu theo số seri
-    - [ ] Quy trình nghiệp vụ
+      - [x] Usecase quản lý tài khoản
+      - [x] Usecase tra cứu theo số seri
+    - [x] Quy trình nghiệp vụ
       - [x] Nghiệp vụ tạo phiếu nhập
-      - [ ] Nghiệp vụ tra cứu số seri
+      - [x] Nghiệp vụ tra cứu số seri
     - [ ] Đặc tả chức năng (4-7 usecases)
     - [ ] Yêu cầu phi chức năng   
 - [ ] Công nghệ
