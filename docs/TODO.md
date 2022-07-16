@@ -43,7 +43,7 @@
     - [ ] Thiết kế cơ sở dữ liệu
   - [ ] Xây dựng ứng dụng
     - [ ] Thư viện và công cụ sử dụng
-      - [ ] OpenZeppelin
+      - [ ] OpenZeppelinscm
     - [ ] Kết quả đạt được
   - [ ] Giải pháp đóng góp
     - [ ] Vấn đề truy xuất nguồn gốc
@@ -62,6 +62,9 @@
   - [ ] Mint NFT
   - [ ] Server APIs
 - [ ] Query seri đính kèm NFT
+- [ ] Tài khoản
+  - [ ] Reset mật khẩu
+  - [ ] Phân quyền
 
 ### Sẽ làm nếu còn thời gian
 
