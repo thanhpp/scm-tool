@@ -7,9 +7,11 @@ import (
 	"math/big"
 	"os"
 	"testing"
+	"time"
 
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/joho/godotenv"
@@ -84,7 +86,49 @@ func TestMintNFT(t *testing.T) {
 
 	tx, err := instance.MintNFT(auth, fromAddr, tokenURI)
 	require.NoError(t, err)
-	t.Logf("new mint nft tx (%s) %+v", tx.Hash().Hex(), tx)
+
+	txJson, err := tx.MarshalJSON()
+	require.NoError(t, err)
+	t.Logf("new mint nft tx (%s) %+v\n %s \n", tx.Hash().Hex(), tx, string(txJson))
+
+	ticker := time.NewTicker(time.Second * 5)
+	defer ticker.Stop()
+
+	for ; true; <-ticker.C {
+		t.Log("querying")
+		_, isPending, err := client.TransactionByHash(ctx, tx.Hash())
+		if err == nil && !isPending {
+			break
+		}
+	}
+
+	receipt, err := client.TransactionReceipt(ctx, tx.Hash())
+	require.NoError(t, err, tx.Hash().String())
+
+	t.Logf("tx receipt %+v\n", receipt)
+
+	for i := range receipt.Logs {
+		t.Logf("receipt logs %d %+v", i, receipt.Logs[i])
+
+		require.Len(t, receipt.Logs[i].Topics, 4)
+
+		hexTokenID := receipt.Logs[i].Topics[3].Hex()
+
+		if len(hexTokenID) >= 3 {
+			for i := 2; i < len(hexTokenID); i++ {
+				if hexTokenID[i] != '0' {
+					hexTokenID = "0x" + hexTokenID[i:]
+					break
+				}
+			}
+		}
+
+		tokenID, err := hexutil.DecodeUint64(hexTokenID)
+		require.NoError(t, err, hexTokenID)
+
+		t.Logf("tokenID %d\n", tokenID)
+
+	}
 }
 
 func TestSafeTransfer(t *testing.T) {
