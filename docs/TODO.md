@@ -38,10 +38,10 @@
   - [x] Thiết kế kiến trúc (microservice)
     - [x] Biểu đồ tổng quan
     - [x] Giải thích kiến trúc 
-  - [ ] Thiết kế tổng quan (UML package diagram)
+  - [x] Thiết kế tổng quan (UML package diagram)
     - [x] scm service
-    - [ ] nft service
-    - [ ] giải thích packages
+    - [x] nft service
+    - [x] giải thích packages
   - [ ] Thiết kế chi tiết gói (Class diagram)  
   - [ ] Thiết kế chi tiết
     - [ ] Thiết kế giao diện
