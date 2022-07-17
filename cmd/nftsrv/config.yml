@@ -1,0 +1,15 @@
+http_server:
+  host: 0.0.0.0
+  port: 11000
+
+logger:
+  color: true
+  logger_name: nftsrv
+  level: debug
+
+database:
+  host: 127.0.0.1
+  port: 5432
+  user: nftuser
+  pass: nftpass
+  database: nftdb

@@ -12,6 +12,12 @@ type DB struct {
 	gdb *gorm.DB
 }
 
+func (db *DB) SeriNFTRepo() repo.SeriNFTRepo {
+	return &SeriNFTDB{
+		db: db.gdb,
+	}
+}
+
 func NewDB(gormDB *gorm.DB) *DB {
 	db := &DB{
 		gdb: gormDB,

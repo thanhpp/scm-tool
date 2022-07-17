@@ -9,5 +9,9 @@ const (
 )
 
 const (
+	RinkebyURL = "https://rinkeby.infura.io"
+)
+
+const (
 	AutoUpdateTokenIDInterval = time.Second * 2
 )

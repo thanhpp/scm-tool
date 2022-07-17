@@ -10,6 +10,8 @@ import (
 const (
 	infuraPrjIDEnv     = "INFURA_PROJECT_ID"
 	infuraPrjSecretEnv = "INFURA_PROJECT_SECRET"
+	nodeAPIURLEnv      = "NODE_API_URL"
+	privateKeyEnv      = "PRIVATE_KEY"
 )
 
 type NFTServiceConfig struct {
@@ -17,6 +19,8 @@ type NFTServiceConfig struct {
 	Logger       configx.LogConfig        `mapstructure:"logger"`
 	Database     configx.DatabaseConfig   `mapstructure:"database"`
 	InfuraConfig InfuraConfig             `mapstructure:"-"`
+	NodeAPIURL   string                   `mapstructure:"-"`
+	PrivateKey   string                   `mapstructure:"-"`
 }
 
 func NewNFTServiceConfig(configPath string) (*NFTServiceConfig, error) {
@@ -33,10 +37,18 @@ func NewNFTServiceConfig(configPath string) (*NFTServiceConfig, error) {
 		return nil, errors.New("empty infura config")
 	}
 
+	apiURL := os.Getenv(nodeAPIURLEnv)
+	privateKey := os.Getenv(privateKeyEnv)
+	if apiURL == "" || privateKey == "" {
+		return nil, errors.New("empty node api url or private key")
+	}
+
 	cfg.InfuraConfig = InfuraConfig{
 		ProjectID:     infuraPrjID,
 		ProjectSecret: infuraPrjSecret,
 	}
+	cfg.NodeAPIURL = apiURL
+	cfg.PrivateKey = privateKey
 
 	return cfg, nil
 }

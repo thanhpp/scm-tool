@@ -59,8 +59,9 @@
 
 - [ ] Service mint NFT
   - [ ] Nhận data để mint NFT
-  - [ ] Upload lên IPFS
-  - [ ] Mint NFT
+  - [x] Upload lên IPFS
+  - [x] Mint NFT
+  - [x] Database
   - [ ] Server APIs
 - [ ] Query seri đính kèm NFT
 - [ ] Tài khoản

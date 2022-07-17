@@ -1,5 +1,9 @@
 package smartcontracts
 
+const (
+	ContractAddress = "0xEA92d9D15139c316944aeba2aBe828B87cBA1265"
+)
+
 type NFT struct {
 	Name       string      `json:"name"`
 	Desc       string      `json:"desc"`
