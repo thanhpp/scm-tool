@@ -47,7 +47,8 @@
       - [ ] OpenZeppelinscm
     - [ ] Kết quả đạt được
   - [ ] Giải pháp đóng góp
-    - [ ] Vấn đề truy xuất nguồn gốc
+    - [x] Vấn đề truy xuất nguồn gốc
+    - [ ] **don't know**
   - [ ] Kết luận  
     - [ ] Kết quả sản phẩm
     - [ ] Hướng phát triển  
