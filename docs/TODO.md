@@ -35,9 +35,9 @@
   - [x] Docker 
   - [ ] Golang
 - [ ] Kết quả thực nghiệm
-  - [ ] Thiết kế kiến trúc (microservice)
+  - [x] Thiết kế kiến trúc (microservice)
     - [x] Biểu đồ tổng quan
-    - [ ] Giải thích kiến trúc 
+    - [x] Giải thích kiến trúc 
   - [ ] Thiết kế tổng quan (UML package diagram)
     - [x] scm service
     - [ ] nft service
