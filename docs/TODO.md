@@ -49,7 +49,11 @@
     - [ ] Thiết kế cơ sở dữ liệu
   - [ ] Xây dựng ứng dụng
     - [ ] Thư viện và công cụ sử dụng
-      - [ ] OpenZeppelinscm
+      - [ ] OpenZeppelin
+      - [ ] Gin
+      - [ ] Postgres
+      - [ ] Abigen
+      - [ ] go-ethereum
     - [ ] Kết quả đạt được
   - [ ] Giải pháp đóng góp
     - [x] Vấn đề truy xuất nguồn gốc
