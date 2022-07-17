@@ -14,10 +14,30 @@ services:
       timeout: 5s
       retries: 10
       start_period: 10s
-    ports:
-      - 5432:5432
+    # ports:
+    #   - 5432:5432
     volumes:
       - pgdata:/var/lib/postgresql/data
+    networks:
+      - intranet
+
+  pgdatabasenft:
+    image: postgres:13
+    restart: always
+    environment:
+      - POSTGRES_USER=nftuser
+      - POSTGRES_PASSWORD=nftpass
+      - POSTGRES_DB=nftdb
+    healthcheck:
+      test: ["CMD", "psql", "-U", "nftuser", "-d", "nftdb", "-c", "SELECT 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    # ports:
+    #   - 5432:5432
+    volumes:
+      - pgdatanft:/var/lib/postgresql/data
     networks:
       - intranet
 
@@ -41,9 +61,28 @@ services:
     networks:
       - intranet
 
+  nftsrv:
+    build:
+      context: ..
+      dockerfile: ./build/Dockerfile.nft
+    depends_on:
+      pgdatabasenft:
+        condition: service_healthy
+    deploy:
+      restart_policy:
+          condition: on-failure
+          max_attempts: 5
+    ports:
+      - 11000:11000
+    environment:
+      - DB_HOST=pgdatabasenft
+    networks:
+      - intranet
+
 networks:
   intranet:
 
 volumes:
   pgdata:
   scmfiles:
+  pgdatanft:

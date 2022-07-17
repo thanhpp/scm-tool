@@ -12,6 +12,20 @@ type SeriNFTDB struct {
 	db *gorm.DB
 }
 
+func (d *SeriNFTDB) CheckDuplicateSeri(ctx context.Context, seri string) (bool, error) {
+	var seriNFTDB = new(repo.SeriNFT)
+
+	if err := d.db.WithContext(ctx).Where("seri = ?", seri).Find(seriNFTDB).Error; err != nil {
+		return false, err
+	}
+
+	if seriNFTDB.Seri == "" {
+		return false, nil
+	}
+
+	return true, nil
+}
+
 func (d *SeriNFTDB) GetBySeri(ctx context.Context, seri string) (*entity.SerialNFT, error) {
 	seriNFTDB := new(repo.SeriNFT)
 
@@ -25,7 +39,7 @@ func (d *SeriNFTDB) GetBySeri(ctx context.Context, seri string) (*entity.SerialN
 func (d *SeriNFTDB) GetSeriNFTWithEmptyTokenID(ctx context.Context) ([]*entity.SerialNFT, error) {
 	var seriNFTsDB []*repo.SeriNFT
 
-	if err := d.db.WithContext(ctx).Where("token_id = ? OR token_id IS NULL", 0).Find(seriNFTsDB).Error; err != nil {
+	if err := d.db.WithContext(ctx).Where("token_id = ?", 0).Find(&seriNFTsDB).Error; err != nil {
 		return nil, err
 	}
 
@@ -41,6 +55,16 @@ func (d *SeriNFTDB) GetSeriNFTByTokenID(ctx context.Context, tokenID int64) (*en
 	seriNFTDB := new(repo.SeriNFT)
 
 	if err := d.db.WithContext(ctx).Where("token_id = ?", tokenID).First(seriNFTDB).Error; err != nil {
+		return nil, err
+	}
+
+	return unmarshalSeriNFT(seriNFTDB), nil
+}
+
+func (d *SeriNFTDB) GetSeriNFTByTxHash(ctx context.Context, txHash string) (*entity.SerialNFT, error) {
+	seriNFTDB := new(repo.SeriNFT)
+
+	if err := d.db.WithContext(ctx).Where("tx_hash LIKE ?", txHash).First(seriNFTDB).Error; err != nil {
 		return nil, err
 	}
 

@@ -4,7 +4,7 @@ import "time"
 
 const (
 	DefaultENVFile    = ".env"
-	DefaultConfigFile = "config.yaml"
+	DefaultConfigFile = "config.yml"
 	SaveFilePaths     = "./files"
 )
 

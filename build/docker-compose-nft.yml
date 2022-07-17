@@ -1,0 +1,49 @@
+version: '3.9'
+
+services:
+  pgdatabase:
+    image: postgres:13
+    restart: always
+    environment:
+      - POSTGRES_USER=nftuser
+      - POSTGRES_PASSWORD=nftpass
+      - POSTGRES_DB=nftdb
+    healthcheck:
+      test: ["CMD", "psql", "-U", "nftuser", "-d", "nftdb", "-c", "SELECT 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    ports:
+      - 5432:5432
+    # volumes:
+    #   - pgdata:/var/lib/postgresql/data
+    networks:
+      - intranet
+
+  scmsrv:
+    build:
+      context: ..
+      dockerfile: ./build/Dockerfile
+    depends_on:
+      pgdatabase:
+        condition: service_healthy
+    deploy:
+      restart_policy:
+          condition: on-failure
+          max_attempts: 5
+    ports:
+      - 10000:10000
+    environment:
+      - DB_HOST=pgdatabase
+    volumes:
+      - scmfiles:/files
+    networks:
+      - intranet
+
+networks:
+  intranet:
+
+volumes:
+  pgdata:
+  scmfiles:

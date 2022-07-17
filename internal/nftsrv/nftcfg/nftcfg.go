@@ -50,6 +50,12 @@ func NewNFTServiceConfig(configPath string) (*NFTServiceConfig, error) {
 	cfg.NodeAPIURL = apiURL
 	cfg.PrivateKey = privateKey
 
+	// overwrite db host
+	dbHost := os.Getenv("DB_HOST")
+	if len(dbHost) != 0 {
+		cfg.Database.Host = dbHost
+	}
+
 	return cfg, nil
 }
 

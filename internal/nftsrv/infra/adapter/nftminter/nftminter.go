@@ -24,6 +24,10 @@ var (
 	bigIntZero = big.NewInt(0)
 )
 
+var (
+	ErrPendingTx = errors.New("pending tx")
+)
+
 type NFTMinter struct {
 	ethClient    *ethclient.Client
 	privKey      *ecdsa.PrivateKey
@@ -64,7 +68,7 @@ func NewNFTMinter(ethClient *ethclient.Client, privateKey, contractAddr string) 
 }
 
 func (m *NFTMinter) newAuth(ctx context.Context) (*bind.TransactOpts, error) {
-	nonce, err := m.ethClient.PendingBalanceAt(ctx, m.fromAddr)
+	nonce, err := m.ethClient.NonceAt(ctx, m.fromAddr, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -75,7 +79,7 @@ func (m *NFTMinter) newAuth(ctx context.Context) (*bind.TransactOpts, error) {
 	}
 
 	auth := bind.NewKeyedTransactor(m.privKey)
-	auth.Nonce = nonce
+	auth.Nonce = big.NewInt(int64(nonce))
 	auth.Value = bigIntZero
 	auth.GasLimit = gasLimit
 	auth.GasPrice = gasPrice
@@ -98,16 +102,31 @@ func (m *NFTMinter) MintNFT(ctx context.Context, tokenURI string) (*MintTxInfo, 
 		return nil, err
 	}
 
+	txJson, err := tx.MarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	logger.Debugw("mint nft tx", "tx", string(txJson))
+
 	return &MintTxInfo{
-		TxHash: tx.Hash().Hex(),
+		TxHash: tx.Hash().String(),
 	}, nil
 }
 
 func (m *NFTMinter) GetTokenIDByTxHash(ctx context.Context, txHash string) (uint64, error) {
 	// get tx receipt
+	hashTxHash := common.HexToHash(txHash)
+	_, isPending, err := m.ethClient.TransactionByHash(ctx, hashTxHash)
+	if err != nil {
+		return 0, fmt.Errorf("get tx by hash error: %w", err)
+	}
+	if isPending {
+		return 0, ErrPendingTx
+	}
+
 	receipt, err := m.ethClient.TransactionReceipt(ctx, common.HexToHash(txHash))
 	if err != nil {
-		return 0, err
+		return 0, fmt.Errorf("get tx receipt error: %w", err)
 	}
 
 	// check logs
@@ -118,7 +137,7 @@ func (m *NFTMinter) GetTokenIDByTxHash(ctx context.Context, txHash string) (uint
 		}
 
 		// parse to get tokenID
-		hexTokenID := receipt.Logs[i].Topics[4].Hex()
+		hexTokenID := receipt.Logs[i].Topics[3].Hex()
 
 		if len(hexTokenID) >= 3 {
 			for i := 2; i < len(hexTokenID); i++ {
@@ -127,7 +146,7 @@ func (m *NFTMinter) GetTokenIDByTxHash(ctx context.Context, txHash string) (uint
 
 					uint64TokenID, err := hexutil.DecodeUint64(hexTokenID)
 					if err != nil {
-						return 0, err
+						return 0, fmt.Errorf("parse tokenID error: %v", err)
 					}
 
 					return uint64TokenID, nil
