@@ -64,7 +64,9 @@
   - [x] Mint NFT
   - [x] Database
   - [x] Server APIs
-- [ ] Query seri đính kèm NFT
+- [ ] Integrate services
+  - [ ] Gửi data để mint NFT
+  - [ ] Query seri đính kèm NFT
 - [ ] Tài khoản
   - [ ] Reset mật khẩu
   - [ ] Phân quyền
