@@ -3,13 +3,16 @@ package nftminter
 import (
 	"context"
 	"crypto/ecdsa"
+	"errors"
 	"fmt"
 	"math/big"
 
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
+	"github.com/thanhpp/scm/pkg/logger"
 	"github.com/thanhpp/scm/pkg/smartcontracts"
 )
 
@@ -80,7 +83,11 @@ func (m *NFTMinter) newAuth(ctx context.Context) (*bind.TransactOpts, error) {
 	return auth, nil
 }
 
-func (m *NFTMinter) MintNFT(ctx context.Context, tokenURI string) (*struct{}, error) {
+type MintTxInfo struct {
+	TxHash string
+}
+
+func (m *NFTMinter) MintNFT(ctx context.Context, tokenURI string) (*MintTxInfo, error) {
 	auth, err := m.newAuth(ctx)
 	if err != nil {
 		return nil, err
@@ -91,7 +98,43 @@ func (m *NFTMinter) MintNFT(ctx context.Context, tokenURI string) (*struct{}, er
 		return nil, err
 	}
 
-	fmt.Printf("tx: %v\n", tx)
+	return &MintTxInfo{
+		TxHash: tx.Hash().Hex(),
+	}, nil
+}
 
-	return nil, nil
+func (m *NFTMinter) GetTokenIDByTxHash(ctx context.Context, txHash string) (uint64, error) {
+	// get tx receipt
+	receipt, err := m.ethClient.TransactionReceipt(ctx, common.HexToHash(txHash))
+	if err != nil {
+		return 0, err
+	}
+
+	// check logs
+	for i := range receipt.Logs {
+		if len(receipt.Logs[i].Topics) != 4 {
+			logger.Warnw("invalid topics", "txHash", txHash, "topics", receipt.Logs[i].Topics)
+			continue
+		}
+
+		// parse to get tokenID
+		hexTokenID := receipt.Logs[i].Topics[4].Hex()
+
+		if len(hexTokenID) >= 3 {
+			for i := 2; i < len(hexTokenID); i++ {
+				if hexTokenID[i] != '0' {
+					hexTokenID = "0x" + hexTokenID[i:]
+
+					uint64TokenID, err := hexutil.DecodeUint64(hexTokenID)
+					if err != nil {
+						return 0, err
+					}
+
+					return uint64TokenID, nil
+				}
+			}
+		}
+	}
+
+	return 0, errors.New("tokenID not found in tx hash " + txHash)
 }

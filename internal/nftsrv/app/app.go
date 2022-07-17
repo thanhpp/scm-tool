@@ -6,15 +6,33 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/thanhpp/scm/internal/nftsrv/domain/entity"
+	"github.com/thanhpp/scm/internal/nftsrv/domain/repo"
 	"github.com/thanhpp/scm/internal/nftsrv/infra/adapter/ipfsclient"
+	"github.com/thanhpp/scm/internal/nftsrv/infra/adapter/nftminter"
+	"github.com/thanhpp/scm/pkg/constx"
 	"github.com/thanhpp/scm/pkg/logger"
 	"github.com/thanhpp/scm/pkg/smartcontracts"
 )
 
 type App struct {
-	ipfs *ipfsclient.IPFSClient
+	ipfs        *ipfsclient.IPFSClient
+	minter      *nftminter.NFTMinter
+	seriNFTRepo repo.SeriNFTRepo
+}
+
+func NewApp(ctx context.Context, ipfs *ipfsclient.IPFSClient, minter *nftminter.NFTMinter, seriNFTRepo repo.SeriNFTRepo) *App {
+	a := &App{
+		ipfs:        ipfs,
+		minter:      minter,
+		seriNFTRepo: seriNFTRepo,
+	}
+
+	go a.autoUpdateTokenID(ctx)
+
+	return a
 }
 
 func (a *App) MintSeriNFT(ctx context.Context, seri string, metadata map[string]string) (*entity.SerialNFT, error) {
@@ -52,7 +70,63 @@ func (a *App) MintSeriNFT(ctx context.Context, seri string, metadata map[string]
 	if err != nil {
 		return nil, err
 	}
-	logger.Infow("uploaded file to ipfs", "file", f.Name(), "cid", ipfsCid)
 
-	return nil, nil
+	txInfo, err := a.minter.MintNFT(ctx, fmt.Sprintf("ipfs://%s", ipfsCid))
+	if err != nil {
+		return nil, err
+	}
+
+	newSeriNFT := &entity.SerialNFT{
+		Seri:     seri,
+		TxHash:   txInfo.TxHash,
+		IPFSHash: ipfsCid,
+		Metadata: string(tmpFileData),
+	}
+
+	if err := a.seriNFTRepo.Create(ctx, newSeriNFT); err != nil {
+		return nil, err
+	}
+
+	return newSeriNFT, nil
+}
+
+func (a *App) GetSeriNFTBySeri(ctx context.Context, seri string) (*entity.SerialNFT, error) {
+	return a.seriNFTRepo.GetBySeri(ctx, seri)
+}
+
+func (a *App) GetSeriNFTByTokenID(ctx context.Context, tokenID int64) (*entity.SerialNFT, error) {
+	return a.seriNFTRepo.GetSeriNFTByTokenID(ctx, tokenID)
+}
+
+func (a *App) autoUpdateTokenID(ctx context.Context) {
+	updateTicker := time.NewTicker(constx.AutoUpdateTokenIDInterval)
+	defer updateTicker.Stop()
+
+	for ; true; <-updateTicker.C {
+		if err := ctx.Err(); err != nil {
+			logger.Errorw("auto update token id: context error", "error", err)
+			return
+		}
+
+		seriNFTs, err := a.seriNFTRepo.GetSeriNFTWithEmptyTokenID(context.Background())
+		if err != nil {
+			logger.Errorw("auto update token id: get seri nft with empty token id error", "error", err)
+			continue
+		}
+
+		for _, seriNFT := range seriNFTs {
+			tokenID, err := a.minter.GetTokenIDByTxHash(context.Background(), seriNFT.TxHash)
+			if err != nil {
+				logger.Errorw("auto update token id: get token id by tx hash error",
+					"seri", seriNFT.Seri, "txHash", seriNFT.TxHash, "error", err)
+				continue
+			}
+
+			if err := a.seriNFTRepo.UpdateTokenIDByTxHash(context.Background(), seriNFT.TxHash, tokenID); err != nil {
+				logger.Errorw("auto update token id: update token id by tx hash error",
+					"seri", seriNFT.Seri, "txHash", seriNFT.TxHash, "error", err)
+				continue
+			}
+		}
+	}
 }

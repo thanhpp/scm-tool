@@ -2,7 +2,8 @@ package entity
 
 type SerialNFT struct {
 	Seri     string
-	NFTHash  string
+	TxHash   string
 	IPFSHash string
 	Metadata string
+	TokenID  int64
 }
