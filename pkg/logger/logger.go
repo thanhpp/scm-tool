@@ -16,8 +16,8 @@ var (
 func SetDefaultLog() {
 	_ = SetLog(configx.LogConfig{
 		Level:      "debug",
-		Color:      true,
-		LoggerName: "scmsrv-default",
+		Color:      false,
+		LoggerName: "default",
 	})
 }
 

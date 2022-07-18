@@ -1,7 +1,8 @@
 version: '3.9'
 
 services:
-  pgdatabase:
+
+  pgdatabasenft:
     image: postgres:13
     restart: always
     environment:
@@ -14,30 +15,28 @@ services:
       timeout: 5s
       retries: 10
       start_period: 10s
-    ports:
-      - 5432:5432
-    # volumes:
-    #   - pgdata:/var/lib/postgresql/data
+    # ports:
+    #   - 5432:5432
+    volumes:
+      - pgdatanft:/var/lib/postgresql/data
     networks:
       - intranet
 
-  scmsrv:
+  nftsrv:
     build:
       context: ..
-      dockerfile: ./build/Dockerfile
+      dockerfile: ./build/Dockerfile.nft
     depends_on:
-      pgdatabase:
+      pgdatabasenft:
         condition: service_healthy
     deploy:
       restart_policy:
           condition: on-failure
           max_attempts: 5
     ports:
-      - 10000:10000
+      - 11000:11000
     environment:
-      - DB_HOST=pgdatabase
-    volumes:
-      - scmfiles:/files
+      - DB_HOST=pgdatabasenft
     networks:
       - intranet
 
@@ -45,5 +44,4 @@ networks:
   intranet:
 
 volumes:
-  pgdata:
-  scmfiles:
+  pgdatanft:

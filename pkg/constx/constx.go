@@ -13,5 +13,6 @@ const (
 )
 
 const (
+	DefaultHTTPClientTimeout  = time.Second * 10
 	AutoUpdateTokenIDInterval = time.Second * 2
 )

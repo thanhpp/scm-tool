@@ -8,6 +8,7 @@ import (
 	"github.com/thanhpp/scm/internal/nftsrv/app"
 	"github.com/thanhpp/scm/internal/nftsrv/infra/port/httpsv/dto"
 	"github.com/thanhpp/scm/pkg/ginutil"
+	"github.com/thanhpp/scm/pkg/logger"
 )
 
 type NFTMinterCtrl struct {
@@ -23,13 +24,15 @@ func NewNFTMinterCtrl(app *app.App) *NFTMinterCtrl {
 func (ctrl NFTMinterCtrl) MintNFT(c *gin.Context) {
 	req := new(dto.MintSeriNFTReq)
 
-	if err := c.ShouldBind(req); err != nil {
+	if err := c.ShouldBindJSON(req); err != nil {
+		logger.Debugw("bind req error", "err", err, "req", req)
 		ginutil.RespErr(c, http.StatusNotAcceptable, err, ginutil.WithData(req))
 		return
 	}
 
 	seriNFT, err := ctrl.app.MintSeriNFT(c, req.Seri, req.Metadata)
 	if err != nil {
+		logger.Debugw("mint seri nft error", "err", err, "req", req)
 		ginutil.RespErr(c, http.StatusInternalServerError, err, ginutil.WithData(req))
 		return
 	}

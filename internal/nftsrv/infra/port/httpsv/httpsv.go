@@ -61,6 +61,8 @@ func (s HTTPServer) Daemon() booting.Daemon {
 
 func (s HTTPServer) newRouter() *gin.Engine {
 	r := gin.New()
+	r.Use(gin.Logger())
+	r.Use(gin.Recovery())
 
 	ctrl := ctrl.NewNFTMinterCtrl(s.app)
 
