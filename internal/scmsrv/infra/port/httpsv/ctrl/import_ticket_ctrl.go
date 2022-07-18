@@ -104,7 +104,7 @@ func (ctrl ImportTicketCtrl) GetSeriData(c *gin.Context) {
 		}
 	}
 
-	serial, err := ctrl.importTickerHanlder.GetSerialInfo(c, seri)
+	serial, nftInfo, err := ctrl.importTickerHanlder.GetSerialInfo(c, seri)
 	if err != nil {
 		ginutil.RespErr(c, http.StatusInternalServerError, err)
 		return
@@ -112,7 +112,7 @@ func (ctrl ImportTicketCtrl) GetSeriData(c *gin.Context) {
 
 	resp := new(dto.SerialInfoResp)
 	resp.Set200OK()
-	resp.SetData(serial)
+	resp.SetData(serial, nftInfo)
 
 	c.JSON(http.StatusOK, resp)
 }

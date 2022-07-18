@@ -2,6 +2,7 @@ package dto
 
 import (
 	"github.com/thanhpp/scm/internal/scmsrv/domain/entity"
+	"github.com/thanhpp/scm/internal/scmsrv/infra/adapter/nftsvclient"
 	"github.com/thanhpp/scm/pkg/ginutil"
 )
 
@@ -20,9 +21,10 @@ type SerialInfoRespData struct {
 	ImportTicketID int                       `json:"import_ticket_id"`
 	StorageData    SerialInfoRespStorageData `json:"storage"`
 	ItemData       SerialInfoRespItemData    `json:"item"`
+	NFTInfo        nftsvclient.NFTInfo       `json:"nft_info"`
 }
 
-func (d *SerialInfoRespData) set(in *entity.Serial) {
+func (d *SerialInfoRespData) set(in *entity.Serial, nftInfo *nftsvclient.NFTInfo) {
 	d.Seri = in.Seri
 	d.ImportTicketID = in.ImportTicket.ID
 
@@ -35,6 +37,8 @@ func (d *SerialInfoRespData) set(in *entity.Serial) {
 		Name: in.Item.Name,
 		Desc: in.Item.Desc,
 	}
+
+	d.NFTInfo = *nftInfo
 }
 
 type SerialInfoResp struct {
@@ -42,6 +46,6 @@ type SerialInfoResp struct {
 	Data SerialInfoRespData `json:"data"`
 }
 
-func (resp *SerialInfoResp) SetData(in *entity.Serial) {
-	resp.Data.set(in)
+func (resp *SerialInfoResp) SetData(in *entity.Serial, nftInfo *nftsvclient.NFTInfo) {
+	resp.Data.set(in, nftInfo)
 }

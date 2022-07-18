@@ -74,13 +74,17 @@ type StorageRepo interface {
 	Update(ctx context.Context, storageID int, fn StorageUpdateFn) error
 }
 
+type UpdateSerialFn func(context.Context, *entity.Serial) (*entity.Serial, error)
+
 type SerialRepo interface {
 	// Read
 	Count(ctx context.Context, importTicketID int, itemSKU string) (int, error)
 	Get(ctx context.Context, seri string) (*entity.Serial, error)
+	GetSeriWithEmptyTokenID(ctx context.Context) ([]*entity.Serial, error)
 
 	// Write
 	CreateBatch(ctx context.Context, serials []*entity.Serial) error
+	UpdateSerial(ctx context.Context, seri string, fn UpdateSerialFn) error
 }
 
 type UserRepo interface {

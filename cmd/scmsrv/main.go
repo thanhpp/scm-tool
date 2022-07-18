@@ -8,6 +8,7 @@ import (
 
 	"github.com/thanhpp/scm/internal/scmsrv/app"
 	"github.com/thanhpp/scm/internal/scmsrv/domain/entity"
+	"github.com/thanhpp/scm/internal/scmsrv/infra/adapter/nftsvclient"
 	"github.com/thanhpp/scm/internal/scmsrv/infra/adapter/storage"
 	"github.com/thanhpp/scm/internal/scmsrv/infra/port/httpsv"
 	"github.com/thanhpp/scm/internal/scmsrv/scmcfg"
@@ -45,20 +46,23 @@ func main() {
 	}
 
 	db := storage.NewDB(gdb)
+	nftServiceClient := nftsvclient.New(constx.DefaultNFTServiceURL)
 
 	scmApp := app.New(
 		entity.NewFactory(),
 		db.ItemDB(), db.SupplierDB(), db.StorageDB(),
 		db.ImportTicketDB(), db.SerialDB(), db.UserDB(),
-		fileutil.NewFileUtil(),
+		fileutil.NewFileUtil(), nftServiceClient,
 	)
 
 	httpServer := httpsv.NewHTTPServer(mainCfg.HTTPServer, &scmApp)
 
+	autoMintAndUpdateSerialDaemon := scmApp.AutoMintAndUpdateSerial(db.SerialDB(), nftServiceClient)
+
 	// start
 	mainCtx := context.Background()
 	daemonMan := booting.NewDaemonManeger(mainCtx)
-	daemonMan.Start(httpServer.Daemon())
+	daemonMan.Start(httpServer.Daemon(), autoMintAndUpdateSerialDaemon)
 
 	booting.WaitSignals(mainCtx)
 

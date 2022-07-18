@@ -71,6 +71,27 @@ func (d SerialDB) Get(ctx context.Context, seri string) (*entity.Serial, error) 
 	return &serial, nil
 }
 
+func (d SerialDB) GetSeriWithEmptyTokenID(ctx context.Context) ([]*entity.Serial, error) {
+	var series []string
+
+	if err := d.gdb.WithContext(ctx).
+		Model(&repo.Serial{}).Select("seri").Where("token_id = ?", 0).Find(&series).Error; err != nil {
+		return nil, err
+	}
+
+	result := make([]*entity.Serial, len(series))
+	for i := range series {
+		serial, err := d.Get(ctx, series[i])
+		if err != nil {
+			return nil, err
+		}
+
+		result[i] = serial
+	}
+
+	return result, nil
+}
+
 func (d SerialDB) CreateBatch(ctx context.Context, serials []*entity.Serial) error {
 	var serialsDB = make([]*repo.Serial, len(serials))
 
@@ -90,4 +111,29 @@ func (d SerialDB) CreateBatch(ctx context.Context, serials []*entity.Serial) err
 	}
 
 	return nil
+}
+
+func (s SerialDB) UpdateSerial(ctx context.Context, seri string, fn repo.UpdateSerialFn) error {
+	return s.gdb.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+		serial, err := s.Get(ctx, seri)
+		if err != nil {
+			return err
+		}
+
+		newSerial, err := fn(ctx, serial)
+		if err != nil {
+			return err
+		}
+
+		newSerialDB := marshalSerial(*newSerial)
+
+		if err := tx.
+			WithContext(ctx).
+			Model(&repo.Serial{}).
+			Where("seri = ?", seri).Updates(newSerialDB).Error; err != nil {
+			return err
+		}
+
+		return nil
+	})
 }

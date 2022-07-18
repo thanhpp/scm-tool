@@ -67,9 +67,9 @@ func (s HTTPServer) newRouter() *gin.Engine {
 	ctrl := ctrl.NewNFTMinterCtrl(s.app)
 
 	r.POST("mint", ctrl.MintNFT)
-
 	r.GET("txhash/:txHash", ctrl.GetByTxHash)
 	r.GET("tokenid/:tokenID", ctrl.GetByTokenID)
+	r.GET("seri/:seri", ctrl.GetBySeri)
 
 	return r
 }

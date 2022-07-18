@@ -17,22 +17,26 @@ func newNFTServiceClient() *nftsvclient.NFTServiceClient {
 	return c
 }
 
+func newTestSeri() *entity.Serial {
+	return &entity.Serial{
+		Seri: "test-seri",
+		Item: &entity.Item{
+			Name: "test-item-name",
+			Desc: "test-item-desc",
+		},
+		ImportTicket: &entity.ImportTicket{
+			ID: 1,
+			FromSupplier: entity.Supplier{
+				Name: "test-supplier-name",
+			},
+		},
+	}
+}
+
 func TestMintNFT(t *testing.T) {
 	var (
-		testSeri = &entity.Serial{
-			Seri: "test-seri",
-			Item: &entity.Item{
-				Name: "test-item-name",
-				Desc: "test-item-desc",
-			},
-			ImportTicket: &entity.ImportTicket{
-				ID: 1,
-				FromSupplier: entity.Supplier{
-					Name: "test-supplier-name",
-				},
-			},
-		}
-		ctx = context.Background()
+		testSeri = newTestSeri()
+		ctx      = context.Background()
 	)
 	logger.SetDefaultLog()
 
@@ -40,4 +44,19 @@ func TestMintNFT(t *testing.T) {
 
 	err := c.MintSeriNFT(ctx, testSeri)
 	require.NoError(t, err)
+}
+
+func TestGetTokenID(t *testing.T) {
+	var (
+		testSeri = newTestSeri()
+		ctx      = context.Background()
+	)
+	logger.SetDefaultLog()
+
+	c := newNFTServiceClient()
+
+	info, err := c.GetNFTInfoBySeri(ctx, testSeri.Seri)
+	require.NoError(t, err)
+
+	t.Logf("token id info %+v\n", info)
 }

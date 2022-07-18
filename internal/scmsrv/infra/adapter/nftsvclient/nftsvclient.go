@@ -6,6 +6,7 @@ import (
 	"crypto/tls"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 
 	"github.com/thanhpp/scm/internal/scmsrv/domain/entity"
@@ -119,7 +120,13 @@ func (c *NFTServiceClient) doRequest(
 	defer httpResp.Body.Close()
 
 	if resp != nil {
-		err = json.NewDecoder(httpResp.Body).Decode(resp)
+		bodyData, err := ioutil.ReadAll(httpResp.Body)
+		if err != nil {
+			return newError("doRequest", "read body data", err)
+		}
+		logger.Debugw("body data", "data", string(bodyData))
+
+		err = json.Unmarshal(bodyData, resp)
 		if err != nil {
 			return newError("doRequest", "json decode", err)
 		}

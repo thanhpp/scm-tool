@@ -10,6 +10,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/thanhpp/scm/internal/scmsrv/domain/entity"
 	"github.com/thanhpp/scm/internal/scmsrv/domain/repo"
+	"github.com/thanhpp/scm/internal/scmsrv/infra/adapter/nftsvclient"
 	"github.com/thanhpp/scm/pkg/constx"
 	"github.com/thanhpp/scm/pkg/fileutil"
 )
@@ -22,6 +23,7 @@ type ImportTicketHandler struct {
 	serialRepo       repo.SerialRepo
 	fac              entity.Factory
 	fileUtil         fileutil.FileUtil
+	nftServiceClient *nftsvclient.NFTServiceClient
 }
 
 func (h ImportTicketHandler) Create(
@@ -98,8 +100,18 @@ func (h ImportTicketHandler) CreateImportDetails(
 
 func (h ImportTicketHandler) GetSerialInfo(
 	ctx context.Context, seri string,
-) (*entity.Serial, error) {
-	return h.serialRepo.Get(ctx, seri)
+) (*entity.Serial, *nftsvclient.NFTInfo, error) {
+	serial, err := h.serialRepo.Get(ctx, seri)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	nftInfo, err := h.nftServiceClient.GetNFTInfoBySeri(ctx, seri)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return serial, nftInfo, nil
 }
 
 func (h ImportTicketHandler) GenSerials(
