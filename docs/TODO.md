@@ -32,13 +32,13 @@
       - [x] Tra cứu thông tin sản phẩm
       - [ ] [MAYBE] Quản lý Nhà cung cấp/Kho
     - [ ] Yêu cầu phi chức năng   
-- [ ] Công nghệ
+- [x] Công nghệ
   - [x] Blockchain
   - [x] Smart contracts
   - [x] NFT
   - [x] IPFS
   - [x] Docker 
-  - [ ] Golang
+  - [x] Golang
 - [ ] Kết quả thực nghiệm
   - [x] Thiết kế kiến trúc (microservice)
     - [x] Biểu đồ tổng quan
