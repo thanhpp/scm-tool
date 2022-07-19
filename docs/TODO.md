@@ -47,10 +47,12 @@
     - [x] scm service
     - [x] nft service
     - [x] giải thích packages
-  - [ ] Thiết kế chi tiết gói (Class diagram)  
+  - [x]Thiết kế chi tiết gói   
+    - [x] scm service
+    - [x] nft service
   - [ ] Thiết kế chi tiết
     - [ ] Thiết kế giao diện
-    - [ ] Thiết kế lớp
+    - [ ] Thiết kế lớp (Class diagram, Sequence Diagram)
     - [ ] Thiết kế cơ sở dữ liệu
   - [ ] Xây dựng ứng dụng
     - [ ] Thư viện và công cụ sử dụng
