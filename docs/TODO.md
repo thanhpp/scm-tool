@@ -47,7 +47,7 @@
     - [x] scm service
     - [x] nft service
     - [x] giải thích packages
-  - [x]Thiết kế chi tiết gói   
+  - [x] Thiết kế chi tiết gói   
     - [x] scm service
     - [x] nft service
   - [ ] Thiết kế chi tiết
