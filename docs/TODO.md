@@ -26,6 +26,11 @@
       - [x] Nghiệp vụ tạo phiếu nhập
       - [x] Nghiệp vụ tra cứu số seri
     - [ ] Đặc tả chức năng (4-7 usecases)
+      - [x] Tạo sản phẩm
+      - [x] Quản lý tài khoản
+      - [x] Sinh số seri
+      - [x] Tra cứu thông tin sản phẩm
+      - [ ] [MAYBE] Quản lý Nhà cung cấp/Kho
     - [ ] Yêu cầu phi chức năng   
 - [ ] Công nghệ
   - [x] Blockchain
@@ -73,9 +78,9 @@
   - [x] Mint NFT
   - [x] Database
   - [x] Server APIs
-- [ ] Integrate services
-  - [ ] Gửi data để mint NFT
-  - [ ] Query seri đính kèm NFT
+- [x] Integrate services
+  - [x] Gửi data để mint NFT
+  - [x] Query seri đính kèm NFT
 - [ ] Tài khoản
   - [ ] Reset mật khẩu
   - [ ] Phân quyền
