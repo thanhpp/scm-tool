@@ -26,14 +26,19 @@
       - [x] Nghiệp vụ tạo phiếu nhập
       - [x] Nghiệp vụ tra cứu số seri
     - [ ] Đặc tả chức năng (4-7 usecases)
+      - [x] Tạo sản phẩm
+      - [x] Quản lý tài khoản
+      - [x] Sinh số seri
+      - [x] Tra cứu thông tin sản phẩm
+      - [ ] [MAYBE] Quản lý Nhà cung cấp/Kho
     - [ ] Yêu cầu phi chức năng   
-- [ ] Công nghệ
+- [x] Công nghệ
   - [x] Blockchain
   - [x] Smart contracts
   - [x] NFT
   - [x] IPFS
   - [x] Docker 
-  - [ ] Golang
+  - [x] Golang
 - [ ] Kết quả thực nghiệm
   - [x] Thiết kế kiến trúc (microservice)
     - [x] Biểu đồ tổng quan
@@ -42,10 +47,12 @@
     - [x] scm service
     - [x] nft service
     - [x] giải thích packages
-  - [ ] Thiết kế chi tiết gói (Class diagram)  
+  - [x] Thiết kế chi tiết gói   
+    - [x] scm service
+    - [x] nft service
   - [ ] Thiết kế chi tiết
     - [ ] Thiết kế giao diện
-    - [ ] Thiết kế lớp
+    - [ ] Thiết kế lớp (Class diagram, Sequence Diagram)
     - [ ] Thiết kế cơ sở dữ liệu
   - [ ] Xây dựng ứng dụng
     - [ ] Thư viện và công cụ sử dụng
@@ -73,9 +80,9 @@
   - [x] Mint NFT
   - [x] Database
   - [x] Server APIs
-- [ ] Integrate services
-  - [ ] Gửi data để mint NFT
-  - [ ] Query seri đính kèm NFT
+- [x] Integrate services
+  - [x] Gửi data để mint NFT
+  - [x] Query seri đính kèm NFT
 - [ ] Tài khoản
   - [ ] Reset mật khẩu
   - [ ] Phân quyền

@@ -18,14 +18,14 @@
   - [x] Lưu ảnh sản phẩm
   - [x] Tao kieu san pham
   - [ ] Sửa sản phẩm
-  - [ ] Lấy thông tin sản phẩm
+  - [x] Lấy thông tin sản phẩm
   - [x] Lấy danh sách sản phẩm
   - [x] Lấy danh sách kiểu sản phẩm 
 - [ ] Quản lý nhập xuất
   - [x] **Tạo phiếu nhập**
   - [x] Tạo số seri
-  - [ ] Truy xuất phiếu nhập
-  - [ ] Lấy thông tin phiếu nhập
+  - [x] Truy xuất phiếu nhập
+  - [x] Lấy thông tin phiếu nhập
   - [ ] **Tạo phiếu xuất**
   - [ ] Lấy thông tin phiếu xuất
   - [x] Tạo nhà cung cấp
@@ -37,16 +37,11 @@
   - [ ] Sửa tài khoản
   - [ ] Quên mật khẩu
   - [ ] Phân quyền
-- [ ] Tạo số seri -> blockchain
+- [x] Tạo số seri -> blockchain
   - [x] MintNFT blockchain 
   - [x] Upload lên IPFS
-  - [ ] Server để lưu trữ và mint NFT
+  - [x] Server để lưu trữ và mint NFT
 - [x] Tra cứu thông tin theo số seri
-
-## Yêu cầu phụ
-
-- [x] gin OK resp
-
 
 ## Overleaf
 
