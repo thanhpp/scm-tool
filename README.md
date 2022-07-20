@@ -53,6 +53,86 @@
 - https://www.overleaf.com/read/bxyvbfxqdztg
 - https://www.overleaf.com/project/62c687809aee882527f0c10a
 
+## Diagrams
+
+### Create new item
+
+```mermaid
+sequenceDiagram
+  actor NhanVien
+  activate NhanVien
+  participant Interface
+  participant HTTPServer
+  participant Application
+  participant Factory
+  participant Database
+  participant LocalStorage
+
+  NhanVien ->>+ Interface: Create new item request
+  Interface ->>+ HTTPServer: Create new item request
+  HTTPServer ->> HTTPServer: Unmarshal request
+  HTTPServer ->>+ Application: Create new item information
+  Application ->>+ Database: Get item type by ID
+  alt Item type not exst
+    Database -->> HTTPServer: Item type not exist
+    HTTPServer ->> HTTPServer: Marshal response
+    HTTPServer -->> Interface: Error response
+    Interface -->> NhanVien: Error response
+  else
+    Database -->>- HTTPServer: Item type information
+    Application ->>+ LocalStorage: Save Images
+    LocalStorage -->>- Application: Image paths
+    Application ->>+ Factory: Create new item
+    alt Invalid new item information
+      Factory -->> Application: Error message
+      Application ->> LocalStorage: Delete images by paths
+      LocalStorage -->> Application: Response
+      Application -->> HTTPServer: Error message
+      HTTPServer ->> HTTPServer: Marshal response
+      HTTPServer -->> Interface: Error response
+      Interface -->> NhanVien: Error response
+    else
+      Factory -->>- Application: New item
+      Application ->>+ Database: Save new item
+      Database -->>- Application: Response
+      Application -->>- HTTPServer: Success message
+      HTTPServer ->> HTTPServer: Marshal response
+      HTTPServer -->>- Interface: Success message
+      Interface -->>- NhanVien: Success message
+    end
+  end
+  
+  deactivate NhanVien
+```
+
+### Auto mint and update NFT
+
+```mermaid
+sequenceDiagram
+  participant Application
+  loop Auto update loop
+    activate Application
+    Application ->>+ Database: Get serials with empty token ID
+    Database -->>- Application: Serials information
+    
+    loop Each serial
+      Application ->>+ NFTService: Mint NFT request
+      NFTService -->>- Application: Mint NFT response
+    end
+
+    loop Each serial
+      Application ->>+ NFTService: Get NFT information by seri
+      NFTService -->>- Application: Response
+      opt Response with token ID
+        Application ->>+ Database: Save token ID by seri
+        Database -->>- Application: Response
+      end
+    end
+    deactivate Application
+  end
+
+```
+
 ## Ref
 
 - https://github.com/INFURA/ipfs-upload-client/blob/master/main.go
