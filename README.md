@@ -100,6 +100,53 @@ sequenceDiagram
   deactivate NhanVien
 ```
 
+### Generate new serials
+```mermaid
+sequenceDiagram
+  actor NhanVien
+  participant Interface
+  participant HTTPServer
+  participant Application
+  participant Factory
+  participant Database
+
+  activate NhanVien
+  
+  NhanVien ->>+ Interface: Generate new serials request
+  Interface ->>+ HTTPServer: Generate new serials request
+  HTTPServer ->> HTTPServer: Unmarshal request
+  HTTPServer ->>+ Application: Generate new serials by import ticket ID
+  Application ->>+ Database: Query import ticket by ID
+  alt Import ticket not exist
+    Database -->> Application: Import ticket not found error
+    Application -->> HTTPServer: Error message
+    HTTPServer ->> HTTPServer: Marshal response
+    HTTPServer -->> Interface: Error response
+    Interface -->> NhanVien: Error response
+  else
+    Database -->>- Application: Import ticket information
+    Application ->>+ Factory: Generate serials
+    Factory ->> Factory: Validate import ticket status
+    alt Import ticket is invalid for generating new serials
+      Factory -->> Application: Invalid import ticket error
+      Application -->> HTTPServer: Error message
+      HTTPServer ->> HTTPServer: Marshal response
+      HTTPServer -->> Interface: Error response
+      Interface -->> NhanVien: Error response
+    else
+      Factory -->>- Application: Serials information
+      Application ->>+ Database: Batch insert serials
+      Database -->>- Application: Response
+      Application -->>- HTTPServer: Serials information
+      HTTPServer ->> HTTPServer: Marshal response
+      HTTPServer -->>- Interface: Serials information
+      Interface -->>- NhanVien: Serials information
+    end
+  end
+
+  deactivate NhanVien
+```
+
 ### Auto mint and update NFT
 
 ```mermaid
@@ -125,7 +172,56 @@ sequenceDiagram
     end
     deactivate Application
   end
+```
 
+### Generate NFT
+```mermaid
+sequenceDiagram
+  participant ScmService
+  participant HTTPServer
+  participant Application
+  participant IPFSClient
+  participant OnchainClient
+  participant SmartContractInstance
+  participant Factory
+  participant LocalStorage
+  participant IPFS
+
+  activate ScmService
+    ScmService ->>+ HTTPServer: Generate NFT request
+    HTTPServer ->> HTTPServer: Unmarshal request
+    HTTPServer ->>+ Application: Generate NFT
+    Application ->>+ Database: Seri duplication check
+    alt Duplicate seri
+      Database -->>- Application: Duplicate response
+      Application -->> HTTPServer: Duplicate error response
+      HTTPServer ->> HTTPServer: Marshal response
+      HTTPServer -->> ScmService: Response error
+    else
+      Application ->> Application: Generate Metadata
+      Application ->>+ LocalStorage: Save metadata file
+      LocalStorage -->>- Application: Metadata file path
+      Application ->>+ IPFSClient: Generate IPFS File from metadata file
+      IPFSClient ->>+ IPFS: Generate IPFS file
+      IPFS -->>- IPFSClient: IPFS file information
+      IPFSClient -->>- Application: IPFS file CID
+      Application ->> Application: Generate Token URI
+      Application ->>+ OnchainClient: Get gas price
+      OnchainClient ->>+ Blockchain: Get gas price
+      Blockchain -->>- OnchainClient: Current gas price
+      Application ->>+ SmartContractInstance: Mint NFT
+      SmartContractInstance ->>+ Blockchain: Create mint NFT Transaction
+      Blockchain -->>- SmartContractInstance: Transaction information
+      SmartContractInstance -->>- Application: Transaction information
+      Application ->>+ Factory: Create SerialNFT
+      Factory -->>- Application: New SerialNFT
+      Application ->>+ Database: Save SerialNFT
+      Database -->>- Application: Response
+      Application -->>- HTTPServer: SerialNFT information
+      HTTPServer ->> HTTPServer: Marshal response
+      HTTPServer -->>- ScmService: Response success
+    end
+  deactivate ScmService
 ```
 
 ## Ref

@@ -53,6 +53,11 @@
   - [ ] Thiết kế chi tiết
     - [ ] Thiết kế giao diện
     - [ ] Thiết kế lớp (Class diagram, Sequence Diagram)
+      - [x] Class Diagram
+      - [x] Biểu đồ trình tự tạo sản phẩm
+      - [x] Biểu đồ trình tự sinh số seri
+      - [x] Biểu đồ trình tự tự động tạo NFT và cập nhật thông tin
+      - [x] Biểu đồ trình tự tạo NFT tại serivce quản lý NFT
     - [ ] Thiết kế cơ sở dữ liệu
   - [ ] Xây dựng ứng dụng
     - [ ] Thư viện và công cụ sử dụng
