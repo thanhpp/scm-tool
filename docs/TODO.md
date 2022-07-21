@@ -13,9 +13,9 @@
   - [x] Mục tiêu và phạm vi
   - [x] Định hướng giải pháp
   - [ ] Bố cục đồ án
-- [ ] Khảo sát
+- [x] Khảo sát
   - [x] Khảo sát hiện trạng
-  - [ ] Tổng quan chức năng
+  - [x] Tổng quan chức năng
     - [x] Usecase tổng quát
     - [x] Phân rã usecase
       - [x] Usecase quản lý sản phẩm
@@ -25,13 +25,13 @@
     - [x] Quy trình nghiệp vụ
       - [x] Nghiệp vụ tạo phiếu nhập
       - [x] Nghiệp vụ tra cứu số seri
-    - [ ] Đặc tả chức năng (4-7 usecases)
+    - [x] Đặc tả chức năng (4-7 usecases)
       - [x] Tạo sản phẩm
       - [x] Quản lý tài khoản
       - [x] Sinh số seri
       - [x] Tra cứu thông tin sản phẩm
       - [ ] [MAYBE] Quản lý Nhà cung cấp/Kho
-    - [ ] Yêu cầu phi chức năng   
+    - [x] Yêu cầu phi chức năng   
 - [x] Công nghệ
   - [x] Blockchain
   - [x] Smart contracts
@@ -79,19 +79,22 @@
         - [ ] user_id_seq
         - [x] serial_nft
   - [ ] Xây dựng ứng dụng
-    - [ ] Thư viện và công cụ sử dụng
-      - [ ] OpenZeppelin
-      - [ ] Gin
-      - [ ] Postgres
-      - [ ] Abigen
-      - [ ] go-ethereum
-    - [ ] Kết quả đạt được
+    - [x] Thư viện và công cụ sử dụng
+      - [x] OpenZeppelin
+      - [x] Gin
+      - [x] Postgres
+      - [x] go-ethereum
+    - [x] Kết quả đạt được
+      - [x] So lieu ve phan mem
+    - [ ] Minh hoa chuc nang chinh
+    - [ ] Kiem thu
+    - [x] Trien khai
   - [ ] Giải pháp đóng góp
     - [x] Vấn đề truy xuất nguồn gốc
     - [ ] **don't know**
-  - [ ] Kết luận  
-    - [ ] Kết quả sản phẩm
-    - [ ] Hướng phát triển  
+  - [x] Kết luận  
+    - [x] Kết quả sản phẩm
+    - [x] Hướng phát triển  
   - [ ] Tài liệu tham khảo
 
 ## Phần mềm minh hoạ
@@ -110,6 +113,7 @@
 - [ ] Tài khoản
   - [ ] Reset mật khẩu
   - [ ] Phân quyền
+- [ ] Lay san pham them ma Storage
 
 ### Sẽ làm nếu còn thời gian
 
