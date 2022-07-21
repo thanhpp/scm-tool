@@ -224,6 +224,99 @@ sequenceDiagram
   deactivate ScmService
 ```
 
+### ERDiagram
+
+```mermaid
+erDiagram 
+  User {
+    int     id
+    string  username
+    string  name
+    string  password
+  }
+
+  Item {
+    string  sku
+    string  name
+    string  desc
+    float   sell_price
+  }
+
+  ItemImage {
+    string path
+  }
+
+  ItemType {
+    int     item_type_id
+    string  name
+    string  desc
+  }
+
+  ImportTicket {
+    int         id
+    int         status
+    timestamp   send_time
+    timestamp   receive_time
+    float       fee
+  }
+
+  ImportTicketProductImage {
+    string  product_image_path
+  }
+
+  ImportTicketBillImage {
+    int     import_ticket_id
+    string  bill_image_path
+  }
+
+  ImportTicketDetail {
+    int     import_ticket_id
+    string  item_sku
+    int     buy_quantity
+    int     receive_quantity
+    float   buy_price
+  }
+
+  NFT {
+    string  transaction_hash
+    string  ipfs_hash
+    string  metadata
+    int     token_id
+  }
+
+  Serial {
+    string    seri
+    int       status
+    int       token_id
+  }
+
+  Storage {
+    int     id
+    string  name
+    string  location
+    string  desc
+  }
+
+  Supplier {
+    int     id
+    string  name
+    string  phone
+    string  email
+  }
+
+  Item ||--o{ ItemImage : has
+  Item ||--|| ItemType: is
+  ImportTicket ||--o{ ImportTicketProductImage: has
+  ImportTicket ||--o{ ImportTicketBillImage: has
+  ImportTicket ||--|{ ImportTicketDetail: has
+  ImportTicketDetail ||--|| Item: is
+  ImportTicket ||--|| Supplier: from
+  ImportTicket ||--|| Storage: to
+  Serial }o--|| ImportTicket: from
+  Serial }o--|| Item: is
+  Serial ||--|| NFT: has
+```
+
 ## Ref
 
 - https://github.com/INFURA/ipfs-upload-client/blob/master/main.go

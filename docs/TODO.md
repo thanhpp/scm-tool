@@ -52,13 +52,32 @@
     - [x] nft service
   - [ ] Thiết kế chi tiết
     - [ ] Thiết kế giao diện
-    - [ ] Thiết kế lớp (Class diagram, Sequence Diagram)
+    - [x] Thiết kế lớp (Class diagram, Sequence Diagram)
       - [x] Class Diagram
       - [x] Biểu đồ trình tự tạo sản phẩm
       - [x] Biểu đồ trình tự sinh số seri
       - [x] Biểu đồ trình tự tự động tạo NFT và cập nhật thông tin
       - [x] Biểu đồ trình tự tạo NFT tại serivce quản lý NFT
-    - [ ] Thiết kế cơ sở dữ liệu
+    - [x] Thiết kế cơ sở dữ liệu
+      - [x] ER Diagram
+      - [x] Thiet ke DB (postgresql)
+        - [x] import_ticket
+        - [x] import_ticket_bill_image
+        - [x] import_ticket_product_image
+        - [x] import_ticket_details
+        - [ ] import_ticket_id_seq
+        - [x] item
+        - [x] item_image
+        - [x] item_type
+        - [ ] item_type_id_seq
+        - [x] serial
+        - [x] storage
+        - [ ] storage_id_seq
+        - [ ] supplier
+        - [ ] supplier_id_seq
+        - [x] user
+        - [ ] user_id_seq
+        - [x] serial_nft
   - [ ] Xây dựng ứng dụng
     - [ ] Thư viện và công cụ sử dụng
       - [ ] OpenZeppelin
