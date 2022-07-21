@@ -209,6 +209,7 @@ sequenceDiagram
       Application ->>+ OnchainClient: Get gas price
       OnchainClient ->>+ Blockchain: Get gas price
       Blockchain -->>- OnchainClient: Current gas price
+      OnchainClient -->>- Application: Gasprice
       Application ->>+ SmartContractInstance: Mint NFT
       SmartContractInstance ->>+ Blockchain: Create mint NFT Transaction
       Blockchain -->>- SmartContractInstance: Transaction information
