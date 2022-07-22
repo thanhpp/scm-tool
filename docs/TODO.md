@@ -3,16 +3,16 @@
 ## Quyền đồ án
 
 - [x] Lời cam kết
-- [ ] Lời cảm ơn
-- [ ] Tóm tắt nội dung
+- [x] Lời cảm ơn
+- [x] Tóm tắt nội dung
 - [ ] Tóm tắt nội dung T.Anh
-- [ ] Viết tắt
-- [ ] Thuật ngữ
-- [ ] Giới thiệu
+- [x] Viết tắt
+- [x] Thuật ngữ
+- [x] Giới thiệu
   - [x] Đặt vấn đề  
   - [x] Mục tiêu và phạm vi
   - [x] Định hướng giải pháp
-  - [ ] Bố cục đồ án
+  - [x] Bố cục đồ án
 - [x] Khảo sát
   - [x] Khảo sát hiện trạng
   - [x] Tổng quan chức năng
@@ -50,8 +50,8 @@
   - [x] Thiết kế chi tiết gói   
     - [x] scm service
     - [x] nft service
-  - [ ] Thiết kế chi tiết
-    - [ ] Thiết kế giao diện
+  - [x] Thiết kế chi tiết
+    - [x] Thiết kế giao diện
     - [x] Thiết kế lớp (Class diagram, Sequence Diagram)
       - [x] Class Diagram
       - [x] Biểu đồ trình tự tạo sản phẩm
@@ -87,7 +87,7 @@
     - [x] Kết quả đạt được
       - [x] So lieu ve phan mem
     - [ ] Minh hoa chuc nang chinh
-    - [ ] Kiem thu
+    - [x] Kiem thu
     - [x] Trien khai
   - [ ] Giải pháp đóng góp
     - [x] Vấn đề truy xuất nguồn gốc
@@ -95,7 +95,7 @@
   - [x] Kết luận  
     - [x] Kết quả sản phẩm
     - [x] Hướng phát triển  
-  - [ ] Tài liệu tham khảo
+  - [x] Tài liệu tham khảo
 
 ## Phần mềm minh hoạ
 
