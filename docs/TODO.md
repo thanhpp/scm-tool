@@ -96,6 +96,23 @@
     - [x] Kết quả sản phẩm
     - [x] Hướng phát triển  
   - [x] Tài liệu tham khảo
+  - [ ] Phụ lục
+    - [ ] Đặc tả usecases  
+      - [ ] Lấy danh sách sản phẩm
+      - [ ] Lấy thông tin sản phẩm
+      - [ ] Lấy danh sách nhà cung cấp
+      - [ ] Lấy thông tin nhà cung cấp
+      - [ ] Cập nhật thông tin nhà cung cấp
+      - [ ] Lấy danh sách kho
+      - [ ] Lấy thông tin kho
+      - [ ] Cập nhật thông tin kho
+      - [ ] Tạo kiểu sản phẩm
+      - [ ] Lấy danh sách phiếu nhập
+      - [ ] Lấy thông tin phiếu nhập
+
+## Yêu cầu phụ
+
+- [ ] Đổi tên bảng lên đầu
 
 ## Phần mềm minh hoạ
 
