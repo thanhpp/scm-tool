@@ -39,7 +39,7 @@
   - [x] IPFS
   - [x] Docker 
   - [x] Golang
-- [ ] Kết quả thực nghiệm
+- [x] Kết quả thực nghiệm
   - [x] Thiết kế kiến trúc (microservice)
     - [x] Biểu đồ tổng quan
     - [x] Giải thích kiến trúc 
@@ -86,10 +86,10 @@
       - [x] go-ethereum
     - [x] Kết quả đạt được
       - [x] So lieu ve phan mem
-    - [ ] Minh hoa chuc nang chinh
+    - [ ] **Minh hoa chuc nang chinh**
     - [x] Kiem thu
     - [x] Trien khai
-  - [ ] Giải pháp đóng góp
+  - [x] Giải pháp đóng góp
     - [x] Vấn đề truy xuất nguồn gốc
     - [ ] **don't know**
   - [x] Kết luận  
