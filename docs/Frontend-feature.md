@@ -1,5 +1,13 @@
 # Frontend feature
 
+
+| Features         | APIs       | Method |        BE         |         FE          | Note |
+| :--------------- | :--------- | ------ | :---------------: | :-----------------: | :--: |
+| Create item      | /item      | POST   | :white_check_mark | :white_large_square |      |
+| Get item         | /item/:sku | GET    | :white_check_mark | :white_large_square |      |
+| Get items        | /item      | GET    | :white_check_mark | :white_large_square |      |
+| Create item type | /item-type | POST   | :white_check_mark | :white_large_square |      |
+
 ## Trang chủ
 
 - [ ] Đăng nhập
