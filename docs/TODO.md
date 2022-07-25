@@ -98,12 +98,12 @@
   - [x] Tài liệu tham khảo
   - [ ] Phụ lục
     - [ ] Đặc tả usecases  
-      - [ ] Lấy danh sách sản phẩm
+      - [x] Lấy danh sách sản phẩm
       - [ ] Lấy thông tin sản phẩm
-      - [ ] Lấy danh sách nhà cung cấp
+      - [x] Lấy danh sách nhà cung cấp
       - [ ] Lấy thông tin nhà cung cấp
       - [ ] Cập nhật thông tin nhà cung cấp
-      - [ ] Lấy danh sách kho
+      - [x] Lấy danh sách kho
       - [ ] Lấy thông tin kho
       - [ ] Cập nhật thông tin kho
       - [ ] Tạo kiểu sản phẩm
