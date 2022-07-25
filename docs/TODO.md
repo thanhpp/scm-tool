@@ -112,7 +112,7 @@
 
 ## Yêu cầu phụ
 
-- [ ] Đổi tên bảng lên đầu
+- [x] Đổi tên bảng lên đầu
 
 ## Phần mềm minh hoạ
 
