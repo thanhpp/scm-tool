@@ -106,7 +106,7 @@
       - [x] Lấy danh sách kho
       - [ ] Lấy thông tin kho
       - [x] Cập nhật thông tin kho
-      - [ ] Tạo kiểu sản phẩm
+      - [x] Tạo kiểu sản phẩm
       - [ ] Lấy danh sách phiếu nhập
       - [ ] Lấy thông tin phiếu nhập
 
