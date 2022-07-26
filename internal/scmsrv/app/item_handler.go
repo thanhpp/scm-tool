@@ -54,6 +54,45 @@ func (h ItemHandler) GetList(ctx context.Context, page, size int) ([]*entity.Ite
 	})
 }
 
+func (h ItemHandler) UpdateItem(
+	ctx context.Context,
+	sku, name, desc string, itemTypeID int, sellPrice float64,
+	newImages []*multipart.FileHeader, deleteImages []string,
+) error {
+	itemType, err := h.itemRepo.GetItemType(ctx, itemTypeID)
+	if err != nil {
+		return err
+	}
+
+	return h.itemRepo.UpdateItem(ctx, sku,
+		func(ctx context.Context, item entity.Item) (entity.Item, error) {
+			for i := range deleteImages {
+				if !item.DeleteImages(deleteImages[i]) {
+					return entity.Item{}, errors.New("delete not exist images")
+				}
+			}
+
+			newImagePaths, err := h.fileUtil.
+				SaveFilesFromMultipart(constx.SaveFilePaths, "item-images-"+sku, newImages)
+			if err != nil {
+				return entity.Item{}, err
+			}
+
+			item.Images = append(item.Images, newImagePaths...)
+
+			if err := item.SetName(name); err != nil {
+				return entity.Item{}, err
+			}
+
+			item.Desc = desc
+			item.Type = *itemType
+			item.SellPrice = sellPrice
+
+			return item, nil
+		},
+	)
+}
+
 func (h ItemHandler) CreateItemType(
 	ctx context.Context,
 	name, desc string,
@@ -72,4 +111,23 @@ func (h ItemHandler) CreateItemType(
 
 func (h ItemHandler) GetAllItemType(ctx context.Context) ([]*entity.ItemType, error) {
 	return h.itemRepo.GetAllItemType(ctx)
+}
+
+func (h ItemHandler) UpdateItemType(ctx context.Context, id int, name, desc string) error {
+	if len(name) == 0 {
+		return errors.New("update item type: empty name")
+	}
+
+	return h.itemRepo.UpdateItemType(ctx, id,
+		func(ctx context.Context, itemType *repo.ItemType) (*repo.ItemType, error) {
+			if itemType == nil {
+				return nil, errors.New("update nil item type")
+			}
+
+			itemType.Name = name
+			itemType.Desc = desc
+
+			return itemType, nil
+		},
+	)
 }

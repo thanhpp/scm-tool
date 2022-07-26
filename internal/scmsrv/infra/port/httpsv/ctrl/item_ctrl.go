@@ -71,6 +71,39 @@ func (ctrl ItemCtrl) GetList(c *gin.Context) {
 	c.JSON(http.StatusOK, resp)
 }
 
+func (ctrl ItemCtrl) UpdateItem(c *gin.Context) {
+	sku := c.Param("sku")
+	if len(sku) == 0 {
+		ginutil.RespErr(c, http.StatusNotAcceptable, errors.New("empty sku"))
+		return
+	}
+
+	req := new(dto.ReqUpdateItem)
+	if err := c.ShouldBind(req); err != nil {
+		ginutil.RespErr(c, http.StatusNotAcceptable, err)
+		return
+	}
+
+	form, err := c.MultipartForm()
+	if err != nil {
+		ginutil.RespErr(c, http.StatusNotAcceptable, errors.WithMessage(err, "form multipart"))
+		return
+	}
+
+	newImages := form.File["new_images"]
+
+	if err := ctrl.itemHandler.UpdateItem(c, sku, req.Name, req.Desc, req.ItemTypeID, req.SellPrice,
+		newImages, req.DeletedImages); err != nil {
+		ginutil.RespErr(c, http.StatusInternalServerError, err)
+		return
+	}
+
+	ginutil.RespOK(c, nil)
+}
+
+// -----------------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------- ITEM TYPE ----------------------------------------------------------
+
 func (ctrl ItemCtrl) CreateItemType(c *gin.Context) {
 	req := new(dto.CreateItemTypeReq)
 
@@ -104,4 +137,25 @@ func (ctrl ItemCtrl) GetAllItemType(c *gin.Context) {
 	resp.SetData(itemTypes)
 
 	c.JSON(http.StatusOK, resp)
+}
+
+func (ctrl ItemCtrl) UpdateItemType(c *gin.Context) {
+	id, err := getIDFromParam(c)
+	if err != nil {
+		ginutil.RespErr(c, http.StatusNotAcceptable, err)
+		return
+	}
+
+	req := new(dto.ReqUpdateItemType)
+	if err := c.BindJSON(req); err != nil {
+		ginutil.RespErr(c, http.StatusNotAcceptable, err)
+		return
+	}
+
+	if err := ctrl.itemHandler.UpdateItemType(c, id, req.Name, req.Desc); err != nil {
+		ginutil.RespErr(c, http.StatusInternalServerError, err)
+		return
+	}
+
+	ginutil.RespOK(c, nil)
 }

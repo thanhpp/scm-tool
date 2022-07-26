@@ -118,12 +118,14 @@ func (s HTTPServer) newRouter() *gin.Engine {
 	{
 		itemGr.GET("", itemCtrl.GetList)
 		itemGr.POST("", itemCtrl.CreateItem)
+		itemGr.PUT("/:sku", itemCtrl.UpdateItem)
 	}
 
 	itemTypeGr := r.Group("item-type")
 	{
 		itemTypeGr.GET("", itemCtrl.GetAllItemType)
 		itemTypeGr.POST("", itemCtrl.CreateItemType)
+		itemTypeGr.PUT("/:id", itemCtrl.UpdateItemType)
 	}
 
 	r.POST("signup", userCtrl.NewUser)

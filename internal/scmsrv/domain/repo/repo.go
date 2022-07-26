@@ -6,7 +6,9 @@ import (
 	"github.com/thanhpp/scm/internal/scmsrv/domain/entity"
 )
 
-type ItemUpdateFn func(ctx context.Context, item *Item) (*Item, error)
+type ItemUpdateFn func(ctx context.Context, item entity.Item) (entity.Item, error)
+
+type ItemTypeUpdateFn func(ctx context.Context, itemType *ItemType) (*ItemType, error)
 
 type ItemFilter struct {
 	Limit  int
@@ -23,10 +25,11 @@ type ItemRepo interface {
 
 	// Write
 	CreateItem(ctx context.Context, item entity.Item) error
-	// Update(ctx context.Context, sku string, fn ItemUpdateFn) error
+	UpdateItem(ctx context.Context, sku string, fn ItemUpdateFn) error
 	// Delete(ctx context.Context, sku string) error
 
 	CreateItemType(ctx context.Context, itemType *entity.ItemType) error
+	UpdateItemType(ctx context.Context, itemTypeID int, fn ItemTypeUpdateFn) error
 }
 
 type ImportTicketRepoFiler struct {

@@ -1,5 +1,7 @@
 package entity
 
+import "errors"
+
 type Item struct {
 	SKU       string
 	Name      string
@@ -12,6 +14,27 @@ type Item struct {
 	// default storage
 
 	Serials []*Serial
+}
+
+func (it *Item) DeleteImages(image string) bool {
+	for i := range it.Images {
+		if it.Images[i] == image {
+			it.Images = append(it.Images[i:], it.Images[i+1:]...)
+			return true
+		}
+	}
+
+	return false
+}
+
+func (it *Item) SetName(name string) error {
+	if len(name) == 0 {
+		return errors.New("set empty item name")
+	}
+
+	it.Name = name
+
+	return nil
 }
 
 func (i Item) IsEmpty() bool {

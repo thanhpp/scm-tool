@@ -90,6 +90,17 @@ func (d ItemDB) GetBySKU(ctx context.Context, sku string) (*entity.Item, error) 
 	return unmarshalItem(*itemDB), nil
 }
 
+func txGetItemBySKU(ctx context.Context, tx *gorm.DB, sku string) (*repo.Item, error) {
+	itemDB := new(repo.Item)
+
+	if err := tx.WithContext(ctx).Model(&repo.Item{}).Where("sku LIKE ?", sku).Take(itemDB).
+		Error; err != nil {
+		return nil, err
+	}
+
+	return itemDB, nil
+}
+
 func (d ItemDB) CoundAvailabeByStorageID(ctx context.Context, storageID int) (int, error) {
 	var count int64
 	if err := d.gdb.WithContext(ctx).Model(&repo.Serial{}).
@@ -144,6 +155,31 @@ func (d ItemDB) GetList(ctx context.Context, filer repo.ItemFilter) ([]*entity.I
 	return items, nil
 }
 
+func (d ItemDB) UpdateItem(ctx context.Context, sku string, fn repo.ItemUpdateFn) error {
+	return d.gdb.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+		itemDB, err := txGetItemBySKU(ctx, tx, sku)
+		if err != nil {
+			return err
+		}
+
+		item := unmarshalItem(*itemDB)
+
+		newItem, err := fn(ctx, *item)
+		if err != nil {
+			return err
+		}
+
+		newItemDB := d.marshalItem(newItem)
+
+		if err := tx.WithContext(ctx).Model(&repo.Item{}).Where("sku = ?", sku).Updates(newItemDB).
+			Error; err != nil {
+			return err
+		}
+
+		return nil
+	})
+}
+
 // ----------------------------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------- ITEM TYPE ---------------------------------------------------------------
 
@@ -163,13 +199,13 @@ func (ItemDB) marshalItemType(in *entity.ItemType) *repo.ItemType {
 }
 
 func (d ItemDB) GetItemType(ctx context.Context, itemTypeID int) (*entity.ItemType, error) {
-	itemDB := new(repo.ItemType)
+	itemTypeDB := new(repo.ItemType)
 
-	if err := d.gdb.WithContext(ctx).Where("id = ?", itemTypeID).Take(itemDB).Error; err != nil {
+	if err := d.gdb.WithContext(ctx).Where("id = ?", itemTypeID).Take(itemTypeDB).Error; err != nil {
 		return nil, err
 	}
 
-	return d.unmarshalItemType(itemDB), nil
+	return d.unmarshalItemType(itemTypeDB), nil
 }
 
 func (d ItemDB) CreateItemType(ctx context.Context, itemType *entity.ItemType) error {
@@ -198,6 +234,29 @@ func (d ItemDB) GetAllItemType(ctx context.Context) ([]*entity.ItemType, error) 
 	}
 
 	return itemTypes, nil
+}
+
+func (d ItemDB) UpdateItemType(ctx context.Context, itemTypeID int, fn repo.ItemTypeUpdateFn) error {
+	return d.gdb.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+		itemTypeDB := new(repo.ItemType)
+
+		if err := tx.Model(&repo.ItemType{}).Where("id = ?", itemTypeID).Take(itemTypeDB).
+			Error; err != nil {
+			return err
+		}
+
+		newItemType, err := fn(ctx, itemTypeDB)
+		if err != nil {
+			return err
+		}
+
+		if err := tx.Model(&repo.ItemType{}).Where("id = ?", itemTypeID).Updates(newItemType).
+			Error; err != nil {
+			return err
+		}
+
+		return nil
+	})
 }
 
 /*

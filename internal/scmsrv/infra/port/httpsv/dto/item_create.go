@@ -99,3 +99,16 @@ func (resp *GetAllItemTypeResp) SetData(itemTypes []*entity.ItemType) {
 		resp.Data[i].set(itemTypes[i])
 	}
 }
+
+type ReqUpdateItemType struct {
+	Name string `json:"name"`
+	Desc string `json:"desc"`
+}
+
+type ReqUpdateItem struct {
+	Name          string   `form:"name"`
+	Desc          string   `form:"desc"`
+	ItemTypeID    int      `form:"item_type_id"`
+	SellPrice     float64  `form:"sell_price"`
+	DeletedImages []string `form:"deleted_images"`
+}
