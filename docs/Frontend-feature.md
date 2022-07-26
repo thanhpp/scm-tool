@@ -11,10 +11,10 @@
 | Create item type        | /item-type               | POST   |  :heavy_check_mark:  | :white_large_square: |      |
 | Get all item type       | /item-type               | GET    |  :heavy_check_mark:  | :white_large_square: |      |
 | Update item type        | /item-type/:item-type-id | PUT    | :white_large_square: | :white_large_square: |      |
-| Create storage          | /storage                 | POST   |  :heavy_check_mark:  | :white_large_square: |      |
-| Get storage             | /storage                 | GET    |  :heavy_check_mark:  | :white_large_square: |      |
-| Get storage             | /storage/:storage-id     | GET    | :white_large_square: | :white_large_square: |      |
-| Update storage          | /storage/:storage-id     | PUT    |  :heavy_check_mark:  | :white_large_square: |      |
+| Create storage          | /storage                 | POST   |  :heavy_check_mark:  | :heavy_check_mark: |      |
+| Get storage             | /storage                 | GET    |  :heavy_check_mark:  | :heavy_check_mark: |      |
+| Get storage             | /storage/:storage-id     | GET    | :white_large_square: | :heavy_check_mark: |      |
+| Update storage          | /storage/:storage-id     | PUT    |  :heavy_check_mark:  | :heavy_check_mark: |      |
 | Create supplier         | /supplier                | POST   |  :heavy_check_mark:  | :white_large_square: |      |
 | Get supplier            | /supplier                | GET    |  :heavy_check_mark:  | :white_large_square: |      |
 | Get supplier            | /supplier/:supplier-id   | GET    | :white_large_square: | :white_large_square: |      |
