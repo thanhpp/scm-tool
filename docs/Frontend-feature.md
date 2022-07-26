@@ -5,7 +5,7 @@
 | :---------------------- | :----------------------- | ------ | :------------------: | :------------------: | :--: |
 | Create item             | /item                    | POST   |  :heavy_check_mark:  | :white_large_square: |      |
 | Get items               | /item                    | GET    |  :heavy_check_mark:  | :white_large_square: |      |
-| Get item                | /item/:sku               | GET    | :white_large_square: | :white_large_square: |      |
+| Get item                | /item/:sku               | GET    | :heavy_check_mark: | :white_large_square: |      |
 | show item image         | /file/:filename          | GET    |  :heavy_check_mark:  | :white_large_square: |      |
 | Update item             | /item/:sku               | PUT    |  :white_large_square:  | :white_large_square: |      |
 | Create item type        | /item-type               | POST   |  :heavy_check_mark:  | :white_large_square: |      |
