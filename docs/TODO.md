@@ -102,10 +102,10 @@
       - [ ] Lấy thông tin sản phẩm
       - [x] Lấy danh sách nhà cung cấp
       - [ ] Lấy thông tin nhà cung cấp
-      - [ ] Cập nhật thông tin nhà cung cấp
+      - [x] Cập nhật thông tin nhà cung cấp
       - [x] Lấy danh sách kho
       - [ ] Lấy thông tin kho
-      - [ ] Cập nhật thông tin kho
+      - [x] Cập nhật thông tin kho
       - [ ] Tạo kiểu sản phẩm
       - [ ] Lấy danh sách phiếu nhập
       - [ ] Lấy thông tin phiếu nhập
