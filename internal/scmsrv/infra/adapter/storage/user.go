@@ -40,6 +40,24 @@ func (d UserDB) GetByUsername(ctx context.Context, username string) (*entity.Use
 	return unmarshalUser(userDB), nil
 }
 
+func (d UserDB) GetUsers(ctx context.Context, filer repo.GetUsersFilter) ([]*entity.User, error) {
+	var usersDB []*repo.User
+
+	if err := d.gdb.WithContext(ctx).Model(&repo.User{}).
+		Offset(filer.Offset).Limit(filer.Limit).Order("id ASC").
+		Find(&usersDB).
+		Error; err != nil {
+		return nil, err
+	}
+
+	users := make([]*entity.User, len(usersDB))
+	for i := range users {
+		users[i] = unmarshalUser(usersDB[i])
+	}
+
+	return users, nil
+}
+
 func marshalUser(in *entity.User) *repo.User {
 	return &repo.User{
 		ID:           in.ID,

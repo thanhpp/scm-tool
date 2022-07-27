@@ -16,6 +16,13 @@ type UserHandler struct {
 func (h UserHandler) CreateUser(
 	ctx context.Context, name, username, password string,
 ) (*entity.User, error) {
+	user, err := h.userRepo.GetByUsername(ctx, username)
+	if err == nil {
+		if user != nil {
+			return nil, errors.New("create user: duplicate username")
+		}
+	}
+
 	newUser, err := h.f.NewUser(name, username, password)
 	if err != nil {
 		return nil, err
@@ -41,4 +48,13 @@ func (h UserHandler) ValidateUser(
 	}
 
 	return user, nil
+}
+
+func (h UserHandler) GetUsers(
+	ctx context.Context, limit, offset int,
+) ([]*entity.User, error) {
+	return h.userRepo.GetUsers(ctx, repo.GetUsersFilter{
+		Limit:  limit,
+		Offset: offset,
+	})
 }

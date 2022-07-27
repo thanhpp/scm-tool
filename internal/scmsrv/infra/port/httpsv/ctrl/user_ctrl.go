@@ -69,3 +69,19 @@ func (ctrl UserCtrl) Login(c *gin.Context) {
 
 	c.JSON(http.StatusOK, resp)
 }
+
+func (ctrl UserCtrl) GetUsers(c *gin.Context) {
+	p := ginutil.NewPaginationQuery(c)
+
+	users, err := ctrl.userHandler.GetUsers(c, p.Limit(), p.Offset())
+	if err != nil {
+		ginutil.RespErr(c, http.StatusNotAcceptable, err)
+		return
+	}
+
+	resp := new(dto.RespGetUsers)
+	resp.Set200OK()
+	resp.SetData(users)
+
+	c.JSON(http.StatusOK, resp)
+}

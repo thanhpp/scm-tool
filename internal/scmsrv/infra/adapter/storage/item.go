@@ -165,27 +165,28 @@ func (d ItemDB) UpdateItem(ctx context.Context, sku string, fn repo.ItemUpdateFn
 		}
 
 		item := unmarshalItem(*itemDB)
-
 		newItem, err := fn(ctx, *item)
 		if err != nil {
 			return err
 		}
-
 		newItemDB := d.marshalItem(newItem)
+
+		logger.Debugw("update item", "old item", itemDB, "new item", newItemDB)
 
 		// find old & new images
 		oldImageMap := make(map[string]struct{}, len(item.Images)) // what is left in the map is deleted
-		for i := range item.Images {
-			oldImageMap[item.Images[i]] = struct{}{}
+		for i := range itemDB.Images {
+			oldImageMap[itemDB.Images[i].Image] = struct{}{}
 		}
+		logger.Debugw("update item", "old image maps", oldImageMap)
 
 		var newImages []string
-		for i := range newItem.Images {
-			if _, ok := oldImageMap[newItem.Images[i]]; ok {
-				delete(oldImageMap, newItem.Images[i]) // remove processed image
-				continue                               // same old image
+		for i := range newItemDB.Images {
+			if _, ok := oldImageMap[newItemDB.Images[i].Image]; ok {
+				delete(oldImageMap, newItemDB.Images[i].Image) // remove processed image
+				continue                                       // same old image
 			}
-			newImages = append(newImages, newItem.Images[i])
+			newImages = append(newImages, newItemDB.Images[i].Image)
 		}
 
 		if err := tx.WithContext(ctx).Model(&repo.Item{}).Where("sku = ?", sku).Updates(newItemDB).
@@ -219,6 +220,8 @@ func (d ItemDB) UpdateItem(ctx context.Context, sku string, fn repo.ItemUpdateFn
 				return err
 			}
 		}
+
+		logger.Debugw("update item db", "new images", newImagesDB, "delete images", deletedImages)
 
 		return nil
 	})

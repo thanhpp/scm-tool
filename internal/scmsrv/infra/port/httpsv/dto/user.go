@@ -49,3 +49,15 @@ type LoginResp struct {
 func (resp *LoginResp) SetData(token string) {
 	resp.Data.Token = token
 }
+
+type RespGetUsers struct {
+	ginutil.RespTemplateError
+	Data []UserInfoRespData `json:"data"`
+}
+
+func (resp *RespGetUsers) SetData(users []*entity.User) {
+	resp.Data = make([]UserInfoRespData, len(users))
+	for i := range resp.Data {
+		resp.Data[i].set(users[i])
+	}
+}

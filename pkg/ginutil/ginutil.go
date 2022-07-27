@@ -123,3 +123,11 @@ func NewPaginationQuery(c *gin.Context) PaginationQuery {
 
 	return p
 }
+
+func (pq PaginationQuery) Limit() int {
+	return pq.Size
+}
+
+func (pq PaginationQuery) Offset() int {
+	return (pq.Page - 1) * pq.Size
+}

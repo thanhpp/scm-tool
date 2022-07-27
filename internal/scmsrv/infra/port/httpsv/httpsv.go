@@ -128,6 +128,11 @@ func (s HTTPServer) newRouter() *gin.Engine {
 		itemTypeGr.PUT("/:id", itemCtrl.UpdateItemType)
 	}
 
+	userGr := r.Group("user")
+	{
+		userGr.GET("", userCtrl.GetUsers)
+	}
+
 	r.POST("signup", userCtrl.NewUser)
 	r.POST("login", userCtrl.Login)
 

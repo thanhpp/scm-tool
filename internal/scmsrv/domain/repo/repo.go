@@ -90,9 +90,15 @@ type SerialRepo interface {
 	UpdateSerial(ctx context.Context, seri string, fn UpdateSerialFn) error
 }
 
+type GetUsersFilter struct {
+	Limit  int
+	Offset int
+}
+
 type UserRepo interface {
 	// Read
 	GetByUsername(ctx context.Context, username string) (*entity.User, error)
+	GetUsers(ctx context.Context, filer GetUsersFilter) ([]*entity.User, error)
 
 	// Create
 	NewUser(ctx context.Context, user *entity.User) error
