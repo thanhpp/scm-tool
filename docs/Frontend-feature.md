@@ -3,11 +3,11 @@
 
 | Features                | APIs                     | Method |          BE          |          FE          | Note |
 | :---------------------- | :----------------------- | ------ | :------------------: | :------------------: | :--: |
-| Create item             | /item                    | POST   |  :heavy_check_mark:  | :white_large_square: |      |
-| Get items               | /item                    | GET    |  :heavy_check_mark:  | :white_large_square: |      |
-| Get item                | /item/:sku               | GET    |  :heavy_check_mark:  | :white_large_square: |      |
-| show item image         | /file/:filename          | GET    |  :heavy_check_mark:  | :white_large_square: |      |
-| Update item             | /item/:sku               | PUT    |  :heavy_check_mark:  | :white_large_square: |      |
+| Create item             | /item                    | POST   |  :heavy_check_mark:  |  :heavy_check_mark:  |      |
+| Get items               | /item                    | GET    |  :heavy_check_mark:  |  :heavy_check_mark:  |      |
+| Get item                | /item/:sku               | GET    |  :heavy_check_mark:  |  :heavy_check_mark:  |      |
+| show item image         | /file/:filename          | GET    |  :heavy_check_mark:  |  :heavy_check_mark:  |      |
+| Update item             | /item/:sku               | PUT    |  :heavy_check_mark:  |  :heavy_check_mark:  |      |
 | Create item type        | /item-type               | POST   |  :heavy_check_mark:  |  :heavy_check_mark:  |      |
 | Get all item type       | /item-type               | GET    |  :heavy_check_mark:  |  :heavy_check_mark:  |      |
 | Update item type        | /item-type/:item-type-id | PUT    |  :heavy_check_mark:  |  :heavy_check_mark:  |      |
