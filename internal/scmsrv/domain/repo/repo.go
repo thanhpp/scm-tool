@@ -90,6 +90,8 @@ type SerialRepo interface {
 	UpdateSerial(ctx context.Context, seri string, fn UpdateSerialFn) error
 }
 
+type UpdateUserFn func(context.Context, entity.User) (entity.User, error)
+
 type GetUsersFilter struct {
 	Limit  int
 	Offset int
@@ -102,4 +104,5 @@ type UserRepo interface {
 
 	// Create
 	NewUser(ctx context.Context, user *entity.User) error
+	UpdateUserByID(ctx context.Context, id int, fn UpdateUserFn) error
 }

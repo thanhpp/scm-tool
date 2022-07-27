@@ -381,6 +381,34 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Update password",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"new_pass\": \"new\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base}}/user/1/password",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"user",
+								"1",
+								"password"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},

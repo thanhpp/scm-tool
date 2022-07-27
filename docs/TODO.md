@@ -128,7 +128,7 @@
   - [x] Gửi data để mint NFT
   - [x] Query seri đính kèm NFT
 - [ ] Tài khoản
-  - [ ] Reset mật khẩu
+  - [x] Reset mật khẩu
   - [ ] Phân quyền
 - [ ] Lay san pham them ma Storage
 

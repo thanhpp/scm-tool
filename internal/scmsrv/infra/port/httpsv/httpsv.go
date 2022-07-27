@@ -131,6 +131,7 @@ func (s HTTPServer) newRouter() *gin.Engine {
 	userGr := r.Group("user")
 	{
 		userGr.GET("", userCtrl.GetUsers)
+		userGr.PATCH("/:id/password", userCtrl.UpdateUserPassword)
 	}
 
 	r.POST("signup", userCtrl.NewUser)

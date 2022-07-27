@@ -61,3 +61,7 @@ func (resp *RespGetUsers) SetData(users []*entity.User) {
 		resp.Data[i].set(users[i])
 	}
 }
+
+type ReqUpdateUserPass struct {
+	NewPass string `json:"new_pass"`
+}

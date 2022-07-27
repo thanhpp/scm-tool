@@ -58,6 +58,31 @@ func (d UserDB) GetUsers(ctx context.Context, filer repo.GetUsersFilter) ([]*ent
 	return users, nil
 }
 
+func (d UserDB) UpdateUserByID(ctx context.Context, id int, fn repo.UpdateUserFn) error {
+	return d.gdb.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+		userDB := new(repo.User)
+
+		if err := tx.WithContext(ctx).Model(&repo.User{}).Where("id = ?", id).Take(userDB).
+			Error; err != nil {
+			return err
+		}
+
+		user := unmarshalUser(userDB)
+		newUser, err := fn(ctx, *user)
+		if err != nil {
+			return err
+		}
+		newUserDB := marshalUser(&newUser)
+
+		if err := tx.WithContext(ctx).Model(&repo.User{}).Where("id = ?", id).Updates(newUserDB).
+			Error; err != nil {
+			return err
+		}
+
+		return nil
+	})
+}
+
 func marshalUser(in *entity.User) *repo.User {
 	return &repo.User{
 		ID:           in.ID,

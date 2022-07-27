@@ -37,6 +37,21 @@ func (f factoryImpl) NewUser(name, username, password string) (*User, error) {
 	}, nil
 }
 
+func (u *User) UpdatePass(newPass string) error {
+	if len(newPass) == 0 {
+		return errors.New("update empty password")
+	}
+
+	newHashPass, err := hashBcrypt(newPass)
+	if err != nil {
+		return err
+	}
+
+	u.HashPassword = newHashPass
+
+	return nil
+}
+
 func hashBcrypt(in string) (string, error) {
 	out, err := bcrypt.GenerateFromPassword([]byte(in), bcrypt.DefaultCost)
 	if err != nil {

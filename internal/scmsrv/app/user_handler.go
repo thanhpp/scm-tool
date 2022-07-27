@@ -58,3 +58,16 @@ func (h UserHandler) GetUsers(
 		Offset: offset,
 	})
 }
+
+func (h UserHandler) UpdateUserPassword(
+	ctx context.Context, id int, newPass string,
+) error {
+	return h.userRepo.UpdateUserByID(ctx, id,
+		func(ctx context.Context, u entity.User) (entity.User, error) {
+			if err := u.UpdatePass(newPass); err != nil {
+				return entity.User{}, err
+			}
+
+			return u, nil
+		})
+}
