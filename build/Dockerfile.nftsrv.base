@@ -1,0 +1,21 @@
+FROM golang:1.18-alpine
+
+# set ENV variables
+ENV GO111MODULE=on \
+    GOOS=linux \
+    GOARCH=amd64
+
+RUN apk add build-base
+
+WORKDIR /go/src/github.com/thanhpp/scm-tool
+
+COPY pkg pkg/
+COPY cmd cmd/
+COPY internal internal/
+COPY go.mod go.mod
+
+RUN go mod tidy && go mod download
+
+WORKDIR /go/src/github.com/thanhpp
+
+RUN rm -rf scm-tool

@@ -1,11 +1,9 @@
-FROM golang:1.18-alpine AS builder
+FROM ghcr.io/thanhpp/nftsrv-base:latest AS builder
 
 # set ENV variables
 ENV GO111MODULE=on \
     GOOS=linux \
     GOARCH=amd64
-
-RUN apk add build-base
 
 WORKDIR /go/src/github.com/thanhpp/scm-tool
 
