@@ -24,7 +24,7 @@ type ItemImage struct {
 
 type ItemType struct {
 	ID   int    `gorm:"column:id; type:int; primaryKey; autoIncrement"`
-	Name string `gorm:"column:name;type:text; unique"`
+	Name string `gorm:"column:name;type:text"`
 	Desc string `gorm:"column:desc;type:text"`
 
 	CreatedAt time.Time `gorm:"column:created_at;autoCreateTime"`

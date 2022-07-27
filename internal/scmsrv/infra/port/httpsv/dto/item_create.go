@@ -106,9 +106,9 @@ type ReqUpdateItemType struct {
 }
 
 type ReqUpdateItem struct {
-	Name          string   `form:"name"`
-	Desc          string   `form:"desc"`
-	ItemTypeID    int      `form:"item_type_id"`
-	SellPrice     float64  `form:"sell_price"`
-	DeletedImages []string `form:"deleted_images"`
+	Name         string   `form:"name"`
+	Desc         string   `form:"desc"`
+	ItemTypeID   int      `form:"item_type_id"`
+	SellPrice    float64  `form:"sell_price"`
+	DeleteImages []string `form:"delete_images"`
 }

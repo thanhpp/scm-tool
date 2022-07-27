@@ -9,6 +9,7 @@ import (
 	"github.com/thanhpp/scm/internal/scmsrv/domain/repo"
 	"github.com/thanhpp/scm/pkg/constx"
 	"github.com/thanhpp/scm/pkg/fileutil"
+	"github.com/thanhpp/scm/pkg/logger"
 )
 
 type ItemHandler struct {
@@ -66,11 +67,13 @@ func (h ItemHandler) UpdateItem(
 
 	return h.itemRepo.UpdateItem(ctx, sku,
 		func(ctx context.Context, item entity.Item) (entity.Item, error) {
+			logger.Debugw("update item", "current images", item.Images)
 			for i := range deleteImages {
-				if !item.DeleteImages(deleteImages[i]) {
-					return entity.Item{}, errors.New("delete not exist images")
+				if !item.DeleteImages(constx.SaveFilePaths + "/" + deleteImages[i]) {
+					return entity.Item{}, errors.New("delete not exist images: " + deleteImages[i])
 				}
 			}
+			logger.Debugw("update item", "after delete images", item.Images)
 
 			newImagePaths, err := h.fileUtil.
 				SaveFilesFromMultipart(constx.SaveFilePaths, "item-images-"+sku, newImages)

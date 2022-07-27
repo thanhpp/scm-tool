@@ -19,7 +19,7 @@ type Item struct {
 func (it *Item) DeleteImages(image string) bool {
 	for i := range it.Images {
 		if it.Images[i] == image {
-			it.Images = append(it.Images[i:], it.Images[i+1:]...)
+			it.Images = append(it.Images[:i], it.Images[i+1:]...)
 			return true
 		}
 	}

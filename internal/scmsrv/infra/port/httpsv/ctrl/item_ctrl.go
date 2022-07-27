@@ -83,6 +83,7 @@ func (ctrl ItemCtrl) UpdateItem(c *gin.Context) {
 		ginutil.RespErr(c, http.StatusNotAcceptable, err)
 		return
 	}
+	logger.Debugw("update item", "request", req)
 
 	form, err := c.MultipartForm()
 	if err != nil {
@@ -93,7 +94,7 @@ func (ctrl ItemCtrl) UpdateItem(c *gin.Context) {
 	newImages := form.File["new_images"]
 
 	if err := ctrl.itemHandler.UpdateItem(c, sku, req.Name, req.Desc, req.ItemTypeID, req.SellPrice,
-		newImages, req.DeletedImages); err != nil {
+		newImages, req.DeleteImages); err != nil {
 		ginutil.RespErr(c, http.StatusInternalServerError, err)
 		return
 	}

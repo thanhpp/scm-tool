@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "7074f53c-e623-4ce9-837e-3a625925456a",
+		"_postman_id": "3ef041bc-93df-4154-9449-3091b5941a77",
 		"name": "scm",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "10191781"
@@ -39,7 +39,7 @@
 								},
 								{
 									"key": "details",
-									"value": "\"[\\n  {\\n    \\\"item_sku\\\": \\\"sku1\\\",\\n    \\\"buy_quantity\\\": 100,\\n    \\\"buy_price\\\": 10000\\n  }\\n]\"",
+									"value": "\"[\\n  {\\n    \\\"item_sku\\\": \\\"sku1\\\",\\n    \\\"buy_quantity\\\": 1,\\n    \\\"buy_price\\\": 10000\\n  }\\n]\"",
 									"type": "text"
 								},
 								{
@@ -108,6 +108,33 @@
 							],
 							"path": [
 								"import_ticket"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "{{base}}/import_ticket/serials",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"import_ticket_id\": 15\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base}}/import_ticket/serials",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"import_ticket",
+								"serials"
 							]
 						}
 					},
@@ -405,7 +432,7 @@
 								{
 									"key": "images",
 									"type": "file",
-									"src": "/home/thanhpp/Pictures/Screenshot from 2022-06-25 00-33-33.png"
+									"src": "/home/thanhpp/Downloads/33785414.jpeg"
 								}
 							]
 						},
@@ -428,7 +455,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"type1\",\n    \"desc\": \"desc1\"\n}",
+							"raw": "{\n    \"name\": \"type2\",\n    \"desc\": \"desc2\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -451,7 +478,16 @@
 					"name": "get items",
 					"request": {
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": "{{base}}/item",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"item"
+							]
+						}
 					},
 					"response": []
 				},
@@ -494,6 +530,93 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Update item type",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"type1\",\n    \"desc\": \"desc1\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base}}/item-type/1",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"item-type",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateitem",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "new name",
+									"type": "text"
+								},
+								{
+									"key": "desc",
+									"value": "new desc",
+									"type": "text"
+								},
+								{
+									"key": "item_type_id",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "new_images",
+									"type": "file",
+									"src": []
+								},
+								{
+									"key": "delete_images",
+									"value": "item-images-sku1-1658896738344-3073314706.jpeg",
+									"type": "text"
+								},
+								{
+									"key": "delete_images",
+									"value": "/files/item-images-sku1-1658892681343-950382410.png",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "delete_images",
+									"value": "./files/item-images-sku1-1658892719720-992456298.png",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base}}/item/sku1",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"item",
+								"sku1"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -503,13 +626,65 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{base}}/serial/999711610610710211551110971159910410398481095352103",
+					"raw": "{{base}}/serial/99989711210351111116107106531101021085711352101107103",
 					"host": [
 						"{{base}}"
 					],
 					"path": [
 						"serial",
-						"999711610610710211551110971159910410398481095352103"
+						"99989711210351111116107106531101021085711352101107103"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "127.0.0.1:11000/mint",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"seri\": \"serial-1\",\n    \"metadata\": {\n        \"data1\": \"data\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "127.0.0.1:11000/mint",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "11000",
+					"path": [
+						"mint"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "127.0.0.1:11000/tokenid/30",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "127.0.0.1:11000/tokenid/30",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "11000",
+					"path": [
+						"tokenid",
+						"30"
 					]
 				}
 			},

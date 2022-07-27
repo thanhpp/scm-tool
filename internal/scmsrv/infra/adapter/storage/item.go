@@ -6,6 +6,7 @@ import (
 	"github.com/thanhpp/scm/internal/scmsrv/domain/entity"
 	"github.com/thanhpp/scm/internal/scmsrv/domain/repo"
 	"github.com/thanhpp/scm/pkg/enum"
+	"github.com/thanhpp/scm/pkg/logger"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 )
@@ -93,7 +94,8 @@ func (d ItemDB) GetBySKU(ctx context.Context, sku string) (*entity.Item, error) 
 func txGetItemBySKU(ctx context.Context, tx *gorm.DB, sku string) (*repo.Item, error) {
 	itemDB := new(repo.Item)
 
-	if err := tx.WithContext(ctx).Model(&repo.Item{}).Where("sku LIKE ?", sku).Take(itemDB).
+	if err := tx.WithContext(ctx).Model(&repo.Item{}).
+		Preload(clause.Associations).Where("sku LIKE ?", sku).Take(itemDB).
 		Error; err != nil {
 		return nil, err
 	}
@@ -171,9 +173,51 @@ func (d ItemDB) UpdateItem(ctx context.Context, sku string, fn repo.ItemUpdateFn
 
 		newItemDB := d.marshalItem(newItem)
 
+		// find old & new images
+		oldImageMap := make(map[string]struct{}, len(item.Images)) // what is left in the map is deleted
+		for i := range item.Images {
+			oldImageMap[item.Images[i]] = struct{}{}
+		}
+
+		var newImages []string
+		for i := range newItem.Images {
+			if _, ok := oldImageMap[newItem.Images[i]]; ok {
+				delete(oldImageMap, newItem.Images[i]) // remove processed image
+				continue                               // same old image
+			}
+			newImages = append(newImages, newItem.Images[i])
+		}
+
 		if err := tx.WithContext(ctx).Model(&repo.Item{}).Where("sku = ?", sku).Updates(newItemDB).
 			Error; err != nil {
 			return err
+		}
+
+		newImagesDB := make([]*repo.ItemImage, len(newImages))
+		for i := range newImagesDB {
+			newImagesDB[i] = &repo.ItemImage{
+				ItemSKU: item.SKU,
+				Image:   newImages[i],
+			}
+		}
+		if len(newImagesDB) > 0 {
+			if err := tx.WithContext(ctx).Model(&repo.ItemImage{}).
+				CreateInBatches(newImagesDB, len(newImagesDB)).Error; err != nil {
+				return err
+			}
+		}
+
+		deletedImages := make([]string, 0, len(oldImageMap))
+		for k := range oldImageMap {
+			deletedImages = append(deletedImages, k)
+		}
+		logger.Debugw("update item", "deteled images", deletedImages)
+		if len(deletedImages) > 0 {
+			if err := tx.WithContext(ctx).Model(&repo.ItemImage{}).
+				Where("item_sku = ? AND image IN ?", item.SKU, deletedImages).
+				Delete(&repo.ItemImage{}).Error; err != nil {
+				return err
+			}
 		}
 
 		return nil
