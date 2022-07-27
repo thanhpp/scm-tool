@@ -364,6 +364,23 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Get users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base}}/user",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
