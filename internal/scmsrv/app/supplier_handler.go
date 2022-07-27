@@ -7,12 +7,25 @@ import (
 	"github.com/thanhpp/scm/internal/scmsrv/domain/repo"
 )
 
-type SupplierHanlder struct {
+type SupplierHandler struct {
 	fac          entity.Factory
 	supplierRepo repo.SupplierRepo
 }
 
-func (h SupplierHanlder) Create(ctx context.Context, name, email, phone string) (*entity.Supplier, error) {
+func (h SupplierHandler) GetByID(ctx context.Context, id int) (*entity.Supplier, error) {
+	return h.supplierRepo.Get(ctx, id)
+}
+
+func (h SupplierHandler) GetList(ctx context.Context, page, size int) ([]*entity.Supplier, error) {
+	offset, limit := genOffsetLimit(page, size)
+
+	return h.supplierRepo.GetList(ctx, repo.SupplierFiler{
+		Offset: offset,
+		Limit:  limit,
+	})
+}
+
+func (h SupplierHandler) Create(ctx context.Context, name, email, phone string) (*entity.Supplier, error) {
 	newSupplier, err := h.fac.NewSupplier(name, email, phone)
 	if err != nil {
 		return nil, err
@@ -25,16 +38,7 @@ func (h SupplierHanlder) Create(ctx context.Context, name, email, phone string) 
 	return newSupplier, nil
 }
 
-func (h SupplierHanlder) GetList(ctx context.Context, page, size int) ([]*entity.Supplier, error) {
-	offset, limit := genOffsetLimit(page, size)
-
-	return h.supplierRepo.GetList(ctx, repo.SupplierFiler{
-		Offset: offset,
-		Limit:  limit,
-	})
-}
-
-func (h SupplierHanlder) Update(ctx context.Context, id int, name, email, phone string) error {
+func (h SupplierHandler) Update(ctx context.Context, id int, name, email, phone string) error {
 	oldSupplier, err := h.supplierRepo.Get(ctx, id)
 	if err != nil {
 		return err

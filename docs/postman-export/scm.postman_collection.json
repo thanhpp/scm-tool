@@ -214,6 +214,24 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Get supplier by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base}}/supplier/1",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"supplier",
+								"1"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},

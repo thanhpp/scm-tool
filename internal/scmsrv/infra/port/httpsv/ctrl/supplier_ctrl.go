@@ -10,13 +10,33 @@ import (
 )
 
 type SupplierCtrl struct {
-	supplierHandler app.SupplierHanlder
+	supplierHandler app.SupplierHandler
 }
 
-func NewSupplier(handler app.SupplierHanlder) *SupplierCtrl {
+func NewSupplier(handler app.SupplierHandler) *SupplierCtrl {
 	return &SupplierCtrl{
 		supplierHandler: handler,
 	}
+}
+
+func (ctrl SupplierCtrl) GetSupplier(c *gin.Context) {
+	id, err := getIDFromParam(c)
+	if err != nil {
+		ginutil.RespErr(c, http.StatusNotAcceptable, err)
+		return
+	}
+
+	supplier, err := ctrl.supplierHandler.GetByID(c, id)
+	if err != nil {
+		ginutil.RespErr(c, http.StatusInternalServerError, err)
+		return
+	}
+
+	resp := new(dto.SupplierInfoResp)
+	resp.Set200OK()
+	resp.SetData(supplier)
+
+	c.JSON(http.StatusOK, resp)
 }
 
 func (ctrl SupplierCtrl) Create(c *gin.Context) {

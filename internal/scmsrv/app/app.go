@@ -15,7 +15,7 @@ import (
 
 type App struct {
 	ImportTicketHandler ImportTicketHandler
-	SupplierHandler     SupplierHanlder
+	SupplierHandler     SupplierHandler
 	StorageHandler      StorageHandler
 	ItemHandler         ItemHandler
 	UserHandler         UserHandler
@@ -38,7 +38,7 @@ func New(
 			fileUtil:         fileUtil,
 			nftServiceClient: nftSrvClient,
 		},
-		SupplierHandler: SupplierHanlder{
+		SupplierHandler: SupplierHandler{
 			fac:          fac,
 			supplierRepo: supplierRepo,
 		},
