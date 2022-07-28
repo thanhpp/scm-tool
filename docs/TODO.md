@@ -99,7 +99,7 @@
   - [ ] Phụ lục
     - [ ] Đặc tả usecases  
       - [x] Lấy danh sách sản phẩm
-      - [ ] Lấy thông tin sản phẩm
+      - [x] Lấy thông tin sản phẩm
       - [x] Lấy danh sách nhà cung cấp
       - [x] Lấy thông tin nhà cung cấp
       - [x] Cập nhật thông tin nhà cung cấp
