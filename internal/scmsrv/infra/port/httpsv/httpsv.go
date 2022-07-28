@@ -91,6 +91,9 @@ func (s HTTPServer) newRouter() *gin.Engine {
 
 	importTicketGr := r.Group("import_ticket")
 	{
+		importTicketGr.GET("", importTicketCtrl.GetListImportTickets)
+		importTicketGr.GET("/:id", importTicketCtrl.GetImportTicket)
+
 		importTicketGr.POST("", importTicketCtrl.Create)
 		importTicketGr.POST("serials", importTicketCtrl.GenSerial)
 	}

@@ -41,6 +41,7 @@ type ImportTicketRepo interface {
 
 	// Read
 	Get(ctx context.Context, importTicketID int) (*entity.ImportTicket, error)
+	GetGeneralInfoList(ctx context.Context, offset, limit int) ([]*entity.ImportTicket, error)
 }
 
 type SupplierFiler struct {

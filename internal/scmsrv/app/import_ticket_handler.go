@@ -176,3 +176,25 @@ func isInStringSlices(val string, sl []string) bool {
 
 	return false
 }
+
+func (h ImportTicketHandler) GetImportTicketByID(
+	ctx context.Context, id int,
+) (*entity.ImportTicket, error) {
+	importTicket, err := h.importTicketRepo.Get(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+
+	return importTicket, nil
+}
+
+func (h ImportTicketHandler) GetListImportTicket(
+	ctx context.Context, offset, limit int,
+) ([]*entity.ImportTicket, error) {
+	importTickets, err := h.importTicketRepo.GetGeneralInfoList(ctx, offset, limit)
+	if err != nil {
+		return nil, err
+	}
+
+	return importTickets, nil
+}

@@ -139,6 +139,41 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Get import ticket by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base}}/import_ticket/1",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"import_ticket",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get list import ticket",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base}}/import_ticket",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"import_ticket"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},

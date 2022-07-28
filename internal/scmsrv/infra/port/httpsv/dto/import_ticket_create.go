@@ -55,7 +55,7 @@ type GenSerialReq struct {
 	ImportTicketID int `json:"import_ticket_id"`
 }
 
-type ImportTicketInfoRespData struct {
+type DataImportTicketGeneralInfo struct {
 	ID                int       `json:"id"`
 	FromSupplierID    int       `json:"from_supplier_id"`
 	ToStorageID       int       `json:"to_storage_id"`
@@ -65,14 +65,9 @@ type ImportTicketInfoRespData struct {
 	Fee               float64   `json:"fee"`
 	BillImagePaths    []string  `json:"bill_image_paths"`
 	ProductImagePaths []string  `json:"product_image_paths"`
-	Details           []struct {
-		ItemSKU     string  `json:"item_sku"`
-		BuyQuantity int     `json:"buy_quantity"`
-		BuyPrice    float64 `json:"buy_price"`
-	} `json:"details"`
 }
 
-func (d *ImportTicketInfoRespData) set(in *entity.ImportTicket) {
+func (d *DataImportTicketGeneralInfo) set(in *entity.ImportTicket) {
 	d.ID = in.ID
 	d.FromSupplierID = in.FromSupplier.ID
 	d.ToStorageID = in.ToStorage.ID
@@ -88,6 +83,19 @@ func (d *ImportTicketInfoRespData) set(in *entity.ImportTicket) {
 	for i := range in.ProductImagePaths {
 		d.ProductImagePaths = append(d.ProductImagePaths, buildFileURL(in.ProductImagePaths[i]))
 	}
+}
+
+type ImportTicketInfoRespData struct {
+	DataImportTicketGeneralInfo
+	Details []struct {
+		ItemSKU     string  `json:"item_sku"`
+		BuyQuantity int     `json:"buy_quantity"`
+		BuyPrice    float64 `json:"buy_price"`
+	} `json:"details"`
+}
+
+func (d *ImportTicketInfoRespData) set(in *entity.ImportTicket) {
+	d.DataImportTicketGeneralInfo.set(in)
 
 	for i := range in.Details {
 		d.Details = append(d.Details, struct {
@@ -139,5 +147,17 @@ func (resp *GenSerialResp) SetData(serials []*entity.Serial) {
 		m[serials[i].Item.SKU] = data
 
 		resp.Data = append(resp.Data, data)
+	}
+}
+
+type RespGetListImportTicket struct {
+	ginutil.RespTemplate
+	Data []DataImportTicketGeneralInfo `json:"data"`
+}
+
+func (resp *RespGetListImportTicket) SetData(in []*entity.ImportTicket) {
+	resp.Data = make([]DataImportTicketGeneralInfo, len(in))
+	for i := range resp.Data {
+		resp.Data[i].set(in[i])
 	}
 }

@@ -138,7 +138,7 @@ func (d ImportTicketDB) Create(ctx context.Context, in *entity.ImportTicket) err
 		}
 
 		if err := tx.
-			Model(&repo.ImportTicketBillImage{}).
+			Model(&repo.ImportTicketProductImage{}).
 			CreateInBatches(dbImportTicket.ProductImages, len(dbImportTicket.ProductImages)).Error; err != nil {
 			return err
 		}
@@ -176,4 +176,28 @@ func (d ImportTicketDB) Get(ctx context.Context, importTicketID int) (*entity.Im
 	importTicket := unmarshalImportTicket(importTicketDB)
 
 	return importTicket, nil
+}
+
+func (d ImportTicketDB) GetGeneralInfoList(ctx context.Context, offset, limit int) ([]*entity.ImportTicket, error) {
+	var importTicketsDB []*repo.ImportTicket
+
+	if err := d.gdb.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+		if err := tx.Model(&repo.ImportTicket{}).
+			Preload(clause.Associations).
+			Offset(offset).Limit(limit).Order("id ASC").
+			Find(&importTicketsDB).Error; err != nil {
+			return err
+		}
+
+		return nil
+	}); err != nil {
+		return nil, err
+	}
+
+	importTickets := make([]*entity.ImportTicket, len(importTicketsDB))
+	for i := range importTickets {
+		importTickets[i] = unmarshalImportTicket(importTicketsDB[i])
+	}
+
+	return importTickets, nil
 }

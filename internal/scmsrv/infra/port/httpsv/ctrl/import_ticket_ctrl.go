@@ -67,6 +67,42 @@ func (ctrl ImportTicketCtrl) Create(c *gin.Context) {
 	c.JSON(http.StatusOK, resp)
 }
 
+func (ctrl ImportTicketCtrl) GetImportTicket(c *gin.Context) {
+	id, err := getIDFromParam(c)
+	if err != nil {
+		ginutil.RespErr(c, http.StatusNotAcceptable, err)
+		return
+	}
+
+	importTicket, err := ctrl.importTickerHanlder.GetImportTicketByID(c, id)
+	if err != nil {
+		ginutil.RespErr(c, http.StatusInternalServerError, err)
+		return
+	}
+
+	resp := new(dto.ImportTicketInfoResp)
+	resp.Set200OK()
+	resp.SetData(importTicket)
+
+	c.JSON(http.StatusOK, resp)
+}
+
+func (ctrl ImportTicketCtrl) GetListImportTickets(c *gin.Context) {
+	p := ginutil.NewPaginationQuery(c)
+
+	importTickets, err := ctrl.importTickerHanlder.GetListImportTicket(c, p.Offset(), p.Limit())
+	if err != nil {
+		ginutil.RespErr(c, http.StatusInternalServerError, err)
+		return
+	}
+
+	resp := new(dto.RespGetListImportTicket)
+	resp.Set200OK()
+	resp.SetData(importTickets)
+
+	c.JSON(http.StatusOK, resp)
+}
+
 func (ctrl ImportTicketCtrl) GenSerial(c *gin.Context) {
 	req := new(dto.GenSerialReq)
 
