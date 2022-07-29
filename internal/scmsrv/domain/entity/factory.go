@@ -16,7 +16,7 @@ type Factory interface {
 		billImagePaths []string, productImagePaths []string,
 	) (*ImportTicket, error)
 	NewImportTicketDetails(item Item, buyQuantity, receiveQuantity int, buyPrice float64) (*ImportTicketDetails, error)
-	NewSupplier(name, phone, email string) (*Supplier, error)
+	NewSupplier(name, email, phone string) (*Supplier, error)
 	NewStorage(name, desc, location string) (*Storage, error)
 	NewItem(sku, name, desc string, itemType ItemType, imagePaths []string) (*Item, error)
 	NewItemType(name, desc string) (*ItemType, error)
@@ -89,7 +89,7 @@ func (factoryImpl) NewImportTicketDetails(
 	}, nil
 }
 
-func (f factoryImpl) NewSupplier(name, phone, email string) (*Supplier, error) {
+func (f factoryImpl) NewSupplier(name, email, phone string) (*Supplier, error) {
 	if len(name) == 0 {
 		return nil, errors.New("create supplier: empty name")
 	}
