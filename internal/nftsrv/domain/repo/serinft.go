@@ -17,6 +17,8 @@ type SeriNFT struct {
 	UpdatedAt time.Time
 }
 
+type UpdateSeriNFTFunc func(*entity.SerialNFT) (*entity.SerialNFT, error)
+
 type SeriNFTRepo interface {
 	CheckDuplicateSeri(ctx context.Context, seri string) (bool, error)
 	GetBySeri(ctx context.Context, seri string) (*entity.SerialNFT, error)
@@ -26,4 +28,5 @@ type SeriNFTRepo interface {
 
 	Create(ctx context.Context, seriNFT *entity.SerialNFT) error
 	UpdateTokenIDByTxHash(ctx context.Context, txHash string, tokenID uint64) error
+	UpdateSeriNFTBySeri(ctx context.Context, seri string, fn UpdateSeriNFTFunc) error
 }

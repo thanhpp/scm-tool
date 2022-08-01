@@ -67,6 +67,10 @@ func NewNFTMinter(ethClient *ethclient.Client, privateKey, contractAddr string) 
 	}, nil
 }
 
+func (m *NFTMinter) FromAddr() common.Address {
+	return m.FromAddr()
+}
+
 func (m *NFTMinter) newAuth(ctx context.Context) (*bind.TransactOpts, error) {
 	nonce, err := m.ethClient.NonceAt(ctx, m.fromAddr, nil)
 	if err != nil {
@@ -156,4 +160,19 @@ func (m *NFTMinter) GetTokenIDByTxHash(ctx context.Context, txHash string) (uint
 	}
 
 	return 0, errors.New("tokenID not found in tx hash " + txHash)
+}
+
+func (m *NFTMinter) Transfer(ctx context.Context, tokenID int, toAddr common.Address) error {
+	auth, err := m.newAuth(ctx)
+	if err != nil {
+		return err
+	}
+
+	tx, err := m.sm.SafeTransferFrom(auth, m.fromAddr, toAddr, big.NewInt(int64(tokenID)))
+	if err != nil {
+		return err
+	}
+	logger.Infow("Safe Tranfer", "to", toAddr.String(), "tokenID", tokenID, "tx hash", tx.Hash())
+
+	return nil
 }

@@ -151,3 +151,35 @@ func (a *App) autoUpdateTokenID(ctx context.Context) {
 		}
 	}
 }
+
+func (a *App) UpdateOwner(ctx context.Context, serials []string, to string) error {
+	var (
+		serialNFT = make([]*entity.SerialNFT, len(serials))
+		err       error
+	)
+
+	for i := range serials {
+		serialNFT[i], err = a.GetSeriNFTBySeri(ctx, serials[i])
+		if err != nil {
+			return err
+		}
+
+		if serialNFT[i].Owner != a.minter.FromAddr().String() {
+			return errors.New("Seri not belongs to current owner: " + serials[i])
+		}
+	}
+
+	for i := range serialNFT {
+		serialNFT[i].Owner = to
+
+		if err := a.seriNFTRepo.UpdateSeriNFTBySeri(
+			ctx, serialNFT[i].Seri, func(sn *entity.SerialNFT) (*entity.SerialNFT, error) {
+				sn.Owner = to
+				return sn, err
+			}); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}

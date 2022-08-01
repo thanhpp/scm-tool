@@ -91,6 +91,46 @@ func (d *SeriNFTDB) UpdateTokenIDByTxHash(ctx context.Context, txHash string, to
 	return nil
 }
 
+func (d *SeriNFTDB) UpdateSeriNFTBySeri(
+	ctx context.Context, seri string, fn repo.UpdateSeriNFTFunc,
+) error {
+	return d.db.WithContext(ctx).Transaction(
+		func(tx *gorm.DB) error {
+			seriNFTDB, err := txGetSeriNFTBySeri(ctx, tx, seri)
+			if err != nil {
+				return err
+			}
+
+			seri := unmarshalSeriNFT(seriNFTDB)
+
+			newSeri, err := fn(seri)
+			if err != nil {
+				return err
+			}
+
+			if err := tx.
+				WithContext(ctx).Model(&repo.SeriNFT{}).
+				Where("seri LIKE ?", seri).Updates(newSeri).Error; err != nil {
+				return err
+			}
+
+			return nil
+		},
+	)
+
+}
+
+func txGetSeriNFTBySeri(ctx context.Context, tx *gorm.DB, seri string) (*repo.SeriNFT, error) {
+	seriNFTDB := new(repo.SeriNFT)
+
+	err := tx.WithContext(ctx).Model(&repo.SeriNFT{}).Where("seri LIKE ?", seri).Take(&seriNFTDB).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return seriNFTDB, nil
+}
+
 func marshalSeriNFT(seriNFT *entity.SerialNFT) *repo.SeriNFT {
 	return &repo.SeriNFT{
 		Seri:     seriNFT.Seri,

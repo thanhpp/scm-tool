@@ -6,4 +6,5 @@ type SerialNFT struct {
 	IPFSHash string
 	Metadata string
 	TokenID  int64
+	Owner    string
 }
