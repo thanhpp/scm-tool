@@ -67,54 +67,7 @@
 					"response": []
 				},
 				{
-					"name": "New Copy",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "from_supplier_id",
-									"value": "1",
-									"type": "text"
-								},
-								{
-									"key": "to_storage_id",
-									"value": "1",
-									"type": "text"
-								},
-								{
-									"key": "send_time",
-									"value": "2006-01-02T15:04:05Z",
-									"type": "text"
-								},
-								{
-									"key": "fee",
-									"value": "1000",
-									"type": "text"
-								},
-								{
-									"key": "details",
-									"value": "\"[\\n  {\\n    \\\"item_sku\\\": \\\"sku1\\\",\\n    \\\"buy_quantity\\\": 100,\\n    \\\"buy_price\\\": 10000\\n  }\\n]\"",
-									"type": "text"
-								}
-							]
-						},
-						"url": {
-							"raw": "{{base}}/import_ticket",
-							"host": [
-								"{{base}}"
-							],
-							"path": [
-								"import_ticket"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "{{base}}/import_ticket/serials",
+					"name": "Generate serials",
 					"request": {
 						"method": "POST",
 						"header": [],

@@ -3,7 +3,6 @@ package dto
 import (
 	"encoding/json"
 	"strconv"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
@@ -14,8 +13,8 @@ import (
 type CreateImportTicketReq struct {
 	FromSupplierID int                            `json:"from_supplier_id" form:"from_supplier_id"`
 	ToStorageID    int                            `json:"to_storage_id" form:"to_storage_id"`
-	SendTime       time.Time                      `json:"send_time" form:"send_time"`
-	ReceiveTime    time.Time                      `json:"receive_time" form:"receive_time"`
+	SendTime       MyTime                         `json:"-" form:"send_time"`
+	ReceiveTime    MyTime                         `json:"receive_time" form:"receive_time"`
 	Fee            float64                        `json:"fee" form:"fee"`
 	Details        []CreateImportTicketReqDetails `json:"-" form:"-"`
 }
@@ -56,15 +55,15 @@ type GenSerialReq struct {
 }
 
 type DataImportTicketGeneralInfo struct {
-	ID                int       `json:"id"`
-	FromSupplierID    int       `json:"from_supplier_id"`
-	ToStorageID       int       `json:"to_storage_id"`
-	Status            string    `json:"status"`
-	SendTime          time.Time `json:"send_time"`
-	ReceiveTime       time.Time `json:"receive_time"`
-	Fee               float64   `json:"fee"`
-	BillImagePaths    []string  `json:"bill_image_paths"`
-	ProductImagePaths []string  `json:"product_image_paths"`
+	ID                int      `json:"id"`
+	FromSupplierID    int      `json:"from_supplier_id"`
+	ToStorageID       int      `json:"to_storage_id"`
+	Status            string   `json:"status"`
+	SendTime          MyTime   `json:"send_time"`
+	ReceiveTime       MyTime   `json:"receive_time"`
+	Fee               float64  `json:"fee"`
+	BillImagePaths    []string `json:"bill_image_paths"`
+	ProductImagePaths []string `json:"product_image_paths"`
 }
 
 func (d *DataImportTicketGeneralInfo) set(in *entity.ImportTicket) {
@@ -72,8 +71,8 @@ func (d *DataImportTicketGeneralInfo) set(in *entity.ImportTicket) {
 	d.FromSupplierID = in.FromSupplier.ID
 	d.ToStorageID = in.ToStorage.ID
 	d.Status = in.Status.String()
-	d.SendTime = in.SendTime
-	d.ReceiveTime = in.ReceiveTime
+	d.SendTime = MyTime(in.SendTime)
+	d.ReceiveTime = MyTime(in.ReceiveTime)
 	d.Fee = in.Fee
 
 	for i := range in.BillImagePaths {

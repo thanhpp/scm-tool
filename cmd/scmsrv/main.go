@@ -23,6 +23,16 @@ import (
 	"gorm.io/gorm/schema"
 )
 
+// func init() {
+// 	// set timezone
+// 	tz, err := time.LoadLocation("Asia/Bangkok")
+// 	if err != nil {
+// 		panic(err)
+// 	}
+
+// 	time.Local = tz
+// }
+
 func main() {
 	mainCfg := new(scmcfg.MainConfig)
 

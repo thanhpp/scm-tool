@@ -54,7 +54,7 @@ func (ctrl ImportTicketCtrl) Create(c *gin.Context) {
 
 	importTicket, err := ctrl.importTickerHanlder.Create(
 		c.Request.Context(), req.FromSupplierID, req.ToStorageID,
-		req.SendTime, req.ReceiveTime, req.Fee, details, billImages, productImages)
+		req.SendTime.Time(), req.ReceiveTime.Time(), req.Fee, details, billImages, productImages)
 	if err != nil {
 		ginutil.RespErr(c, http.StatusNotAcceptable, err)
 		return

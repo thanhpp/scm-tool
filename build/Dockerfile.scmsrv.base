@@ -5,6 +5,9 @@ ENV GO111MODULE=on \
     GOOS=linux \
     GOARCH=amd64
 
+RUN apk add tzdata
+RUN cp -r /usr/share/zoneinfo /etc/localtime
+
 WORKDIR /go/src/github.com/thanhpp/scm-tool
 
 COPY pkg pkg/
