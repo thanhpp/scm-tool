@@ -1,12 +1,14 @@
 package dto_test
 
 import (
+	"encoding/json"
 	"testing"
 	"time"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/thanhpp/scm/internal/scmsrv/infra/port/httpsv/dto"
+	"github.com/thanhpp/scm/pkg/logger"
 )
 
 func setLocalTime() error {
@@ -37,4 +39,18 @@ func TestMytime(t *testing.T) {
 	byteMytime, err := m.MarshalJSON()
 	require.NoError(t, err)
 	assert.Equal(t, strTime, string(byteMytime))
+}
+
+func TestMarshalMyTime(t *testing.T) {
+	var (
+		val = dto.CreateImportTicketReq{
+			ReceiveTime: dto.MyTime{},
+		}
+	)
+	logger.SetDefaultLog()
+
+	data, err := json.Marshal(val)
+	require.NoError(t, err)
+
+	t.Log(string(data))
 }

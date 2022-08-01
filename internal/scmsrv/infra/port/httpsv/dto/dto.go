@@ -1,6 +1,9 @@
 package dto
 
-import "time"
+import (
+	"encoding/json"
+	"time"
+)
 
 const MyTimeLayout = "15:04 02-01-2006"
 
@@ -20,7 +23,7 @@ func (m *MyTime) UnmarshalJSON(data []byte) error {
 func (m MyTime) MarshalJSON() ([]byte, error) {
 	str := m.Time().Format(MyTimeLayout)
 
-	return []byte(str), nil
+	return json.Marshal(str)
 }
 
 func (m MyTime) Time() time.Time {
