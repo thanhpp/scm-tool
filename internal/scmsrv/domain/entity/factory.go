@@ -60,6 +60,7 @@ func (f factoryImpl) NewImportTicket(
 		Status:       enum.ImportTicketStatusNew,
 		SendTime:     sendTime,
 		ReceiveTime:  receiveTime,
+		Fee:          fee,
 
 		BillImagePaths:    billImagePaths,
 		ProductImagePaths: productImagePaths,

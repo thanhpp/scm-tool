@@ -11,6 +11,7 @@ import (
 	"github.com/thanhpp/scm/internal/scmsrv/domain/entity"
 	"github.com/thanhpp/scm/internal/scmsrv/infra/port/httpsv/dto"
 	"github.com/thanhpp/scm/pkg/ginutil"
+	"github.com/thanhpp/scm/pkg/logger"
 )
 
 type ImportTicketCtrl struct {
@@ -29,6 +30,8 @@ func (ctrl ImportTicketCtrl) Create(c *gin.Context) {
 		ginutil.RespErr(c, http.StatusNotAcceptable, err, ginutil.WithData(dto.CreateImportTicketReq{}))
 		return
 	}
+
+	logger.Infow("Create import ticket req", "req", req)
 
 	form, err := c.MultipartForm()
 	if err != nil {

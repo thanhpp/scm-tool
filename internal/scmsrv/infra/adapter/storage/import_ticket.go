@@ -66,6 +66,8 @@ func (d ImportTicketDB) marshalImportTicket(in entity.ImportTicket) *repo.Import
 			})
 	}
 
+	logger.Debugw("db unmarshaled import ticket", "import ticket", out, "in", in)
+
 	return out
 }
 
