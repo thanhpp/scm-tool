@@ -3,7 +3,6 @@ package dto
 import (
 	"encoding/json"
 	"fmt"
-	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -34,13 +33,7 @@ func CustomBindCreateImportTicketReq(c *gin.Context) (*CreateImportTicketReq, er
 	}
 
 	details := c.Request.FormValue("details")
-
-	data, err := strconv.Unquote(details)
-	if err != nil {
-		return nil, errors.WithMessage(err, "parse create import ticket: unquote details")
-	}
-
-	if err := json.Unmarshal([]byte(data), &req.Details); err != nil {
+	if err := json.Unmarshal([]byte(details), &req.Details); err != nil {
 		return nil, errors.WithMessage(err, "parse create import ticket: unmarshal details")
 	}
 
