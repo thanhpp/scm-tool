@@ -2,7 +2,9 @@ package dto
 
 import (
 	"encoding/json"
+	"fmt"
 	"strconv"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
@@ -13,8 +15,9 @@ import (
 type CreateImportTicketReq struct {
 	FromSupplierID int                            `json:"from_supplier_id" form:"from_supplier_id"`
 	ToStorageID    int                            `json:"to_storage_id" form:"to_storage_id"`
-	SendTime       MyTime                         `json:"-" form:"send_time"`
-	ReceiveTime    MyTime                         `json:"receive_time" form:"receive_time"`
+	SendTime       string                         `json:"-" form:"-"`
+	ReceiveTime    string                         `json:"receive_time" form:"receive_time"`
+	receiveTime    time.Time                      `json:"-" form:"-"`
 	Fee            float64                        `json:"fee" form:"fee"`
 	Details        []CreateImportTicketReqDetails `json:"-" form:"-"`
 }
@@ -41,7 +44,18 @@ func CustomBindCreateImportTicketReq(c *gin.Context) (*CreateImportTicketReq, er
 		return nil, errors.WithMessage(err, "parse create import ticket: unmarshal details")
 	}
 
+	rcvTime, err := time.Parse(MyTimeLayout, req.ReceiveTime)
+	if err != nil {
+		return nil, fmt.Errorf("parse receive time err: %w", err)
+	}
+
+	req.receiveTime = rcvTime
+
 	return req, nil
+}
+
+func (r CreateImportTicketReq) GetReceiveTime() time.Time {
+	return r.receiveTime
 }
 
 type CreateImportTicketReqDetails struct {

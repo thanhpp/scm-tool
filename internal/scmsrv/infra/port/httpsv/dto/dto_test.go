@@ -2,6 +2,7 @@ package dto_test
 
 import (
 	"encoding/json"
+	"strconv"
 	"testing"
 	"time"
 
@@ -24,7 +25,7 @@ func setLocalTime() error {
 
 func TestMytime(t *testing.T) {
 	var (
-		strTime = "17:06 18-09-1999"
+		strTime = "17:31 18-09-1999"
 		m       = new(dto.MyTime)
 	)
 
@@ -38,13 +39,15 @@ func TestMytime(t *testing.T) {
 
 	byteMytime, err := m.MarshalJSON()
 	require.NoError(t, err)
-	assert.Equal(t, strTime, string(byteMytime))
+	val, err := strconv.Unquote(string(byteMytime))
+	require.NoError(t, err)
+	assert.Equal(t, strTime, val)
 }
 
 func TestMarshalMyTime(t *testing.T) {
 	var (
 		val = dto.CreateImportTicketReq{
-			ReceiveTime: dto.MyTime{},
+			ReceiveTime: "17:31 18-09-1999",
 		}
 	)
 	logger.SetDefaultLog()
