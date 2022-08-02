@@ -34,9 +34,9 @@ func (f factoryImpl) NewImportTicket(
 	fromSupplier Supplier, toStorage Storage, sendTime, receiveTime time.Time, fee float64, details []ImportTicketDetails,
 	billImagePaths []string, productImagePaths []string,
 ) (*ImportTicket, error) {
-	if sendTime.IsZero() {
-		return nil, errors.New("create import ticket: empty send time")
-	}
+	// if sendTime.IsZero() {
+	// 	return nil, errors.New("create import ticket: empty send time")
+	// }
 
 	if len(details) == 0 {
 		return nil, errors.New("create import ticket: empty details")
