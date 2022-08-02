@@ -73,7 +73,7 @@ type DataImportTicketGeneralInfo struct {
 	FromSupplierID    int      `json:"from_supplier_id"`
 	ToStorageID       int      `json:"to_storage_id"`
 	Status            string   `json:"status"`
-	SendTime          MyTime   `json:"send_time"`
+	SendTime          MyTime   `json:"-"`
 	ReceiveTime       MyTime   `json:"receive_time"`
 	Fee               float64  `json:"fee"`
 	BillImagePaths    []string `json:"bill_image_paths"`
