@@ -31,6 +31,23 @@ func (r *MintSeriNFTResp) SetData(in *entity.SerialNFT) {
 	r.Data.set(in)
 }
 
+type BurnSeriNFTsReq struct {
+	Serials []string `json:"serials"`
+}
+
+type BurnSerisNFTResp struct {
+	ginutil.RespTemplateError
+}
+
+type TransferSeriNFTReq struct {
+	Serials []string `json:"serials"`
+	To      string   `json:"to"`
+}
+
+type TransferSeriNFTResp struct {
+	ginutil.RespTemplateError
+}
+
 type DataGetSeriNFTResp struct {
 	DataMintSeriNFTResp
 	TokenID uint64 `json:"token_id"`
@@ -43,9 +60,15 @@ func (d *DataGetSeriNFTResp) set(in *entity.SerialNFT) {
 
 type GetSeriNFTResp struct {
 	ginutil.RespTemplateError
-	Data DataGetSeriNFTResp `json:"data"`
+	Data struct {
+		DataGetSeriNFTResp
+		Owner          string `json:"owner"`
+		TransferTxHash string `json:"transfer_tx_hash"`
+	} `json:"data"`
 }
 
 func (r *GetSeriNFTResp) SetData(in *entity.SerialNFT) {
 	r.Data.set(in)
+	r.Data.Owner = in.Owner
+	r.Data.TransferTxHash = in.TransferTxHash
 }

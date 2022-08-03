@@ -44,6 +44,44 @@ func (ctrl NFTMinterCtrl) MintNFT(c *gin.Context) {
 	c.JSON(http.StatusOK, resp)
 }
 
+func (ctrl NFTMinterCtrl) BurnNFTs(c *gin.Context) {
+	req := new(dto.BurnSeriNFTsReq)
+
+	if err := c.ShouldBindJSON(req); err != nil {
+		ginutil.RespErr(c, http.StatusNotAcceptable, err)
+		return
+	}
+
+	if err := ctrl.app.Burn(c, req.Serials); err != nil {
+		ginutil.RespErr(c, http.StatusInternalServerError, err)
+		return
+	}
+
+	resp := new(dto.BurnSerisNFTResp)
+	resp.Set200OK()
+
+	c.JSON(http.StatusOK, resp)
+}
+
+func (ctrl NFTMinterCtrl) TransferNFTs(c *gin.Context) {
+	req := new(dto.TransferSeriNFTReq)
+
+	if err := c.ShouldBindJSON(req); err != nil {
+		ginutil.RespErr(c, http.StatusNotAcceptable, err)
+		return
+	}
+
+	if err := ctrl.app.Transfer(c, req.Serials, req.To); err != nil {
+		ginutil.RespErr(c, http.StatusInternalServerError, err)
+		return
+	}
+
+	resp := new(dto.TransferSeriNFTResp)
+	resp.Set200OK()
+
+	c.JSON(http.StatusOK, resp)
+}
+
 func (ctrl NFTMinterCtrl) GetBySeri(c *gin.Context) {
 	seri := c.Param("seri")
 

@@ -51,6 +51,25 @@ func (d *SeriNFTDB) GetSeriNFTWithEmptyTokenID(ctx context.Context) ([]*entity.S
 	return seriNFTs, nil
 }
 
+func (d *SeriNFTDB) GetWaitingTransferSerialNFT(
+	ctx context.Context, excludeOwner string,
+) ([]*entity.SerialNFT, error) {
+	var seriNFTsDB []*repo.SeriNFT
+
+	if err := d.db.WithContext(ctx).Model(&repo.SeriNFT{}).
+		Where("(owner <> ? AND owner IS NOT NULL) AND (transfer_tx_hash IS NULL)",
+			excludeOwner).Find(&seriNFTsDB).Error; err != nil {
+		return nil, err
+	}
+
+	seriNFTs := make([]*entity.SerialNFT, len(seriNFTsDB))
+	for i := range seriNFTsDB {
+		seriNFTs[i] = unmarshalSeriNFT(seriNFTsDB[i])
+	}
+
+	return seriNFTs, nil
+}
+
 func (d *SeriNFTDB) GetSeriNFTByTokenID(ctx context.Context, tokenID int64) (*entity.SerialNFT, error) {
 	seriNFTDB := new(repo.SeriNFT)
 
@@ -133,20 +152,24 @@ func txGetSeriNFTBySeri(ctx context.Context, tx *gorm.DB, seri string) (*repo.Se
 
 func marshalSeriNFT(seriNFT *entity.SerialNFT) *repo.SeriNFT {
 	return &repo.SeriNFT{
-		Seri:     seriNFT.Seri,
-		TxHash:   seriNFT.TxHash,
-		IPFSHash: seriNFT.IPFSHash,
-		Metadata: seriNFT.Metadata,
-		TokenID:  seriNFT.TokenID,
+		Seri:           seriNFT.Seri,
+		TxHash:         seriNFT.TxHash,
+		IPFSHash:       seriNFT.IPFSHash,
+		Metadata:       seriNFT.Metadata,
+		TokenID:        seriNFT.TokenID,
+		Owner:          seriNFT.Owner,
+		TransferTxHash: seriNFT.TransferTxHash,
 	}
 }
 
 func unmarshalSeriNFT(seriNFT *repo.SeriNFT) *entity.SerialNFT {
 	return &entity.SerialNFT{
-		Seri:     seriNFT.Seri,
-		TxHash:   seriNFT.TxHash,
-		IPFSHash: seriNFT.IPFSHash,
-		Metadata: seriNFT.Metadata,
-		TokenID:  seriNFT.TokenID,
+		Seri:           seriNFT.Seri,
+		TxHash:         seriNFT.TxHash,
+		IPFSHash:       seriNFT.IPFSHash,
+		Metadata:       seriNFT.Metadata,
+		TokenID:        seriNFT.TokenID,
+		Owner:          seriNFT.Owner,
+		TransferTxHash: seriNFT.TransferTxHash,
 	}
 }

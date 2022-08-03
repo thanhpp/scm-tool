@@ -8,13 +8,15 @@ import (
 )
 
 type SeriNFT struct {
-	Seri      string `gorm:"column:seri;type:text;primaryKey"`
-	TxHash    string `gorm:"column:tx_hash;type:text"`
-	IPFSHash  string `gorm:"column:ipfs_hash;type:text"`
-	Metadata  string `gorm:"column:metadata;type:text"`
-	TokenID   int64  `gorm:"column:token_id;type:bigint"`
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	Seri           string `gorm:"column:seri;type:text;primaryKey"`
+	TxHash         string `gorm:"column:tx_hash;type:text"`
+	IPFSHash       string `gorm:"column:ipfs_hash;type:text"`
+	Metadata       string `gorm:"column:metadata;type:text"`
+	TokenID        int64  `gorm:"column:token_id;type:bigint"`
+	Owner          string `gorm:"column:owner;type:text"`
+	TransferTxHash string `gorm:"column:transfer_tx_hash;type:text"`
+	CreatedAt      time.Time
+	UpdatedAt      time.Time
 }
 
 type UpdateSeriNFTFunc func(*entity.SerialNFT) (*entity.SerialNFT, error)
@@ -25,6 +27,7 @@ type SeriNFTRepo interface {
 	GetSeriNFTWithEmptyTokenID(ctx context.Context) ([]*entity.SerialNFT, error)
 	GetSeriNFTByTokenID(ctx context.Context, tokenID int64) (*entity.SerialNFT, error)
 	GetSeriNFTByTxHash(ctx context.Context, txHash string) (*entity.SerialNFT, error)
+	GetWaitingTransferSerialNFT(ctx context.Context, excludeOwner string) ([]*entity.SerialNFT, error)
 
 	Create(ctx context.Context, seriNFT *entity.SerialNFT) error
 	UpdateTokenIDByTxHash(ctx context.Context, txHash string, tokenID uint64) error

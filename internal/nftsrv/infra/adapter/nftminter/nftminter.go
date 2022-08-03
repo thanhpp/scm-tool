@@ -162,17 +162,17 @@ func (m *NFTMinter) GetTokenIDByTxHash(ctx context.Context, txHash string) (uint
 	return 0, errors.New("tokenID not found in tx hash " + txHash)
 }
 
-func (m *NFTMinter) Transfer(ctx context.Context, tokenID int, toAddr common.Address) error {
+func (m *NFTMinter) Transfer(ctx context.Context, tokenID int, toAddr common.Address) (string, error) {
 	auth, err := m.newAuth(ctx)
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	tx, err := m.sm.SafeTransferFrom(auth, m.fromAddr, toAddr, big.NewInt(int64(tokenID)))
 	if err != nil {
-		return err
+		return "", err
 	}
 	logger.Infow("Safe Tranfer", "to", toAddr.String(), "tokenID", tokenID, "tx hash", tx.Hash())
 
-	return nil
+	return tx.Hash().String(), nil
 }

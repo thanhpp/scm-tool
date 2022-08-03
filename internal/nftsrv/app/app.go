@@ -8,6 +8,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/ethereum/go-ethereum/common"
 	"github.com/thanhpp/scm/internal/nftsrv/domain/entity"
 	"github.com/thanhpp/scm/internal/nftsrv/domain/repo"
 	"github.com/thanhpp/scm/internal/nftsrv/infra/adapter/ipfsclient"
@@ -31,6 +32,7 @@ func NewApp(ctx context.Context, ipfs *ipfsclient.IPFSClient, minter *nftminter.
 	}
 
 	go a.autoUpdateTokenID(ctx)
+	go a.autoTransferTokens(ctx)
 
 	return a
 }
@@ -93,6 +95,7 @@ func (a *App) MintSeriNFT(ctx context.Context, seri string, metadata map[string]
 		TxHash:   txInfo.TxHash,
 		IPFSHash: ipfsCid,
 		Metadata: string(tmpFileData),
+		Owner:    a.minter.FromAddr().String(),
 	}
 
 	if err := a.seriNFTRepo.Create(ctx, newSeriNFT); err != nil {
@@ -103,7 +106,16 @@ func (a *App) MintSeriNFT(ctx context.Context, seri string, metadata map[string]
 }
 
 func (a *App) GetSeriNFTBySeri(ctx context.Context, seri string) (*entity.SerialNFT, error) {
-	return a.seriNFTRepo.GetBySeri(ctx, seri)
+	seriNFT, err := a.seriNFTRepo.GetBySeri(ctx, seri)
+	if err != nil {
+		return nil, err
+	}
+
+	if seriNFT.Owner == "" {
+		seriNFT.Owner = a.minter.FromAddr().String()
+	}
+
+	return seriNFT, nil
 }
 
 func (a *App) GetSeriNFTByTokenID(ctx context.Context, tokenID int64) (*entity.SerialNFT, error) {
@@ -112,6 +124,82 @@ func (a *App) GetSeriNFTByTokenID(ctx context.Context, tokenID int64) (*entity.S
 
 func (a *App) GetSeriNFTByTxHash(ctx context.Context, txHash string) (*entity.SerialNFT, error) {
 	return a.seriNFTRepo.GetSeriNFTByTxHash(ctx, txHash)
+}
+
+func (a *App) updateOwner(ctx context.Context, serials []string, to string) error {
+	var (
+		serialNFT = make([]*entity.SerialNFT, len(serials))
+		err       error
+	)
+
+	for i := range serials {
+		serialNFT[i], err = a.GetSeriNFTBySeri(ctx, serials[i])
+		if err != nil {
+			return err
+		}
+
+		if serialNFT[i].Owner != a.minter.FromAddr().String() {
+			return errors.New("Seri not belongs to current owner: " + serials[i])
+		}
+	}
+
+	for i := range serialNFT {
+		serialNFT[i].Owner = to
+
+		if err := a.seriNFTRepo.UpdateSeriNFTBySeri(
+			ctx, serialNFT[i].Seri, func(sn *entity.SerialNFT) (*entity.SerialNFT, error) {
+				sn.Owner = to
+				return sn, err
+			}); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (a *App) Burn(ctx context.Context, serials []string) error {
+	return a.updateOwner(ctx, serials, constx.RinkebyBurnAddress)
+}
+
+func (a *App) Transfer(ctx context.Context, serials []string, to string) error {
+	return a.updateOwner(ctx, serials, to)
+}
+
+func (a *App) autoTransferTokens(ctx context.Context) {
+	transferTicker := time.NewTicker(constx.AutoTransferTokenInterval)
+	defer transferTicker.Stop()
+
+	for ; true; <-transferTicker.C {
+		if err := ctx.Err(); err != nil {
+			logger.Errorw("auto transfer stopped", "ctx error", err)
+			return
+		}
+
+		serialNFTs, err := a.seriNFTRepo.GetWaitingTransferSerialNFT(ctx, a.minter.FromAddr().String())
+		if err != nil {
+			logger.Errorw("get waiting transfer", "err", err)
+			continue
+		}
+
+		for i := range serialNFTs {
+			txHash, err := a.minter.
+				Transfer(ctx, int(serialNFTs[i].TokenID), common.HexToAddress(serialNFTs[i].Owner))
+			if err != nil {
+				logger.Errorw("transfer error", "tokenID", serialNFTs[i].TokenID, "err", err)
+				continue
+			}
+
+			if err := a.seriNFTRepo.UpdateSeriNFTBySeri(ctx, serialNFTs[i].Seri,
+				func(sn *entity.SerialNFT) (*entity.SerialNFT, error) {
+					sn.TransferTxHash = txHash
+					return sn, nil
+				}); err != nil {
+				logger.Errorw("transfer update db", "err", err)
+				continue
+			}
+		}
+	}
 }
 
 func (a *App) autoUpdateTokenID(ctx context.Context) {
@@ -150,36 +238,4 @@ func (a *App) autoUpdateTokenID(ctx context.Context) {
 			}
 		}
 	}
-}
-
-func (a *App) UpdateOwner(ctx context.Context, serials []string, to string) error {
-	var (
-		serialNFT = make([]*entity.SerialNFT, len(serials))
-		err       error
-	)
-
-	for i := range serials {
-		serialNFT[i], err = a.GetSeriNFTBySeri(ctx, serials[i])
-		if err != nil {
-			return err
-		}
-
-		if serialNFT[i].Owner != a.minter.FromAddr().String() {
-			return errors.New("Seri not belongs to current owner: " + serials[i])
-		}
-	}
-
-	for i := range serialNFT {
-		serialNFT[i].Owner = to
-
-		if err := a.seriNFTRepo.UpdateSeriNFTBySeri(
-			ctx, serialNFT[i].Seri, func(sn *entity.SerialNFT) (*entity.SerialNFT, error) {
-				sn.Owner = to
-				return sn, err
-			}); err != nil {
-			return err
-		}
-	}
-
-	return nil
 }
