@@ -68,7 +68,7 @@ func NewNFTMinter(ethClient *ethclient.Client, privateKey, contractAddr string) 
 }
 
 func (m *NFTMinter) FromAddr() common.Address {
-	return m.FromAddr()
+	return m.fromAddr
 }
 
 func (m *NFTMinter) newAuth(ctx context.Context) (*bind.TransactOpts, error) {
