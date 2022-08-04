@@ -758,6 +758,66 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "127.0.0.1:11000/transfer",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"serials\": [\n        \"999810949117107561161071065310352111491141065311848\"\n    ],\n    \"to\": \"0xCbc078a65815CC8F0A93263DD9B589969De4dA1F\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "127.0.0.1:11000/transfer",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "11000",
+					"path": [
+						"transfer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "127.0.0.1:11000/burn",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"serials\": [\n        \"999810949117107561161071065310352111491141065448103\"\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "127.0.0.1:11000/burn",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "11000",
+					"path": [
+						"burn"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
