@@ -98,7 +98,7 @@ func newGormDB(dsn string) (*gorm.DB, error) {
 			Logger: gormlogger.New(
 				log.New(os.Stdout, "\n", log.LstdFlags),
 				gormlogger.Config{
-					LogLevel: gormlogger.Error,
+					LogLevel: gormlogger.Info,
 					Colorful: false,
 				},
 			),

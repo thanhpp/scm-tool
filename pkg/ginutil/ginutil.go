@@ -91,7 +91,7 @@ func WithData(in interface{}) RespErrorOpt {
 const (
 	MinSize     = 1
 	MaxSize     = 100
-	DefaultSize = 10
+	DefaultSize = 100000
 	MinPage     = 1
 	DefaultPage = 1
 )

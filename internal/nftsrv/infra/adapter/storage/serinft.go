@@ -57,7 +57,7 @@ func (d *SeriNFTDB) GetWaitingTransferSerialNFT(
 	var seriNFTsDB []*repo.SeriNFT
 
 	if err := d.db.WithContext(ctx).Model(&repo.SeriNFT{}).
-		Where("(owner <> ? AND owner IS NOT NULL) AND (transfer_tx_hash IS NULL)",
+		Where("(owner <> ? AND owner IS NOT NULL) AND (transfer_tx_hash = '')",
 			excludeOwner).Find(&seriNFTsDB).Error; err != nil {
 		return nil, err
 	}
@@ -120,16 +120,18 @@ func (d *SeriNFTDB) UpdateSeriNFTBySeri(
 				return err
 			}
 
-			seri := unmarshalSeriNFT(seriNFTDB)
+			seriNFT := unmarshalSeriNFT(seriNFTDB)
 
-			newSeri, err := fn(seri)
+			newSeri, err := fn(seriNFT)
 			if err != nil {
 				return err
 			}
 
+			newSeriDB := marshalSeriNFT(newSeri)
+
 			if err := tx.
 				WithContext(ctx).Model(&repo.SeriNFT{}).
-				Where("seri LIKE ?", seri).Updates(newSeri).Error; err != nil {
+				Where("seri LIKE ?", seri).Updates(newSeriDB).Error; err != nil {
 				return err
 			}
 
