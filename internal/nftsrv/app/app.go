@@ -15,6 +15,8 @@ import (
 	"github.com/thanhpp/scm/internal/nftsrv/infra/adapter/nftminter"
 	"github.com/thanhpp/scm/pkg/constx"
 	"github.com/thanhpp/scm/pkg/logger"
+	"github.com/thanhpp/scm/pkg/rbmq"
+	"github.com/thanhpp/scm/pkg/sharedto"
 	"github.com/thanhpp/scm/pkg/smartcontracts"
 )
 
@@ -22,16 +24,30 @@ type App struct {
 	ipfs        *ipfsclient.IPFSClient
 	minter      *nftminter.NFTMinter
 	seriNFTRepo repo.SeriNFTRepo
+	rbmqClient  *rbmq.Client
 }
 
 func NewApp(ctx context.Context, ipfs *ipfsclient.IPFSClient, minter *nftminter.NFTMinter, seriNFTRepo repo.SeriNFTRepo) *App {
+	rbmqClient, err := rbmq.NewClient(constx.RabbitMQServerURL)
+	if err != nil {
+		panic(err)
+	}
+	if err := rbmqClient.CreateQueue(sharedto.MintNFTRequestQueue); err != nil {
+		panic(err)
+	}
+	if err := rbmqClient.CreateQueue(sharedto.SeriNFTInfoQueue); err != nil {
+		panic(err)
+	}
+
 	a := &App{
 		ipfs:        ipfs,
 		minter:      minter,
 		seriNFTRepo: seriNFTRepo,
+		rbmqClient:  rbmqClient,
 	}
 
 	go a.autoUpdateTokenID(ctx)
+	go a.autoMintNFT(ctx)
 	go a.autoTransferTokens(ctx)
 
 	return a
@@ -75,6 +91,7 @@ func (a *App) MintSeriNFT(ctx context.Context, seri string, metadata map[string]
 	if err != nil {
 		return nil, fmt.Errorf("create nft data file error: %w", err)
 	}
+	defer os.Remove(fmt.Sprintf("%s.json", seri))
 
 	if _, err := f.Write(tmpFileData); err != nil {
 		return nil, fmt.Errorf("write nft data error: %w", err)
@@ -89,6 +106,7 @@ func (a *App) MintSeriNFT(ctx context.Context, seri string, metadata map[string]
 	if err != nil {
 		return nil, err
 	}
+	logger.Infow("sent mint nft tx", "seri", seri, "txHash", txInfo.TxHash)
 
 	newSeriNFT := &entity.SerialNFT{
 		Seri:     seri,
@@ -236,6 +254,69 @@ func (a *App) autoUpdateTokenID(ctx context.Context) {
 					"seri", seriNFT.Seri, "txHash", seriNFT.TxHash, "error", err)
 				continue
 			}
+
+			seriNFTInfo := &sharedto.SeriNFTInfo{
+				Seri:    seriNFT.Seri,
+				TxHash:  seriNFT.TxHash,
+				IPFSCid: seriNFT.IPFSHash,
+				TokenID: uint64(tokenID),
+			}
+			data, err := json.Marshal(seriNFTInfo)
+			if err != nil {
+				logger.Errorw("nft: marshal update seri nft info data", "err", err)
+				continue
+			}
+
+			if err := a.rbmqClient.PublishJSONMessage(sharedto.SeriNFTInfoQueue, data); err != nil {
+				logger.Errorw("nft: publish update seri nft info", "err", err)
+				return
+			}
+
+			logger.Infow("nft: published update seri nft info", "seri", seriNFT.Seri)
+		}
+	}
+}
+
+func (a *App) autoMintNFT(ctx context.Context) {
+	msgC, err := a.rbmqClient.GetConsumerChannel(sharedto.MintNFTRequestQueue)
+	if err != nil {
+		logger.Errorw("consume mint nft queue error", "err", err)
+		return
+	}
+
+	for {
+		select {
+		case <-ctx.Done():
+			return
+
+		case byteMsg := <-msgC:
+			req := new(sharedto.ReqCreateSeriNFT)
+			if err := json.Unmarshal(byteMsg.Body, req); err != nil {
+				logger.Errorw("nft: unmarshal mint nft err", "err", err, "data", string(byteMsg.Body))
+				continue
+			}
+
+			seriNFT, err := a.seriNFTRepo.GetBySeri(ctx, req.Seri)
+			if err == nil {
+				if len(seriNFT.TxHash) != 0 {
+					continue
+				}
+				logger.Infow("nft: skipped - minting", "seri", req.Seri)
+				continue
+			}
+
+			res, err := a.MintSeriNFT(ctx, req.Seri, map[string]string{
+				"item_name":        req.Metadata.ItemName,
+				"item_desc":        req.Metadata.ItemDesc,
+				"supplier_name":    req.Metadata.SupplierName,
+				"import_ticket_id": req.Metadata.ImportTicketID,
+			})
+			if err != nil {
+				logger.Errorw("nft: mint nft error", "err", err, "seri", req.Seri)
+				continue
+			}
+
+			logger.Infow("nft: send tx mint nft info", "info", res)
 		}
 	}
 }

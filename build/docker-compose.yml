@@ -48,6 +48,8 @@ services:
     depends_on:
       pgdatabase:
         condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
     deploy:
       restart_policy:
           condition: on-failure
@@ -68,6 +70,8 @@ services:
     depends_on:
       pgdatabasenft:
         condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
     deploy:
       restart_policy:
           condition: on-failure
@@ -78,6 +82,23 @@ services:
       - DB_HOST=pgdatabasenft
     networks:
       - intranet
+  
+  rabbitmq:
+    hostname: rabbitmq
+    image: rabbitmq:3.8.14-management
+    restart: always
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - rabbitmqdata:/var/lib/rabbitmq
+    networks:
+      - intranet
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 10s
+      timeout: 30s
+      retries: 10
 
 networks:
   intranet:
@@ -86,3 +107,4 @@ volumes:
   pgdata:
   scmfiles:
   pgdatanft:
+  rabbitmqdata:

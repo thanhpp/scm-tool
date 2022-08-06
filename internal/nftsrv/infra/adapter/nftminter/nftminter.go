@@ -17,7 +17,7 @@ import (
 )
 
 const (
-	gasLimit = 300000
+	gasLimit = 3000000
 )
 
 var (
@@ -86,7 +86,7 @@ func (m *NFTMinter) newAuth(ctx context.Context) (*bind.TransactOpts, error) {
 	auth.Nonce = big.NewInt(int64(nonce))
 	auth.Value = bigIntZero
 	auth.GasLimit = gasLimit
-	auth.GasPrice = gasPrice
+	auth.GasPrice = gasPrice.Mul(gasPrice, big.NewInt(2))
 
 	return auth, nil
 }

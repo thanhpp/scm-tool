@@ -15,8 +15,13 @@ const (
 )
 
 const (
-	DefaultHTTPClientTimeout        = time.Second * 10
-	AutoUpdateTokenIDInterval       = time.Second * 2
-	AutoTransferTokenInterval       = time.Second * 10
-	AutoMintAndUpdateSerialInterval = time.Second * 30
+	DefaultHTTPClientTimeout         = time.Second * 10
+	AutoUpdateTokenIDInterval        = time.Second * 2
+	AutoTransferTokenInterval        = time.Second * 10
+	AutoFallbackUpdateSerialInterval = time.Minute * 5
+	AutoMintNFTInterval              = time.Minute
+)
+
+const (
+	RabbitMQServerURL = "amqp://guest:guest@rabbitmq:5672/"
 )

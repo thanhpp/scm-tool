@@ -67,15 +67,16 @@ func main() {
 
 	httpServer := httpsv.NewHTTPServer(mainCfg.HTTPServer, &scmApp)
 
-	autoMintAndUpdateSerialDaemon := scmApp.AutoMintAndUpdateSerial(db.SerialDB(), nftServiceClient)
+	autoMintDaemon := scmApp.AutoMintNFT(db.SerialDB())
+	autoNFTUpdateDaemon := scmApp.AutoUpdateSeriNFT(db.SerialDB())
+	autoFallbackNFTUpdateDaemon := scmApp.AutoFallbackUpdateSerial(db.SerialDB(), nftServiceClient)
 
 	// start
 	mainCtx := context.Background()
 	daemonMan := booting.NewDaemonManeger(mainCtx)
-	daemonMan.Start(httpServer.Daemon(), autoMintAndUpdateSerialDaemon)
+	daemonMan.Start(httpServer.Daemon(), autoMintDaemon, autoNFTUpdateDaemon, autoFallbackNFTUpdateDaemon)
 
 	booting.WaitSignals(mainCtx)
-
 	daemonMan.Stop()
 
 	fmt.Println(mainCfg)
