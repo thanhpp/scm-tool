@@ -147,38 +147,26 @@ sequenceDiagram
   deactivate NhanVien
 ```
 
-### Auto mint and update NFT
-
+### SCM Service Generate NFT
 ```mermaid
 sequenceDiagram
   participant Application
-  loop Auto update loop
-    activate Application
-    Application ->>+ Database: Get serials with empty token ID
-    Database -->>- Application: Serials information
-    
-    loop Each serial
-      Application ->>+ NFTService: Mint NFT request
-      NFTService -->>- Application: Mint NFT response
-    end
+      loop Auto mint NFT interval
+          activate Application
+          Application ->>+ Database: Get serials with empty token ID
+          Database -->>- Application: Serials information
 
-    loop Each serial
-      Application ->>+ NFTService: Get NFT information by seri
-      NFTService -->>- Application: Response
-      opt Response with token ID
-        Application ->>+ Database: Save token ID by seri
-        Database -->>- Application: Response
+          loop Each serial
+              Application -) RabbitMQ: Publish mint NFT message
+          end
+          deactivate Application
       end
-    end
-    deactivate Application
-  end
 ```
 
-### Generate NFT
+### NFT Service Generate NFT
 ```mermaid
 sequenceDiagram
-  participant ScmService
-  participant HTTPServer
+  participant RabbitMQ
   participant Application
   participant IPFSClient
   participant OnchainClient
@@ -187,16 +175,12 @@ sequenceDiagram
   participant LocalStorage
   participant IPFS
 
-  activate ScmService
-    ScmService ->>+ HTTPServer: Generate NFT request
-    HTTPServer ->> HTTPServer: Unmarshal request
-    HTTPServer ->>+ Application: Generate NFT
+    RabbitMQ -) Application: Generate NFT message
+    activate Application
     Application ->>+ Database: Seri duplication check
     alt Duplicate seri
-      Database -->>- Application: Duplicate response
-      Application -->> HTTPServer: Duplicate error response
-      HTTPServer ->> HTTPServer: Marshal response
-      HTTPServer -->> ScmService: Response error
+      Database -->>- Application: Duplicate seri
+      Application ->> Application: skip 
     else
       Application ->> Application: Generate Metadata
       Application ->>+ LocalStorage: Save metadata file
@@ -218,13 +202,64 @@ sequenceDiagram
       Factory -->>- Application: New SerialNFT
       Application ->>+ Database: Save SerialNFT
       Database -->>- Application: Response
-      Application -->>- HTTPServer: SerialNFT information
-      HTTPServer ->> HTTPServer: Marshal response
-      HTTPServer -->>- ScmService: Response success
+    deactivate Application
     end
-  deactivate ScmService
 ```
 
+
+### SCM Auto update NFT
+
+```mermaid
+sequenceDiagram
+  participant Application
+    par Rest update
+        loop Auto update loop
+        activate Application
+        Application ->>+ Database: Get serials with empty token ID
+        Database -->>- Application: Serials information
+
+        loop Each serial
+            Application ->>+ NFTService: Get NFT information by seri
+            NFTService -->>- Application: Response
+            opt Response with token ID
+            Application ->>+ Database: Save token ID by seri
+            Database -->>- Application: Response
+            end
+        end
+        deactivate Application
+        end
+    and RabbitMQ update
+        activate Application
+        RabbitMQ -) Application: NFT Information
+        Application ->>+ Database: Update NFT Information by seri
+        Database -->>- Application: Response
+        deactivate Application
+  end
+```
+
+### NFT Update transaction information
+```mermaid
+sequenceDiagram
+  participant Application
+  participant Database
+  participant OnchainClient
+  loop Auto update transaction interval
+    activate Application
+    Application ->>+ Database: Get NFT information without token ID
+    Database -->>- Application: NFT information
+    loop Each NFT
+      Application ->>+ OnchainClient: Get transaction information by hash
+      OnchainClient ->>+ Blockchain: Get transaction receipt
+      Blockchain -->>- OnchainClient: Transaction receipt
+      OnchainClient ->> OnchainClient: Get token ID from receipt logs
+      OnchainClient -->>- Application: Transaction information 
+      Application ->>+ Database: Update NFT information
+      Database -->>- Application: Response
+      Application -) RabbitMQ: Publish update NFT information message
+    end
+    deactivate Application
+  end
+```
 ### ERDiagram
 
 ```mermaid
