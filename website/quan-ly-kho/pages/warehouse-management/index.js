@@ -1,12 +1,56 @@
-import React from 'react'
+import React, { useState } from 'react'
 import SearchForm from '../../components/SearchForm.js/SearchForm'
 import WarehouseList from '../../components/list/WarehouseList'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
+import { useDispatch } from 'react-redux'
+import { warehouseSliceActions } from '../../store/warehouseSlice'
+
 
 function WarehouseManagement() {
 
+    const [searchInput, setSearchInput] = useState('')
+
     const router = useRouter()
+    const dispatch = useDispatch()
+
+    const searchInputHandle = (value) => {
+        setSearchInput(value)
+    }
+
+    const searchHandle = async () => {
+        try {
+            const response = await fetch('https://scm-tool.thanhpp.ninja/storage')
+
+            if (!response) {
+                throw new Error('somethign wrong');
+                return;
+            }
+            const data = await response.json()
+
+            const dataSearched = data.data.filter((warehouse) => {
+                if (warehouse.name.includes(searchInput) || warehouse.desc.includes(searchInput) || warehouse.location.includes(searchInput)) {
+                    return true
+                }
+                return false
+            })
+            if (searchInput) {
+                dispatch(warehouseSliceActions.isSearching({
+                    data: true
+                }))
+            } else {
+                dispatch(warehouseSliceActions.isSearching({
+                    data: false
+                }))
+            }
+            dispatch(warehouseSliceActions.warehouseSearch({
+                data: dataSearched
+            }))
+            console.log(dataSearched)
+        } catch (err) {
+            console.log(err)
+        }
+    }
 
     return (
         //bg-[#1b1b38]
@@ -19,7 +63,7 @@ function WarehouseManagement() {
             <div className='text-white '>
                 <div className='text-[32px] mb-[16px]'>Warehouses</div>
                 <div className='mb-[40px]'>
-                    <SearchForm />
+                    <SearchForm onChangeInput={searchInputHandle} onClickSearch={searchHandle} />
                 </div>
                 <div className='mb-[24px]'>
                     <button onClick={() => router.push('/warehouse-management/add-warehouse')} className='text-[15px] block bg-transparent hover:opacity-80 border border-white cursor-pointer rounded-md min-w-[110px] h-[34px] px-[12px] py-[6px]'>Add warehouse</button>
@@ -28,9 +72,9 @@ function WarehouseManagement() {
             <div>
                 <WarehouseList />
             </div>
-            <div className='fixed bottom-0 left-[292px] right-[36px] h-[54px] border-t border-black'>
-                {/* <Save /> */}
-            </div>
+            {/* <div className='fixed bottom-0 left-[292px] right-[36px] h-[54px] border-t border-black'>
+                <Save />
+            </div> */}
         </div>
     )
 }

@@ -7,10 +7,6 @@ import { productsSliceActions } from '../../../store/productsSlice';
 
 function ProductId() {
     const [productDetail, setProductDetail] = useState()
-    const [sku, setSku] = useState(productDetail?.sku)
-    const [name, setName] = useState()
-    const [desc, setDesc] = useState(productDetail?.desc)
-    const [itemTypeId, setItemTypeId] = useState(productDetail?.itemTypeId)
     const [image, setImage] = useState()
     const [imageDelete, setImageDelete] = useState()
     const [loading, setLoading] = useState(false)

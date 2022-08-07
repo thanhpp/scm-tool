@@ -9,11 +9,16 @@ import ItemSupplier from '../Item/ItemSupplier';
 
 
 function SupplierList() {
-    // const productsData = useSelector((state) => state.products.products)
-    const [supplier, setSupplier] = useState()
-    // const [warehouseList, setWarehouseList] = useState(warehouseData)
+    const [pagination, setPagination] = useState({
+        offset: 0,
+        numberPerPage: 2,
+        pageCount: 0,
+    })
 
-    const dispatch = useDispatch()
+    const [supplierList, setSupplierList] = useState()
+
+    const isSearchingSelector = useSelector((state) => state.supplier.isSearching)
+    const supplierSelector = useSelector((state) => state.supplier.supplier)
 
 
     useEffect(() => {
@@ -26,11 +31,14 @@ function SupplierList() {
                 }
                 const data = await response.json()
 
-                setSupplier(data.data)
-                // dispatch(productsSliceActions.saveProducts({
-                //     data: data.data
-                // }))
-                // setWarehouseList(data)
+                setPagination(prev => ({
+                    ...prev,
+                    pageCount: !isSearchingSelector ? Math.ceil(data.data.length / prev.numberPerPage) : Math.ceil(supplierSelector.length / prev.numberPerPage)
+                }))
+
+                const supplierDisplay = !isSearchingSelector ? data.data.slice(pagination.offset, parseInt(pagination.offset) + parseInt(pagination.numberPerPage)) : supplierSelector.slice(pagination.offset, parseInt(pagination.offset) + parseInt(pagination.numberPerPage))
+
+                setSupplierList(supplierDisplay)
                 console.log(data.data)
             } catch (err) {
                 console.log('fetch wrong')
@@ -38,10 +46,19 @@ function SupplierList() {
         }
 
         fetchSupplier()
-    }, [])
+    }, [pagination.offset, pagination.numberPerPage, pagination.pageCount, isSearchingSelector, supplierSelector])
 
-    const removeHandle = () => {
+    const numberPerPageHandle = (value) => {
+        setPagination(prev => ({
+            ...prev,
+            numberPerPage: value
+        }))
+    }
 
+    const handleClick = (e) => {
+        const selected = e.selected
+        const offset = selected * pagination.numberPerPage
+        setPagination({ ...pagination, offset })
     }
     return (
         //bg-[#323259]
@@ -60,10 +77,10 @@ function SupplierList() {
                 </div>
             </div>
             {/* {pagination.currentData ? pagination.currentData.map((item) => <ProductItem isSelectedAll={isSelectedAll} key={item.id} id={item.id} sku={item.sku} name={item.name} category={item.category} price={item.price} amount={item.amount} vendor={item.vendor} arrivalDate={item.arrivalDate} />) : <Box sx={{ display: 'flex' }}> */}
-            {supplier && supplier.map(supplier => <ItemSupplier id={supplier.id} key={supplier.id} name={supplier.name} email={supplier.email} phone={supplier.phone} />)}
+            {supplierList && supplierList.map(supplier => <ItemSupplier id={supplier.id} key={supplier.id} name={supplier.name} email={supplier.email} phone={supplier.phone} />)}
             {/* <CircularProgress /> */}
             {/* </Box>} */}
-            {/* <Pagination getNumberPerPage={numberPerPageHandle} pageCount={pagination.pageCount} onPageChange={handleClick} /> */}
+            <Pagination getNumberPerPage={numberPerPageHandle} pageCount={pagination.pageCount} onPageChange={handleClick} />
             {/* <Pagination /> */}
         </div>
     )

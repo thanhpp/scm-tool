@@ -9,7 +9,7 @@ function Header() {
             <div><Link href='/warehouse-management'><span className=' cursor-pointer hover:opacity-80'>Quản lý kho</span></Link></div>
             <div><Link href='/products-management'><span className=' cursor-pointer hover:opacity-80'>Quản lý sản phẩm</span></Link></div>
             <div><Link href='/io-management'><span className=' cursor-pointer hover:opacity-80'>Quản lý nhập xuất</span></Link></div>
-            <div><span className=' cursor-pointer hover:opacity-80'>Quản lý giao vận</span></div>
+            {/* <div><span className=' cursor-pointer hover:opacity-80'>Quản lý giao vận</span></div> */}
             <div><span className=' cursor-pointer'><Avatar /></span></div>
         </div>
     )

@@ -7,7 +7,7 @@ import store from '../store/store'
 function MyApp({ Component, pageProps }) {
 
   const router = useRouter()
-  if (router.pathname === '/login') {
+  if (router.pathname === '/login' || router.pathname === '/signup' || router.pathname === '/serial') {
     return <Component {...pageProps} />
   } else {
     return (

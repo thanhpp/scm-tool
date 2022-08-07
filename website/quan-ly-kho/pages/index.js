@@ -23,7 +23,6 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
         {/* <meta httpEquiv="Content-Security-Policy" content="upgrade-insecure-requests"></meta> */}
       </Head>
-
       <p>homepage</p>
     </div>
   )

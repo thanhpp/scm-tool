@@ -76,7 +76,8 @@ function ItemSupplier({ id, name, phone, email }) {
                 {/* <InboxIcon className='mr-[10px] leading-[24px] ml-[20px]' /> */}
                 <span className='mr-[10px] leading-[24px] ml-[20px]' >{id}</span>
             </div>
-            <Link href={`/products-management/supplier/${id}`}><div className=' col-span-4 my-auto hover:border-b border-black cursor-pointer  truncate'>{name}</div></Link>
+            <div className=' col-span-4 my-auto  truncate'>{name}</div>
+            {/* <Link href={`/products-management/supplier/${id}`}><div className=' col-span-4 my-auto hover:border-b border-black cursor-pointer  truncate'>{name}</div></Link> */}
             <div className=' col-span-4 my-auto truncate'>{email}</div>
             <div className=' col-span-2 my-auto truncate'>{phone}</div>
             <div className=' col-span-1 my-auto pl-[5px] flex justify-between truncate'>

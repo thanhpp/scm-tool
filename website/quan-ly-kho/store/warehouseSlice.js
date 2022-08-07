@@ -3,10 +3,13 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const WarehouseSlice = createSlice({
     name: 'warehouse',
-    initialState: { warehouse: [] },
+    initialState: { warehouse: [], isSearching: false },
     reducers: {
-        saveWarehouse(state, action) {
+        warehouseSearch(state, action) {
             state.warehouse = action.payload.data
+        },
+        isSearching(state, action) {
+            state.isSearching = action.payload.data
         }
     }
 })

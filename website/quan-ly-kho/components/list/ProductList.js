@@ -3,18 +3,24 @@ import Delete from '@mui/icons-material/Delete';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import InboxIcon from '@mui/icons-material/Inbox';
-import ItemWarehouse from '../Item/ItemWarehouse';
 import Pagination from '../Pagination/Pagination';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { productsSliceActions } from '../../store/productsSlice';
 import ItemProduct from '../Item/ItemProduct';
 
 
-function ProductList() {
-    const productsData = useSelector((state) => state.products.products)
-    // const [warehouseList, setWarehouseList] = useState(warehouseData)
 
-    const dispatch = useDispatch()
+function ProductList() {
+    const [pagination, setPagination] = useState({
+        offset: 0,
+        numberPerPage: 2,
+        pageCount: 0,
+    })
+
+    const [productList, setProductList] = useState()
+
+    const productSelector = useSelector((state) => state.products.products)
+    const isSearchingSelector = useSelector((state) => state.products.isSearching)
 
 
     useEffect(() => {
@@ -26,22 +32,38 @@ function ProductList() {
                     return;
                 }
                 const data = await response.json()
-                dispatch(productsSliceActions.saveProducts({
-                    data: data.data
+
+                setPagination(prev => ({
+                    ...prev,
+                    pageCount: !isSearchingSelector ? Math.ceil(data.data.length / prev.numberPerPage) : Math.ceil(productSelector.length / prev.numberPerPage)
                 }))
-                // setWarehouseList(data)
-                console.log(data.data)
+
+                const productDisplay = !isSearchingSelector ? data.data.slice(pagination.offset, parseInt(pagination.offset) + parseInt(pagination.numberPerPage)) : productSelector.slice(pagination.offset, parseInt(pagination.offset) + parseInt(pagination.numberPerPage))
+
+                setProductList(productDisplay)
+                console.log(productDisplay)
             } catch (err) {
                 console.log('fetch wrong')
             }
         }
 
         fetchProduct()
-    }, [])
+    }, [pagination.offset, pagination.numberPerPage, pagination.pageCount, isSearchingSelector, productSelector])
 
-    const removeHandle = () => {
-
+    const numberPerPageHandle = (value) => {
+        setPagination(prev => ({
+            ...prev,
+            numberPerPage: value
+        }))
     }
+
+    const handleClick = (e) => {
+        const selected = e.selected
+        const offset = selected * pagination.numberPerPage
+        setPagination({ ...pagination, offset })
+    }
+
+
     return (
         //bg-[#323259]
         <div className='bg-white rounded-md'>
@@ -59,10 +81,10 @@ function ProductList() {
                 </div>
             </div>
             {/* {pagination.currentData ? pagination.currentData.map((item) => <ProductItem isSelectedAll={isSelectedAll} key={item.id} id={item.id} sku={item.sku} name={item.name} category={item.category} price={item.price} amount={item.amount} vendor={item.vendor} arrivalDate={item.arrivalDate} />) : <Box sx={{ display: 'flex' }}> */}
-            {productsData.map(product => <ItemProduct id={product.sku} sku={product.sku} key={product.sku} images={product.images} name={product.name} itemTypeId={product.item_type_id} desc={product.desc} />)}
+            {productList && productList.map(product => <ItemProduct id={product.sku} sku={product.sku} key={product.sku} images={product.images} name={product.name} itemTypeId={product.item_type_id} desc={product.desc} />)}
             {/* <CircularProgress /> */}
             {/* </Box>} */}
-            {/* <Pagination getNumberPerPage={numberPerPageHandle} pageCount={pagination.pageCount} onPageChange={handleClick} /> */}
+            <Pagination getNumberPerPage={numberPerPageHandle} pageCount={pagination.pageCount} onPageChange={handleClick} />
             {/* <Pagination /> */}
         </div>
     )

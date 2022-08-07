@@ -1,13 +1,58 @@
 import { useRouter } from 'next/router'
-import React from 'react'
+import React, { useState } from 'react'
 import SearchForm from '../../../components/SearchForm.js/SearchForm'
 import Head from 'next/head'
 import ItemTypeList from '../../../components/list/ItemTypeList'
+import { itemTypeSliceActions } from '../../../store/itemTypeSlice'
+import { useDispatch } from 'react-redux'
 
-function ProductsManagement() {
+function ItemTypeManegement() {
+
+    const [searchInput, setSearchInput] = useState('')
 
     const router = useRouter()
-    const { typeId } = router.query
+    const dispatch = useDispatch()
+
+    const searchInputHandle = (value) => {
+        setSearchInput(value)
+    }
+
+    const searchHandle = async () => {
+        try {
+            const response = await fetch('https://scm-tool.thanhpp.ninja/item-type')
+
+            if (!response) {
+                throw new Error('somethign wrong');
+                return;
+            }
+            const data = await response.json()
+
+            const dataSearched = data.data.filter((itemType) => {
+                if (itemType.name.includes(searchInput) || itemType.desc.includes(searchInput)) {
+                    return true
+                }
+                return false
+            })
+            if (searchInput) {
+                dispatch(itemTypeSliceActions.isSearching({
+                    data: true
+                }))
+            } else {
+                dispatch(itemTypeSliceActions.isSearching({
+                    data: false
+                }))
+            }
+            dispatch(itemTypeSliceActions.itemTypeSearch({
+                data: dataSearched
+            }))
+            console.log(dataSearched)
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+    // const router = useRouter()
+    // const { typeId } = router.query
     return (
         <div className='bg-blue-500 w-full h-full min-h-screen   p-[36px]'>
             <Head>
@@ -18,7 +63,7 @@ function ProductsManagement() {
             <div className='text-white '>
                 <div className='text-[32px] mb-[16px]'>item types</div>
                 <div className='mb-[40px]'>
-                    <SearchForm />
+                    <SearchForm onChangeInput={searchInputHandle} onClickSearch={searchHandle} />
                 </div>
                 <div className='mb-[24px]'>
                     <button onClick={() => router.push(`/products-management/item-types/addItemType`)} className='text-[15px] mb-3 block bg-transparent hover:opacity-80 border border-white cursor-pointer rounded-md min-w-[110px] h-[34px] px-[12px] py-[6px]'>Add new item type</button>
@@ -34,4 +79,4 @@ function ProductsManagement() {
     )
 }
 
-export default ProductsManagement
+export default ItemTypeManegement

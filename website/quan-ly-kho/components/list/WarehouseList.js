@@ -5,43 +5,66 @@ import Box from '@mui/material/Box';
 import WarehouseIcon from '@mui/icons-material/Warehouse';
 import ItemWarehouse from '../Item/ItemWarehouse';
 import Pagination from '../Pagination/Pagination';
-import { useDispatch, useSelector } from 'react-redux';
-import { warehouseSliceActions } from '../../store/warehouseSlice';
+import { useSelector } from 'react-redux';
 
 
 function WarehouseList() {
-    const warehouseData = useSelector((state) => state.warehouse.warehouse)
-    // const [warehouseList, setWarehouseList] = useState(warehouseData)
+    const [pagination, setPagination] = useState({
+        offset: 0,
+        numberPerPage: 2,
+        pageCount: 0,
+    })
 
-    const dispatch = useDispatch()
+    const [warehouseList, setWarehouseList] = useState()
+
+    const isSearchingSelector = useSelector((state) => state.warehouse.isSearching)
+    const warehouseSelector = useSelector((state) => state.warehouse.warehouse)
 
 
     useEffect(() => {
         const fetchWarehouse = async () => {
-            console.log(process.env.API_URL)
+            console.log(warehouseSelector)
             try {
                 const response = await fetch(`https://scm-tool.thanhpp.ninja/storage`)
                 if (!response) {
-                    throw new Error('somethign wrong');
+                    throw new Error('something wrong');
                     return;
                 }
                 const data = await response.json()
-                dispatch(warehouseSliceActions.saveWarehouse({
-                    data: data.data
+
+                setPagination(prev => ({
+                    ...prev,
+                    pageCount: !isSearchingSelector ? Math.ceil(data.data.length / prev.numberPerPage) : Math.ceil(warehouseSelector.length / prev.numberPerPage)
                 }))
-                // setWarehouseList(data)
-                // console.log(warehouseData)
+
+                const warehousesDisplay = !isSearchingSelector ? data.data.slice(pagination.offset, parseInt(pagination.offset) + parseInt(pagination.numberPerPage)) : warehouseSelector.slice(pagination.offset, parseInt(pagination.offset) + parseInt(pagination.numberPerPage))
+
+                setWarehouseList(warehousesDisplay)
+
+
             } catch (err) {
                 console.log('fetch wrong')
             }
         }
 
         fetchWarehouse()
-    }, [])
+    }, [pagination.offset, pagination.numberPerPage, pagination.pageCount, isSearchingSelector, warehouseSelector])
 
-    const removeHandle = () => {
 
+    const numberPerPageHandle = (value) => {
+        setPagination(prev => ({
+            ...prev,
+            numberPerPage: value
+        }))
     }
+
+    const handleClick = (e) => {
+        const selected = e.selected
+        const offset = selected * pagination.numberPerPage
+        setPagination({ ...pagination, offset })
+    }
+
+
     return (
         //bg-[#323259]
         <div className='bg-white rounded-md'>
@@ -58,12 +81,10 @@ function WarehouseList() {
                     <span className=' mr-[10px] rounded-sm'>Edit</span>
                 </div>
             </div>
-            {/* {pagination.currentData ? pagination.currentData.map((item) => <ProductItem isSelectedAll={isSelectedAll} key={item.id} id={item.id} sku={item.sku} name={item.name} category={item.category} price={item.price} amount={item.amount} vendor={item.vendor} arrivalDate={item.arrivalDate} />) : <Box sx={{ display: 'flex' }}> */}
-            {warehouseData.map(warehouse => <ItemWarehouse id={warehouse.id} key={warehouse.id} name={warehouse.name} desc={warehouse.desc} location={warehouse.location} />)}
+            {warehouseList && warehouseList.map(warehouse => <ItemWarehouse id={warehouse.id} key={warehouse.id} name={warehouse.name} desc={warehouse.desc} location={warehouse.location} />)}
             {/* <CircularProgress /> */}
             {/* </Box>} */}
-            {/* <Pagination getNumberPerPage={numberPerPageHandle} pageCount={pagination.pageCount} onPageChange={handleClick} /> */}
-            {/* <Pagination /> */}
+            <Pagination getNumberPerPage={numberPerPageHandle} pageCount={pagination.pageCount} onPageChange={handleClick} />
         </div>
     )
 }

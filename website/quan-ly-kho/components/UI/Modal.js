@@ -16,7 +16,7 @@ function Modal({ show, onClose, children }) {
   }
 
   const modalContent = show ? (
-    <div>
+    <div className=' overflow-scroll'>
       <div className='backdrop' onClick={handleClose}>Close</div>
       <div className='modal'>
         <div className=' cursor-pointer flex justify-end' onClick={handleClose}><CloseIcon /></div>
@@ -40,7 +40,7 @@ function Modal({ show, onClose, children }) {
                   
                   .modal {
                     position: fixed;
-                    top: 20vh;
+                    top: 8vh;
                     left: 5%;
                     width: 90%;
                     background-color: white;
