@@ -181,7 +181,13 @@
 					"name": "get",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NjAyNDExNjcsImlhdCI6MTY2MDE1NDc2NywiaXNzIjoic2Ntc3J2IiwidXNlciI6eyJpZCI6MSwibmFtZSI6InRoYW5ocHAiLCJ1c2VybmFtZSI6InRoYW5ocHAifX0.VVoQiw1il_OnltJH7z5nWtwQs82Go3trZDl2h_ZLLSs",
+								"type": "text"
+							}
+						],
 						"url": {
 							"raw": "{{base}}/supplier",
 							"host": [

@@ -40,16 +40,25 @@ type JWTSrv interface {
 	GenToken(user *entity.User) (*Token, error)
 	Validate(token string) (*jwt.Token, error)
 	Refresh(user *entity.User, refresh string) (*Token, error)
+	CheckCache(userID int) bool
 }
 
 type jwtSrvImpl struct {
+	tokenCache map[int]*Token // userID - jwtToken
 }
 
 func NewJWTSrvImpl() JWTSrv {
-	return &jwtSrvImpl{}
+	return &jwtSrvImpl{
+		tokenCache: make(map[int]*Token),
+	}
 }
 
-func (f jwtSrvImpl) GenToken(user *entity.User) (*Token, error) {
+func (f *jwtSrvImpl) GenToken(user *entity.User) (*Token, error) {
+	cachedToken, ok := f.tokenCache[user.ID]
+	if ok {
+		return cachedToken, nil
+	}
+
 	claims := &Claims{
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(expire).Unix(),
@@ -65,9 +74,12 @@ func (f jwtSrvImpl) GenToken(user *entity.User) (*Token, error) {
 		return nil, errors.WithMessage(err, "signing token")
 	}
 
-	return &Token{
+	newToken := &Token{
 		JWT: t,
-	}, nil
+	}
+	f.tokenCache[user.ID] = newToken
+
+	return newToken, nil
 }
 func (f jwtSrvImpl) Validate(token string) (*jwt.Token, error) {
 	return jwt.Parse(token, func(t *jwt.Token) (interface{}, error) {
@@ -81,4 +93,10 @@ func (f jwtSrvImpl) Validate(token string) (*jwt.Token, error) {
 
 func (f jwtSrvImpl) Refresh(user *entity.User, refresh string) (*Token, error) {
 	return nil, nil
+}
+
+func (f *jwtSrvImpl) CheckCache(userID int) bool {
+	_, ok := f.tokenCache[userID]
+
+	return ok
 }

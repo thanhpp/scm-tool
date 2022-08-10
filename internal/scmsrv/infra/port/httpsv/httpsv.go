@@ -14,26 +14,29 @@ import (
 	"github.com/thanhpp/scm/internal/scmsrv/infra/port/httpsv/ctrl"
 	"github.com/thanhpp/scm/pkg/booting"
 	"github.com/thanhpp/scm/pkg/configx"
+	"github.com/thanhpp/scm/pkg/ginutil"
 	"github.com/thanhpp/scm/pkg/logger"
 )
 
 type HTTPServer struct {
-	cfg configx.HTTPServerConfig
-	app *app.App
+	cfg    configx.HTTPServerConfig
+	app    *app.App
+	jwtSrv auth.JWTSrv
 }
 
 func NewHTTPServer(
 	cfg configx.HTTPServerConfig, app *app.App,
 ) *HTTPServer {
 	httpServer := &HTTPServer{
-		cfg: cfg,
-		app: app,
+		cfg:    cfg,
+		app:    app,
+		jwtSrv: auth.NewJWTSrvImpl(),
 	}
 
 	return httpServer
 }
 
-func (s HTTPServer) Daemon() booting.Daemon {
+func (s *HTTPServer) Daemon() booting.Daemon {
 	server := http.Server{
 		Addr:    fmt.Sprintf("%s:%s", s.cfg.Host, s.cfg.Port),
 		Handler: s.newRouter(),
@@ -65,7 +68,7 @@ func (s HTTPServer) Daemon() booting.Daemon {
 	}
 }
 
-func (s HTTPServer) newRouter() *gin.Engine {
+func (s *HTTPServer) newRouter() *gin.Engine {
 	r := gin.New()
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
@@ -91,6 +94,7 @@ func (s HTTPServer) newRouter() *gin.Engine {
 
 	importTicketGr := r.Group("import_ticket")
 	{
+		importTicketGr.Use(s.authMiddleware())
 		importTicketGr.GET("", importTicketCtrl.GetListImportTickets)
 		importTicketGr.GET("/:id", importTicketCtrl.GetImportTicket)
 
@@ -102,6 +106,7 @@ func (s HTTPServer) newRouter() *gin.Engine {
 
 	supplierGr := r.Group("supplier")
 	{
+		supplierGr.Use(s.authMiddleware())
 		supplierGr.GET("", supplierCtrl.GetList)
 		supplierGr.GET("/:id", supplierCtrl.GetSupplier)
 
@@ -111,6 +116,7 @@ func (s HTTPServer) newRouter() *gin.Engine {
 
 	storageGr := r.Group("storage")
 	{
+		storageGr.Use(s.authMiddleware())
 		storageGr.GET("", storageCtrl.GetList)
 		storageGr.GET("/:id", storageCtrl.Get)
 
@@ -120,6 +126,7 @@ func (s HTTPServer) newRouter() *gin.Engine {
 
 	itemGr := r.Group("item")
 	{
+		itemGr.Use(s.authMiddleware())
 		itemGr.GET("", itemCtrl.GetList)
 		itemGr.POST("", itemCtrl.CreateItem)
 		itemGr.PUT("/:sku", itemCtrl.UpdateItem)
@@ -127,6 +134,7 @@ func (s HTTPServer) newRouter() *gin.Engine {
 
 	itemTypeGr := r.Group("item-type")
 	{
+		itemGr.Use(s.authMiddleware())
 		itemTypeGr.GET("", itemCtrl.GetAllItemType)
 		itemTypeGr.POST("", itemCtrl.CreateItemType)
 		itemTypeGr.PUT("/:id", itemCtrl.UpdateItemType)
@@ -134,6 +142,7 @@ func (s HTTPServer) newRouter() *gin.Engine {
 
 	userGr := r.Group("user")
 	{
+		userGr.Use(s.authMiddleware())
 		userGr.GET("", userCtrl.GetUsers)
 		userGr.PATCH("/:id/password", userCtrl.UpdateUserPassword)
 	}
@@ -144,4 +153,31 @@ func (s HTTPServer) newRouter() *gin.Engine {
 	r.GET("files/:filename", filesCtrl.ServeFile)
 
 	return r
+}
+
+const (
+	bearerPrefix       = "Bearer "
+	bearerPrefixLength = len(bearerPrefix)
+)
+
+func (s *HTTPServer) authMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		authHeader := c.GetHeader("Authorization")
+		if len(authHeader) < bearerPrefixLength {
+			ginutil.RespErr(c, http.StatusUnauthorized, errors.New("invalid length"))
+			c.Abort()
+			return
+		}
+
+		authHeader = authHeader[bearerPrefixLength:]
+
+		_, err := s.jwtSrv.Validate(authHeader)
+		if err != nil {
+			ginutil.RespErr(c, http.StatusUnauthorized, err)
+			c.Abort()
+			return
+		}
+
+		c.Next()
+	}
 }
