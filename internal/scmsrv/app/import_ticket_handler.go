@@ -99,6 +99,22 @@ func (h ImportTicketHandler) CreateImportDetails(
 	return detail, nil
 }
 
+func (h ImportTicketHandler) GetSerialsByImportTicketID(
+	ctx context.Context, importTicketID int,
+) (map[string][]*entity.Serial, error) {
+	serials, err := h.serialRepo.GetSerialsByImportTicketID(ctx, importTicketID)
+	if err != nil {
+		return nil, fmt.Errorf("get serial by import ticket id error: %w", err)
+	}
+
+	m := make(map[string][]*entity.Serial)
+	for i := range serials {
+		m[serials[i].Item.SKU] = append(m[serials[i].Item.SKU], serials[i])
+	}
+
+	return m, nil
+}
+
 func (h ImportTicketHandler) GetSerialInfo(
 	ctx context.Context, seri string,
 ) (*entity.Serial, *nftsvclient.NFTInfo, error) {

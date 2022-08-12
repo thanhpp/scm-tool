@@ -54,7 +54,7 @@
 }
 ```
 
-### Lấy thông tin số seri theo import ticket id
+### Lấy thông tin số seri theo import ticket id (GET /import-ticket/:id/serials)
 
 ## Thấp
 
@@ -65,3 +65,9 @@
 ### 3. Hiển thị danh sách chọn tại các trường nhập ID
 
 1. Tự mapping name => ID khi gửi request
+
+### 4. Thay đổi size 1 page = 20
+
+## Q & A:
+
+1. Đổi order của get list có ảnh hưởng FE không?

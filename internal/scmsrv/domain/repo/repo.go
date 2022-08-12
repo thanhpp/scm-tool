@@ -85,6 +85,7 @@ type SerialRepo interface {
 	Count(ctx context.Context, importTicketID int, itemSKU string) (int, error)
 	Get(ctx context.Context, seri string) (*entity.Serial, error)
 	GetSeriWithEmptyTokenID(ctx context.Context) ([]*entity.Serial, error)
+	GetSerialsByImportTicketID(ctx context.Context, importTicketID int) ([]*entity.Serial, error)
 
 	// Write
 	CreateBatch(ctx context.Context, serials []*entity.Serial) error

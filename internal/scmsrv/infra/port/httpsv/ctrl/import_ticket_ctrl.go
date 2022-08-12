@@ -156,3 +156,23 @@ func (ctrl ImportTicketCtrl) GetSeriData(c *gin.Context) {
 
 	c.JSON(http.StatusOK, resp)
 }
+
+func (ctrl ImportTicketCtrl) GetSerialsByImportTicketID(c *gin.Context) {
+	id, err := getIDFromParam(c)
+	if err != nil {
+		ginutil.RespErr(c, http.StatusNotAcceptable, err)
+		return
+	}
+
+	serialsMap, err := ctrl.importTickerHanlder.GetSerialsByImportTicketID(c, id)
+	if err != nil {
+		ginutil.RespErr(c, http.StatusInternalServerError, err)
+		return
+	}
+
+	resp := new(dto.GetSerialsByImportTicketIDResp)
+	resp.Set200OK()
+	resp.SetData(serialsMap)
+
+	c.JSON(http.StatusOK, resp)
+}

@@ -71,6 +71,27 @@ func (d SerialDB) Get(ctx context.Context, seri string) (*entity.Serial, error) 
 	return &serial, nil
 }
 
+func (d SerialDB) GetSerialsByImportTicketID(ctx context.Context, importTicketID int) ([]*entity.Serial, error) {
+	var series []string
+
+	if err := d.gdb.WithContext(ctx).
+		Model(&repo.Serial{}).Select("seri").Where("import_ticket_id = ?", 0).Find(&series).Error; err != nil {
+		return nil, err
+	}
+
+	result := make([]*entity.Serial, len(series))
+	for i := range series {
+		serial, err := d.Get(ctx, series[i])
+		if err != nil {
+			return nil, err
+		}
+
+		result[i] = serial
+	}
+
+	return result, nil
+}
+
 func (d SerialDB) GetSeriWithEmptyTokenID(ctx context.Context) ([]*entity.Serial, error) {
 	var series []string
 

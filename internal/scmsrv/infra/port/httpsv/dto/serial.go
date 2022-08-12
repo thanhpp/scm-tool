@@ -58,3 +58,45 @@ type SerialInfoResp struct {
 func (resp *SerialInfoResp) SetData(in *entity.Serial, nftInfo *nftsvclient.NFTInfo) {
 	resp.Data.set(in, nftInfo)
 }
+
+type SerialInfoRespDataWithoutNFTInfo struct {
+	Seri           string                     `json:"seri"`
+	ImportTicketID int                        `json:"import_ticket_id"`
+	StorageData    SerialInfoRespStorageData  `json:"storage"`
+	SupplierData   SerialInfoRespSupplierData `json:"supplier"`
+	ItemData       SerialInfoRespItemData     `json:"item"`
+}
+
+type GetSerialsByImportTicketIDResp struct {
+	ginutil.RespTemplateError
+	Data map[string][]SerialInfoRespDataWithoutNFTInfo `json:"data"`
+}
+
+func (d *SerialInfoRespDataWithoutNFTInfo) set(in *entity.Serial) {
+	d.Seri = in.Seri
+	d.ImportTicketID = in.ImportTicket.ID
+
+	d.StorageData = SerialInfoRespStorageData{
+		Name:     in.ImportTicket.ToStorage.Name,
+		Location: in.ImportTicket.ToStorage.Location,
+	}
+
+	d.ItemData = SerialInfoRespItemData{
+		Name: in.Item.Name,
+		Desc: in.Item.Desc,
+	}
+
+	d.SupplierData = SerialInfoRespSupplierData{
+		Name: in.ImportTicket.FromSupplier.Name,
+	}
+}
+
+func (resp *GetSerialsByImportTicketIDResp) SetData(m map[string][]*entity.Serial) {
+	resp.Data = make(map[string][]SerialInfoRespDataWithoutNFTInfo, len(m))
+	for k, v := range m {
+		resp.Data[k] = make([]SerialInfoRespDataWithoutNFTInfo, len(v))
+		for i := range v {
+			resp.Data[k][i].set(v[i])
+		}
+	}
+}

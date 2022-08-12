@@ -97,6 +97,7 @@ func (s *HTTPServer) newRouter() *gin.Engine {
 		importTicketGr.Use(s.authMiddleware())
 		importTicketGr.GET("", importTicketCtrl.GetListImportTickets)
 		importTicketGr.GET("/:id", importTicketCtrl.GetImportTicket)
+		importTicketGr.GET("/:id/serial", importTicketCtrl.GetSerialsByImportTicketID)
 
 		importTicketGr.POST("", importTicketCtrl.Create)
 		importTicketGr.POST("serials", importTicketCtrl.GenSerial)

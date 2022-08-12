@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/pkg/errors"
-	"github.com/rs/xid"
 	"github.com/thanhpp/scm/pkg/enum"
 )
 
@@ -164,10 +163,15 @@ func (factoryImpl) NewSerials(importTicket *ImportTicket, item *Item, num int) (
 		return nil, errors.New("create serials: zero num")
 	}
 
+	now := time.Now().UnixMilli()
+
+	newSeriBase := fmt.Sprintf("%03d%03d%03d%03d",
+		importTicket.FromSupplier.ID, importTicket.ToStorage.ID, importTicket.ID, now%100)
+
 	serials := make([]*Serial, num)
 	for i := range serials {
 		serials[i] = &Serial{
-			Seri:         stringToInt(xid.New().String()),
+			Seri:         fmt.Sprintf("%s%03d", newSeriBase, i),
 			Status:       enum.SerialStatusNew,
 			ImportTicket: importTicket,
 			Item:         item,
@@ -182,7 +186,7 @@ func stringToInt(in string) string {
 	b.Grow(len(in))
 
 	for i := range in {
-		b.WriteString(fmt.Sprintf("%d", in[i]))
+		b.WriteString(fmt.Sprintf("%02d", in[i]))
 	}
 
 	return b.String()
