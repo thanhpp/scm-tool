@@ -2,6 +2,7 @@ package app
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"mime/multipart"
 	"path/filepath"
@@ -56,12 +57,12 @@ func (h ImportTicketHandler) Create(
 
 	supplier, err := h.supplierRepo.Get(ctx, supplierID)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("get supplier error: %w", err)
 	}
 
 	storage, err := h.storageRepo.Get(ctx, storageID)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("get storage error: %w", err)
 	}
 
 	newImportTicket, err := h.fac.NewImportTicket(
@@ -75,7 +76,7 @@ func (h ImportTicketHandler) Create(
 	log.Printf("newImportTicket entity: %+v", newImportTicket)
 
 	if err := h.importTicketRepo.Create(ctx, newImportTicket); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("create import ticket error: %w", err)
 	}
 
 	return newImportTicket, nil
