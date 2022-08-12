@@ -75,7 +75,10 @@ func (d SerialDB) GetSerialsByImportTicketID(ctx context.Context, importTicketID
 	var series []string
 
 	if err := d.gdb.WithContext(ctx).
-		Model(&repo.Serial{}).Select("seri").Where("import_ticket_id = ?", 0).Find(&series).Error; err != nil {
+		Model(&repo.Serial{}).
+		Select("seri").
+		Where("import_ticket_id = ?", importTicketID).
+		Find(&series).Error; err != nil {
 		return nil, err
 	}
 

@@ -54,7 +54,7 @@
 }
 ```
 
-### Lấy thông tin số seri theo import ticket id (GET /import-ticket/:id/serials)
+### Lấy thông tin số seri theo import ticket id (GET /import_ticket/:id/serials)
 
 ## Thấp
 
