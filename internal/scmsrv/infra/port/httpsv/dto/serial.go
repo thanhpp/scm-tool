@@ -16,12 +16,17 @@ type SerialInfoRespStorageData struct {
 	Location string `json:"location"`
 }
 
+type SerialInfoRespSupplierData struct {
+	Name string `json:"name"`
+}
+
 type SerialInfoRespData struct {
-	Seri           string                    `json:"seri"`
-	ImportTicketID int                       `json:"import_ticket_id"`
-	StorageData    SerialInfoRespStorageData `json:"storage"`
-	ItemData       SerialInfoRespItemData    `json:"item"`
-	NFTInfo        nftsvclient.NFTInfo       `json:"nft_info"`
+	Seri           string                     `json:"seri"`
+	ImportTicketID int                        `json:"import_ticket_id"`
+	StorageData    SerialInfoRespStorageData  `json:"storage"`
+	SupplierData   SerialInfoRespSupplierData `json:"supplier"`
+	ItemData       SerialInfoRespItemData     `json:"item"`
+	NFTInfo        nftsvclient.NFTInfo        `json:"nft_info"`
 }
 
 func (d *SerialInfoRespData) set(in *entity.Serial, nftInfo *nftsvclient.NFTInfo) {
@@ -36,6 +41,10 @@ func (d *SerialInfoRespData) set(in *entity.Serial, nftInfo *nftsvclient.NFTInfo
 	d.ItemData = SerialInfoRespItemData{
 		Name: in.Item.Name,
 		Desc: in.Item.Desc,
+	}
+
+	d.SupplierData = SerialInfoRespSupplierData{
+		Name: in.ImportTicket.FromSupplier.Name,
 	}
 
 	d.NFTInfo = *nftInfo
