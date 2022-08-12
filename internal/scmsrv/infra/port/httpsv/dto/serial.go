@@ -69,34 +69,15 @@ type SerialInfoRespDataWithoutNFTInfo struct {
 
 type GetSerialsByImportTicketIDResp struct {
 	ginutil.RespTemplateError
-	Data map[string][]SerialInfoRespDataWithoutNFTInfo `json:"data"`
-}
-
-func (d *SerialInfoRespDataWithoutNFTInfo) set(in *entity.Serial) {
-	d.Seri = in.Seri
-	d.ImportTicketID = in.ImportTicket.ID
-
-	d.StorageData = SerialInfoRespStorageData{
-		Name:     in.ImportTicket.ToStorage.Name,
-		Location: in.ImportTicket.ToStorage.Location,
-	}
-
-	d.ItemData = SerialInfoRespItemData{
-		Name: in.Item.Name,
-		Desc: in.Item.Desc,
-	}
-
-	d.SupplierData = SerialInfoRespSupplierData{
-		Name: in.ImportTicket.FromSupplier.Name,
-	}
+	Data map[string][]string `json:"data"`
 }
 
 func (resp *GetSerialsByImportTicketIDResp) SetData(m map[string][]*entity.Serial) {
-	resp.Data = make(map[string][]SerialInfoRespDataWithoutNFTInfo, len(m))
+	resp.Data = make(map[string][]string, len(m))
 	for k, v := range m {
-		resp.Data[k] = make([]SerialInfoRespDataWithoutNFTInfo, len(v))
+		resp.Data[k] = make([]string, len(v))
 		for i := range v {
-			resp.Data[k][i].set(v[i])
+			resp.Data[k][i] = v[i].Seri
 		}
 	}
 }
