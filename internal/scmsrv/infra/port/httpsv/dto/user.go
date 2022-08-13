@@ -39,6 +39,10 @@ type LoginReq struct {
 
 type LoginRespData struct {
 	Token string `json:"token"`
+	User  struct {
+		ID   int    `json:"id"`
+		Name string `json:"name"`
+	} `json:"user"`
 }
 
 type LoginResp struct {
@@ -46,8 +50,10 @@ type LoginResp struct {
 	Data LoginRespData `json:"data"`
 }
 
-func (resp *LoginResp) SetData(token string) {
+func (resp *LoginResp) SetData(token string, user *entity.User) {
 	resp.Data.Token = token
+	resp.Data.User.ID = user.ID
+	resp.Data.User.Name = user.Name
 }
 
 type RespGetUsers struct {

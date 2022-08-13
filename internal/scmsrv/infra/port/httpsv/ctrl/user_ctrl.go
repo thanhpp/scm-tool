@@ -65,7 +65,7 @@ func (ctrl UserCtrl) Login(c *gin.Context) {
 
 	resp := new(dto.LoginResp)
 	resp.Set200OK()
-	resp.SetData(token.JWT)
+	resp.SetData(token.JWT, user)
 
 	c.JSON(http.StatusOK, resp)
 }
