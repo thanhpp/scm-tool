@@ -69,15 +69,22 @@ type SerialInfoRespDataWithoutNFTInfo struct {
 
 type GetSerialsByImportTicketIDResp struct {
 	ginutil.RespTemplateError
-	Data map[string][]string `json:"data"`
+	Data []GetSerialsByImportTicketIDData `json:"data"`
+}
+
+type GetSerialsByImportTicketIDData struct {
+	SKU    string   `json:"sku"`
+	Series []string `json:"series"`
 }
 
 func (resp *GetSerialsByImportTicketIDResp) SetData(m map[string][]*entity.Serial) {
-	resp.Data = make(map[string][]string, len(m))
 	for k, v := range m {
-		resp.Data[k] = make([]string, len(v))
+		resp.Data = append(resp.Data, GetSerialsByImportTicketIDData{
+			SKU:    k,
+			Series: make([]string, len(v)),
+		})
 		for i := range v {
-			resp.Data[k][i] = v[i].Seri
+			resp.Data[len(resp.Data)-1].Series[i] = v[i].Seri
 		}
 	}
 }
