@@ -77,7 +77,7 @@ function WarehouseList() {
             <div className='grid grid-cols-12 gap-3 text-black'>
                 <div className='flex items-center col-span-1 my-[16px]'>
                     {/* <input type='checkbox' className='mr-[10px] leading-[24px] ml-[20px]' /> */}
-                    <WarehouseIcon className='mr-[10px] leading-[24px] ml-[20px]' />
+                    <span className='mr-[10px] leading-[24px] ml-[20px]' >id</span>
                 </div>
                 <div className=' col-span-3 my-auto   truncate'>name</div>
                 <div className=' col-span-5 my-auto truncate'>description</div>
