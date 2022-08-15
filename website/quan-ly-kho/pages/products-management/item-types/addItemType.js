@@ -1,14 +1,28 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useRouter } from 'next/router';
 import Loading from '../../../components/UI/Loading';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
+
 
 function AddItemType() {
     const [name, setName] = useState('')
     const [desc, setDesc] = useState('')
     const [loading, setLoading] = useState(false)
     const router = useRouter()
+
+    const [auth, setAuth] = useState()
+
+
+    useEffect(() => {
+        if (!localStorage.getItem('token')) {
+            router.push('/login')
+            return;
+        }
+        const token = localStorage.getItem('token')
+        setAuth(token)
+    }, [])
 
 
     const nameHandle = (e) => {
@@ -23,7 +37,7 @@ function AddItemType() {
 
     const addTypeHandle = async () => {
         setLoading(true)
-
+        let token = localStorage.getItem('token')
         try {
             const res = await fetch('https://scm-tool.thanhpp.ninja/item-type', {
                 method: 'POST',
@@ -32,7 +46,8 @@ function AddItemType() {
                     desc
                 }),
                 headers: {
-                    'Content-type': 'application/json'
+                    'Content-type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 }
             })
             if (!res.ok) {
@@ -42,17 +57,18 @@ function AddItemType() {
 
             const data = await res.json()
             if (data.error.code == 200) {
+                alert(data.error.message)
                 router.push('/products-management/item-types')
             }
             setLoading(false)
             console.log(data)
         } catch (err) {
-            console.log(err)
+            alert(err)
             setLoading(false)
         }
     }
 
-    return (
+    return (!auth ? <div></div> :
         <div className='bg-blue-500 w-full h-full min-h-screen   p-[36px]'>
             <div>
                 <div onClick={() => router.back()} className=' bg-white rounded-[1000px] w-[30px] h-[30px] mb-[10px] cursor-pointer'>

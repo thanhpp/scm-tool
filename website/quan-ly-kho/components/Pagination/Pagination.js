@@ -32,10 +32,10 @@ function Pagination({ onPageChange, pageCount, getNumberPerPage }) {
             />
             <div className='ml-[5px] '>
                 <select onClick={getValueHandle} defaultValue='2' className='bg-[#1e2835] text-white rounded-md'>
-                    <option value="2" >2</option>
-                    <option value="4">4</option>
-                    <option value="6">6</option>
-                    <option value="8">8</option>
+                    <option value="20" >20</option>
+                    <option value="40">40</option>
+                    <option value="80">80</option>
+                    <option value="100">100</option>
                 </select>
             </div>
         </div>

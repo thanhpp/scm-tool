@@ -3,7 +3,7 @@ import Loading from '../UI/Loading';
 import Link from 'next/link';
 import { useRouter } from 'next/router'
 
-function Signup() {
+function ChangePassword() {
     const [name, setName] = useState()
     const [username, setUsername] = useState()
     const [password, setPassword] = useState()
@@ -11,16 +11,8 @@ function Signup() {
 
     const router = useRouter()
 
-    const nameHandle = (e) => {
+    const newPasswordHandle = (e) => {
         setName(e.target.value)
-    }
-
-    const usernameHandle = (e) => {
-        setUsername(e.target.value)
-    }
-
-    const passwordHandle = (e) => {
-        setPassword(e.target.value)
     }
 
     const submitHandle = async (e) => {
@@ -65,22 +57,14 @@ function Signup() {
             <form onSubmit={submitHandle} className='flex flex-col w-full p-[15px] rounded-lg bg-[#f3f3f3] drop-shadow-md'>
                 <p className=' text-center text-[#212509] text-[28px] my-[18px]'>Sign Up</p>
                 <div className=' justify-center mb-[5px] '>
-                    <input type="text" onChange={nameHandle} className='w-full p-[10px] border border-gray-600 outline-blue-300' placeholder='Name' />
+                    <input type="text" onChange={newPasswordHandle} className='w-full p-[10px] border border-gray-600 outline-blue-300' placeholder='Name' />
                     {/* {isValidated.email ?? <p>{isValidated.email}</p>} */}
-                </div>
-                <div className=' justify-center mb-[5px] '>
-                    <input type="text" onChange={usernameHandle} className='w-full p-[10px] border border-gray-600 outline-blue-300' placeholder='User name' />
-                    {/* {isValidated.email ?? <p>{isValidated.email}</p>} */}
-                </div>
-                <div className=' justify-center mb-[10px] '>
-                    <input type="password" onChange={passwordHandle} className='w-full p-[10px] border border-gray-600 outline-blue-300' placeholder='Password' />
-                    {/* {isValidated.password ?? <p>{isValidated.password}</p>} */}
                 </div>
                 <button className=' bg-[#70c282] h-[30px] rounded text-white font-medium'>
-                    Signup
+                    Change password
                 </button>
                 {/* {errorMessage ?? <p>email or password is wrong!</p>} */}
-                <Link href='/login'><p className=' ml-auto mt-3 cursor-pointer hover:opacity-80'>login</p></Link>
+                {/* <Link href='/login'><p className=' ml-auto mt-3 cursor-pointer hover:opacity-80'>login</p></Link> */}
             </form>
             {loading ? <Loading /> : ''}
         </div>
@@ -88,4 +72,4 @@ function Signup() {
 }
 
 
-export default Signup
+export default ChangePassword

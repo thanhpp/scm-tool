@@ -64,7 +64,7 @@ function ItemTicket({ id, supplierId, storageId, status, fee, billImage, product
     const updateHandle = async () => {
         setLoading(true)
 
-
+        let token = localStorage.getItem('token')
         try {
             const res = await fetch(` https://scm-tool.thanhpp.ninja/import_ticket/${id}`, {
                 method: 'PUT',
@@ -73,7 +73,8 @@ function ItemTicket({ id, supplierId, storageId, status, fee, billImage, product
                     desc: descUpdate
                 }),
                 headers: {
-                    'Content-type': 'application/json'
+                    'Content-type': 'application/json',
+                    "authorization": `Bearer ${token}`
                 }
             })
 
@@ -84,12 +85,12 @@ function ItemTicket({ id, supplierId, storageId, status, fee, billImage, product
 
             const data = await res.json()
             if (data.error.code == 200) {
-                console.log('edit success')
+                alert(data.error.message)
                 router.reload(window.location.pathname)
             }
             setLoading(false)
         } catch (err) {
-            console.log('edit fail')
+            alert(err)
             setLoading(false)
         }
     }
@@ -108,8 +109,12 @@ function ItemTicket({ id, supplierId, storageId, status, fee, billImage, product
             <Link href={`/io-management/ticket/${id}`}><div className=' col-span-6 my-auto hover:border-b border-black cursor-pointer  truncate'>{status}</div></Link>
             <div className=' col-span-2 my-auto truncate'>{fee}</div>
             <div className=' col-span-1 my-auto pl-[5px] flex justify-between truncate'>
-                <span className=' mr-[10px] rounded-sm cursor-pointer hover:opacity-80'><Delete className='' /></span>
-                <span onClick={() => setShowModal(true)} className=' mr-[10px] rounded-sm cursor-pointer hover:opacity-80'><EditIcon className='' /></span>
+                {/* <span className=' mr-[10px] rounded-sm cursor-pointer hover:opacity-80'><Delete className='' /></span> */}
+                <Link href={`/io-management/ticket/data-serial/${id}`}>
+                    <div className='col-span-1 h-[38px] text-center hover:opacity-80 rounded-md px-[12px] py-[6px] bg-blue-500  cursor-pointer'>
+                        <button className='text-white ' >get data</button>
+                    </div>
+                </Link>
             </div>
             <Modal show={showModal} onClose={() => setShowModal(false)}>
                 <div>

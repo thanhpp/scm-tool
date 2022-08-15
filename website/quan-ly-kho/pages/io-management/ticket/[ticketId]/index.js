@@ -2,6 +2,8 @@ import { useRouter } from 'next/router'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Loading from '../../../../components/UI/Loading';
+import { useSelector } from 'react-redux';
+
 
 function TicketId() {
 
@@ -20,15 +22,30 @@ function TicketId() {
     const [productImageDisplay, setProductImageDisplay] = useState()
     const [loading, setLoading] = useState(false)
     const router = useRouter()
+    const [auth, setAuth] = useState()
 
     const { ticketId } = router.query
+
+    useEffect(() => {
+        if (!localStorage.getItem('token')) {
+            router.push('/login')
+            return;
+        }
+        const token = localStorage.getItem('token')
+        setAuth(token)
+    }, [])
 
 
     const fetchTicket = async () => {
         setLoading(true)
-
+        const token = localStorage.getItem('token')
         try {
-            const res = await fetch(`https://scm-tool.thanhpp.ninja/import_ticket/${ticketId}`)
+            const res = await fetch(`https://scm-tool.thanhpp.ninja/import_ticket/${ticketId}`, {
+                headers: {
+                    "Content-type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                }
+            })
 
             if (!res.ok) {
                 throw new Error('can not fetch data')
@@ -56,7 +73,7 @@ function TicketId() {
 
             setLoading(false)
         } catch (err) {
-            console.log(err)
+            alert(err)
             setLoading(false)
         }
 
@@ -138,7 +155,7 @@ function TicketId() {
     //     }
     // }
 
-    return (
+    return (!auth ? <div></div> :
         <div className='bg-blue-500 w-full h-full min-h-screen   p-[36px]'>
             <div>
                 <div onClick={() => router.back()} className=' bg-white rounded-[1000px] w-[30px] h-[30px] mb-[10px] cursor-pointer'>

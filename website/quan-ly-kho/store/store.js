@@ -4,6 +4,8 @@ import WarehouseSlice from "./warehouseSlice";
 import ItemTypeSlice from "./itemTypeSlice";
 import SupplierSlice from "./supplierSlice";
 import TicketSlice from "./ticketSlice";
+import AuthSlice from "./authSlice";
+import UserSlice from "./userSlice";
 
 const store = configureStore({
     reducer: {
@@ -11,7 +13,9 @@ const store = configureStore({
         products: ProductsSice.reducer,
         itemtype: ItemTypeSlice.reducer,
         supplier: SupplierSlice.reducer,
-        ticket: TicketSlice.reducer
+        ticket: TicketSlice.reducer,
+        auth: AuthSlice.reducer,
+        user: UserSlice.reducer
     }
 })
 

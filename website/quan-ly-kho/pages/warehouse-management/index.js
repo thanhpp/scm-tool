@@ -1,15 +1,17 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import SearchForm from '../../components/SearchForm.js/SearchForm'
 import WarehouseList from '../../components/list/WarehouseList'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
 import { useDispatch } from 'react-redux'
 import { warehouseSliceActions } from '../../store/warehouseSlice'
+import { useSelector } from 'react-redux';
 
 
 function WarehouseManagement() {
 
     const [searchInput, setSearchInput] = useState('')
+    const [auth, setAuth] = useState()
 
     const router = useRouter()
     const dispatch = useDispatch()
@@ -18,9 +20,24 @@ function WarehouseManagement() {
         setSearchInput(value)
     }
 
+
+    useEffect(() => {
+        if (!localStorage.getItem('token')) {
+            router.push('/login')
+            return;
+        }
+        const token = localStorage.getItem('token')
+        setAuth(token)
+    }, [])
+
     const searchHandle = async () => {
+        let token = localStorage.getItem('token')
         try {
-            const response = await fetch('https://scm-tool.thanhpp.ninja/storage')
+            const response = await fetch('https://scm-tool.thanhpp.ninja/storage', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
 
             if (!response) {
                 throw new Error('somethign wrong');
@@ -48,11 +65,11 @@ function WarehouseManagement() {
             }))
             console.log(dataSearched)
         } catch (err) {
-            console.log(err)
+            alert(err)
         }
     }
 
-    return (
+    return (!auth ? <div></div> :
         //bg-[#1b1b38]
         <div className='bg-blue-500 w-full h-full min-h-screen   p-[36px]'>
             <Head>

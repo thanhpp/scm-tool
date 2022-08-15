@@ -1,8 +1,10 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useRouter } from 'next/router';
 import Loading from '../../components/UI/Loading';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
+
 
 function AddProduct() {
     const [sku, setSku] = useState('')
@@ -12,6 +14,17 @@ function AddProduct() {
     const [image, setImage] = useState('')
     const [loading, setLoading] = useState(false)
     const router = useRouter()
+
+    const [auth, setAuth] = useState()
+
+    useEffect(() => {
+        if (!localStorage.getItem('token')) {
+            router.push('/login')
+            return;
+        }
+        const token = localStorage.getItem('token')
+        setAuth(token)
+    }, [])
 
     const skuHandle = (e) => {
         setSku(e.target.value)
@@ -46,14 +59,15 @@ function AddProduct() {
         dataForm.append('images', image)
 
         console.log(dataForm)
+        let token = localStorage.getItem('token')
 
         try {
             const res = await fetch('https://scm-tool.thanhpp.ninja/item', {
                 method: 'POST',
-                body: dataForm
-                // headers: {
-                //     "Content-type": "multipart/form-data"
-                // }
+                body: dataForm,
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
             })
             if (!res.ok) {
                 throw new Error('something wrong');
@@ -62,17 +76,18 @@ function AddProduct() {
 
             const data = await res.json()
             if (data.error.code == 200) {
+                alert(data.error.message)
                 router.push('/products-management')
             }
             setLoading(false)
             console.log(data)
         } catch (err) {
-            console.log(err)
+            alert(err)
             setLoading(false)
         }
     }
 
-    return (
+    return (!auth ? <div></div> :
         <div className='bg-blue-500 w-full h-full min-h-screen   p-[36px]'>
             <div>
                 <div onClick={() => router.back()} className=' bg-white rounded-[1000px] w-[30px] h-[30px] mb-[10px] cursor-pointer'>

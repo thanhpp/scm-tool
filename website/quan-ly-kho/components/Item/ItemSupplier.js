@@ -37,6 +37,7 @@ function ItemSupplier({ id, name, phone, email }) {
 
     const updateHandle = async () => {
         setLoading(true)
+        let token = localStorage.getItem('token')
 
 
         try {
@@ -48,7 +49,8 @@ function ItemSupplier({ id, name, phone, email }) {
                     phone: phoneUpdate
                 }),
                 headers: {
-                    'Content-type': 'application/json'
+                    'Content-type': 'application/json',
+                    "Authorization": `Bearer ${token}`
                 }
             })
 
@@ -59,12 +61,12 @@ function ItemSupplier({ id, name, phone, email }) {
 
             const data = await res.json()
             if (data.error.code == 200) {
-                console.log('edit success')
+                alert(data.error.message)
                 router.reload(window.location.pathname)
             }
             setLoading(false)
         } catch (err) {
-            console.log('edit fail')
+            alert(err)
             setLoading(false)
         }
     }
@@ -81,7 +83,7 @@ function ItemSupplier({ id, name, phone, email }) {
             <div className=' col-span-4 my-auto truncate'>{email}</div>
             <div className=' col-span-2 my-auto truncate'>{phone}</div>
             <div className=' col-span-1 my-auto pl-[5px] flex justify-between truncate'>
-                <span className=' mr-[10px] rounded-sm cursor-pointer hover:opacity-80'><Delete className='' /></span>
+                {/* <span className=' mr-[10px] rounded-sm cursor-pointer hover:opacity-80'><Delete className='' /></span> */}
                 <span onClick={() => setShowModal(true)} className=' mr-[10px] rounded-sm cursor-pointer hover:opacity-80'><EditIcon className='' /></span>
             </div>
             <Modal show={showModal} onClose={() => setShowModal(false)}>

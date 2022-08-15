@@ -11,7 +11,7 @@ import ItemType from '../../components/Item/ItemType'
 function ProductList() {
     const [pagination, setPagination] = useState({
         offset: 0,
-        numberPerPage: 2,
+        numberPerPage: 20,
         pageCount: 0,
     })
 
@@ -23,8 +23,13 @@ function ProductList() {
 
     useEffect(() => {
         const fetchProduct = async () => {
+            let token = localStorage.getItem('token')
             try {
-                const response = await fetch(' https://scm-tool.thanhpp.ninja/item-type')
+                const response = await fetch(' https://scm-tool.thanhpp.ninja/item-type', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                })
                 if (!response) {
                     throw new Error('somethign wrong');
                     return;
@@ -41,7 +46,7 @@ function ProductList() {
                 setItemTypeList(warehousesDisplay)
                 console.log(data.data)
             } catch (err) {
-                console.log('fetch wrong')
+                alert(err)
             }
         }
 
@@ -71,7 +76,7 @@ function ProductList() {
                 <div className=' col-span-5 my-auto   truncate'>name</div>
                 <div className=' col-span-5 my-auto truncate'>description</div>
                 <div className=' col-span-1 my-auto pl-[5px] flex justify-between truncate'>
-                    <span className=' mr-[10px] rounded-sm'>Delete</span>
+                    {/* <span className=' mr-[10px] rounded-sm'>Delete</span> */}
                     <span className=' mr-[10px] rounded-sm'>Edit</span>
                 </div>
             </div>

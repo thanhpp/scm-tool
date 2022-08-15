@@ -5,10 +5,10 @@ import Loading from '../../components/UI/Loading';
 import { useSelector } from 'react-redux';
 
 
-function AddWarehouse() {
+function AddUser() {
     const [name, setName] = useState('')
-    const [desc, setDesc] = useState('')
-    const [location, setLocation] = useState('')
+    const [username, setUsername] = useState('')
+    const [password, setPassword] = useState('')
     const [loading, setLoading] = useState(false)
     const router = useRouter()
     const [auth, setAuth] = useState()
@@ -26,31 +26,31 @@ function AddWarehouse() {
         setName(e.target.value)
     }
 
-    const descHandle = (e) => {
-        setDesc(e.target.value)
+    const usernameHandle = (e) => {
+        setUsername(e.target.value)
     }
 
-    const locationHandle = (e) => {
-        setLocation(e.target.value)
+    const passwordHandle = (e) => {
+        setPassword(e.target.value)
     }
 
-    const addWarehouseHandle = async () => {
+    const addUserHandle = async () => {
         setLoading(true)
         const token = localStorage.getItem('token')
         try {
-            const res = await fetch('https://scm-tool.thanhpp.ninja/storage', {
+            const res = await fetch('https://scm-tool.thanhpp.ninja/signup', {
                 method: 'POST',
                 body: JSON.stringify({
                     name,
-                    desc,
-                    location
+                    username,
+                    password
                 }),
                 headers: {
                     "Content-type": "application/json",
-                    "Authorization": `Bearer ${token}`
+                    "Authorization": `Bear ${token}`
                 }
             })
-            if (!res) {
+            if (!res.ok) {
                 throw new Error('somethign wrong');
                 return;
             }
@@ -58,10 +58,9 @@ function AddWarehouse() {
             const data = await res.json()
             if (data.error.code == 200) {
                 alert(data.error.message)
-                router.push('/warehouse-management')
+                router.push('/')
             }
             setLoading(false)
-            console.log(data)
         } catch (err) {
             alert(err)
             setLoading(false)
@@ -75,7 +74,7 @@ function AddWarehouse() {
                     <ArrowBackIcon className='text-black pl-[4px]' />
                 </div>
                 <div className=' text-[28px]'>
-                    Add new warehouse
+                    Add new user
                 </div>
             </div>
             <div className='relative text-[#A16EFF] border-b border-white'>
@@ -92,19 +91,19 @@ function AddWarehouse() {
                     </div>
                     <div className='flex mb-[26px]'>
                         <div className='flex justify-end w-[175px] leading-[38px] mr-[20px]'>
-                            <label htmlFor='description'>Description<span className='text-[#d13143]'>*</span></label>
+                            <label htmlFor='username'>Usernmae<span className='text-[#d13143]'>*</span></label>
                         </div>
-                        <input id='description' type='text' onChange={descHandle} className='text-black h-[38px] w-[380px] pl-[15px] pr-[40px] truncate' />
+                        <input id='username' type='text' onChange={usernameHandle} className='text-black h-[38px] w-[380px] pl-[15px] pr-[40px] truncate' />
                     </div>
                     <div className='flex mb-[26px]'>
                         <div className='flex justify-end w-[175px] leading-[38px] mr-[20px]'>
-                            <label htmlFor='location'>Location<span className='text-[#d13143]'>*</span></label>
+                            <label htmlFor='passwoed'>password<span className='text-[#d13143]'>*</span></label>
                         </div>
-                        <input id='location' type='text' onChange={locationHandle} className='text-black h-[38px] w-[380px] pl-[15px] pr-[40px] truncate' />
+                        <input id='passwoed' type='text' onChange={passwordHandle} className='text-black h-[38px] w-[380px] pl-[15px] pr-[40px] truncate' />
                     </div>
                     <div className='flex mb-[26px]'>
-                        <div onClick={addWarehouseHandle} className='h-[38px] text-center hover:opacity-80 rounded-md ml-[200px] px-[12px] py-[6px] bg-transparent border border-white cursor-pointer'>
-                            <button className='text-white ' >Add new warehouse</button>
+                        <div onClick={addUserHandle} className='h-[38px] text-center hover:opacity-80 rounded-md ml-[200px] px-[12px] py-[6px] bg-transparent border border-white cursor-pointer'>
+                            <button className='text-white ' >Add new user</button>
                         </div>
                     </div>
                 </div>
@@ -114,4 +113,4 @@ function AddWarehouse() {
     )
 }
 
-export default AddWarehouse
+export default AddUser

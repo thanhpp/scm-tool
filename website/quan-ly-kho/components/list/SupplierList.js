@@ -11,7 +11,7 @@ import ItemSupplier from '../Item/ItemSupplier';
 function SupplierList() {
     const [pagination, setPagination] = useState({
         offset: 0,
-        numberPerPage: 2,
+        numberPerPage: 20,
         pageCount: 0,
     })
 
@@ -23,8 +23,13 @@ function SupplierList() {
 
     useEffect(() => {
         const fetchSupplier = async () => {
+            let token = localStorage.getItem('token')
             try {
-                const response = await fetch(' https://scm-tool.thanhpp.ninja/supplier')
+                const response = await fetch(' https://scm-tool.thanhpp.ninja/supplier', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                })
                 if (!response) {
                     throw new Error('somethign wrong');
                     return;
@@ -41,7 +46,7 @@ function SupplierList() {
                 setSupplierList(supplierDisplay)
                 console.log(data.data)
             } catch (err) {
-                console.log('fetch wrong')
+                alert(err)
             }
         }
 
@@ -72,7 +77,7 @@ function SupplierList() {
                 <div className=' col-span-4 my-auto truncate'>email</div>
                 <div className=' col-span-2 my-auto truncate'>phone</div>
                 <div className=' col-span-1 my-auto pl-[5px] flex justify-between truncate'>
-                    <span className=' mr-[10px] rounded-sm'>Delete</span>
+                    {/* <span className=' mr-[10px] rounded-sm'>Delete</span> */}
                     <span className=' mr-[10px] rounded-sm'>Edit</span>
                 </div>
             </div>

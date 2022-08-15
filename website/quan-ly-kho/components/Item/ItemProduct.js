@@ -58,17 +58,18 @@ function ItemProduct({ sku, name, desc, itemTypeId, images }) {
         if (imageDelete) {
             dataForm.append('delete_images', imageDelete)
         }
-
+        let token = localStorage.getItem('token')
         try {
             const res = await fetch(` https://scm-tool.thanhpp.ninja/item/${sku}`, {
                 method: 'PUT',
-                body: dataForm
-                // headers: {
-                //     'Content-type': 'application/json'
-                // }
+                body: dataForm,
+                headers: {
+                    'Content-type': 'application/json',
+                    "Authorization": `Bearer ${token}`
+                }
             })
 
-            if (!res) {
+            if (!res.ok) {
                 throw new Error('edit failed')
                 return;
             }
@@ -78,7 +79,7 @@ function ItemProduct({ sku, name, desc, itemTypeId, images }) {
             router.reload(window.location.pathname)
             setLoading(false)
         } catch (err) {
-            console.log('edit fail')
+            alert(err)
             setLoading(false)
         }
     }
@@ -94,7 +95,7 @@ function ItemProduct({ sku, name, desc, itemTypeId, images }) {
             <div className=' col-span-5 my-auto truncate'>{desc}</div>
             <div className=' col-span-2 my-auto truncate'>{itemTypeId}</div>
             <div className=' col-span-1 my-auto pl-[5px] flex justify-between truncate'>
-                <span className=' mr-[10px] rounded-sm cursor-pointer hover:opacity-80'><Delete className='' /></span>
+                {/* <span className=' mr-[10px] rounded-sm cursor-pointer hover:opacity-80'><Delete className='' /></span> */}
                 <span onClick={() => setShowModal(true)} className=' mr-[10px] rounded-sm cursor-pointer hover:opacity-80'><EditIcon className='' /></span>
             </div>
             <Modal show={showModal} onClose={() => setShowModal(false)}>

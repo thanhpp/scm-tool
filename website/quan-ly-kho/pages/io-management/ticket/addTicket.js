@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useRouter } from 'next/router';
 import Loading from '../../../components/UI/Loading'
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 function AddTicket() {
     const [supplierId, setSupplierId] = useState()
@@ -20,6 +21,19 @@ function AddTicket() {
     // const [detail,setDetail] = useState()
     const [loading, setLoading] = useState(false)
     const router = useRouter()
+
+    const [auth, setAuth] = useState()
+    const [numberAddItem, setNumberAddItem] = useState([])
+
+
+    useEffect(() => {
+        if (!localStorage.getItem('token')) {
+            router.push('/login')
+            return;
+        }
+        const token = localStorage.getItem('token')
+        setAuth(token)
+    }, [])
 
 
     const supplierIdHandle = (e) => {
@@ -70,11 +84,12 @@ function AddTicket() {
     const addTicketHandle = async () => {
         setLoading(true)
 
-        const details = JSON.stringify([{
-            item_sku: itemSku,
-            buy_quantity: parseInt(quantity),
-            buy_price: parseFloat(price)
-        }])
+        // const details = JSON.stringify([{
+        //     item_sku: itemSku,
+        //     buy_quantity: parseInt(quantity),
+        //     buy_price: parseFloat(price)
+        // }])
+        const details = JSON.stringify(numberAddItem)
 
         // const escape = (str) => {
         //     return str
@@ -104,13 +119,14 @@ function AddTicket() {
         formData.append('receive_time', receiveTime)
         formData.append('details', details)
 
+        let token = localStorage.getItem('token')
         try {
             const res = await fetch('https://scm-tool.thanhpp.ninja/import_ticket', {
                 method: 'POST',
-                body: formData
-                // headers: {
-                //     'Content-type': 'application/json'
-                // }
+                body: formData,
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
             })
             if (!res.ok) {
                 throw new Error('something wrong');
@@ -119,17 +135,30 @@ function AddTicket() {
 
             const data = await res.json()
             if (data.error.code == 200) {
+                alert(data.error.message)
                 router.push('/io-management/ticket')
             }
             setLoading(false)
             console.log(data)
         } catch (err) {
-            console.log(err)
+            alert(err)
             setLoading(false)
         }
     }
 
-    return (
+    const addItemHandle = () => {
+        setNumberAddItem([...numberAddItem, {
+            item_sku: itemSku,
+            buy_quantity: parseInt(quantity),
+            buy_price: parseFloat(price)
+        }])
+        setItemSku('')
+        setPrice('')
+        setQuantity('')
+        console.log(numberAddItem)
+    }
+
+    return (!auth ? <div></div> :
         <div className='bg-blue-500 w-full h-full min-h-screen   p-[36px]'>
             <div>
                 <div onClick={() => router.back()} className=' bg-white rounded-[1000px] w-[30px] h-[30px] mb-[10px] cursor-pointer'>
@@ -197,20 +226,34 @@ function AddTicket() {
                         <div className='flex justify-end w-[175px] leading-[38px] mr-[20px]'>
                             <label htmlFor='itemSku'>item sku</label>
                         </div>
-                        <input id='itemSku' onChange={itemSkuHandle} type='text' className='text-black h-[38px] w-[380px] pl-[15px] pr-[40px] truncate' />
+                        <input id='itemSku' onChange={itemSkuHandle} value={itemSku || ''} type='text' className='text-black h-[38px] w-[380px] pl-[15px] pr-[40px] truncate' />
                     </div>
                     <div className='flex mb-[26px]'>
                         <div className='flex justify-end w-[175px] leading-[38px] mr-[20px]'>
                             <label htmlFor='quantity'>quantity</label>
                         </div>
-                        <input id='quantity' onChange={quantityHandle} type='text' className='text-black h-[38px] w-[380px] pl-[15px] pr-[40px] truncate' />
+                        <input id='quantity' onChange={quantityHandle} value={quantity || ''} type='text' className='text-black h-[38px] w-[380px] pl-[15px] pr-[40px] truncate' />
                     </div>
                     <div className='flex mb-[26px]'>
                         <div className='flex justify-end w-[175px] leading-[38px] mr-[20px]'>
                             <label htmlFor='price'>price</label>
                         </div>
-                        <input id='price' onChange={priceHandle} type='text' className='text-black h-[38px] w-[380px] pl-[15px] pr-[40px] truncate' />
+                        <input id='price' onChange={priceHandle} value={price || ''} type='text' className='text-black h-[38px] w-[380px] pl-[15px] pr-[40px] truncate' />
                     </div>
+                    <div className='flex mb-[26px]'>
+                        <div onClick={addItemHandle} className='flex justify-end w-[175px] leading-[38px] ml-[87px] cursor-pointer'>
+                            <div className=' border-white border border-collapse rounded-md'>Add item</div>
+                        </div>
+                    </div>
+                    {numberAddItem && numberAddItem.map((item) => (
+                        <div key={item.item_sku} className='flex mb-[26px]'>
+                            <div onClick={addItemHandle} className='flex justify-end  leading-[38px] ml-[195px] cursor-pointer'>
+                                <div className='border-white border border-collapse p-2 '>{'sku: ' + item.item_sku}</div>
+                                <div className='border-white border border-collapse p-2 '>{'quantity: ' + item.buy_quantity}</div>
+                                <div className='border-white border border-collapse p-2 '>{'price: ' + item.buy_price}</div>
+                            </div>
+                        </div>
+                    ))}
                     {/* <div className='flex mb-[26px]'>
                         <div className='flex justify-end w-[175px] leading-[38px] mr-[20px]'>
                             <label htmlFor='sendTime'>send time</label>

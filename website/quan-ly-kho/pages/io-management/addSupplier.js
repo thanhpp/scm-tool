@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useRouter } from 'next/router';
 import Loading from '../../components/UI/Loading';
+import { useSelector } from 'react-redux';
 
 function AddSupplier() {
     const [name, setName] = useState('')
@@ -9,6 +10,18 @@ function AddSupplier() {
     const [phone, setPhone] = useState('')
     const [loading, setLoading] = useState(false)
     const router = useRouter()
+
+    const [auth, setAuth] = useState()
+
+
+    useEffect(() => {
+        if (!localStorage.getItem('token')) {
+            router.push('/login')
+            return;
+        }
+        const token = localStorage.getItem('token')
+        setAuth(token)
+    }, [])
 
 
     const nameHandle = (e) => {
@@ -27,7 +40,7 @@ function AddSupplier() {
 
     const addSupplierHandle = async () => {
         setLoading(true)
-
+        let token = localStorage.getItem('token')
         try {
             const res = await fetch('https://scm-tool.thanhpp.ninja/supplier', {
                 method: 'POST',
@@ -37,7 +50,8 @@ function AddSupplier() {
                     phone
                 }),
                 headers: {
-                    'Content-type': 'application/json'
+                    'Content-type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 }
             })
             if (!res.ok) {
@@ -47,17 +61,18 @@ function AddSupplier() {
 
             const data = await res.json()
             if (data.error.code == 200) {
+                alert(data.error.message)
                 router.push('/io-management')
             }
             setLoading(false)
             console.log(data)
         } catch (err) {
-            console.log(err)
+            alert(err)
             setLoading(false)
         }
     }
 
-    return (
+    return (!auth ? <div></div> :
         <div className='bg-blue-500 w-full h-full min-h-screen   p-[36px]'>
             <div>
                 <div onClick={() => router.back()} className=' bg-white rounded-[1000px] w-[30px] h-[30px] mb-[10px] cursor-pointer'>

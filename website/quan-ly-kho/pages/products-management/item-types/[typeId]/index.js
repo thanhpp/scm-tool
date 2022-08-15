@@ -2,6 +2,8 @@ import { useRouter } from 'next/router'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Loading from '../../../../components/UI/Loading';
+import { useSelector } from 'react-redux';
+
 
 function TypeId() {
     const [id, setId] = useState()
@@ -12,11 +14,28 @@ function TypeId() {
 
     const { typeId } = router.query
 
+    const [auth, setAuth] = useState()
+
+
+    useLayoutEffect(() => {
+        if (!localStorage.getItem('token')) {
+            router.push('/login')
+            return;
+        }
+        const token = localStorage.getItem('token')
+        setAuth(token)
+    }, [])
+
 
     const fetchProduct = async () => {
         setLoading(true)
+        let token = localStorage.getItem('token')
         try {
-            const res = await fetch(`https://scm-tool.thanhpp.ninja/item-type`)
+            const res = await fetch(`https://scm-tool.thanhpp.ninja/item-type`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
 
             if (!res.ok) {
                 throw new Error('can not fetch data')
@@ -37,7 +56,7 @@ function TypeId() {
 
             setLoading(false)
         } catch (err) {
-            console.log(err)
+            alert(err)
             setLoading(false)
         }
     }
@@ -65,7 +84,7 @@ function TypeId() {
 
     const updateTypeHandle = async () => {
         setLoading(true)
-
+        let token = localStorage.getItem('token')
         try {
             const res = await fetch(` https://scm-tool.thanhpp.ninja/item-type/${typeId}`, {
                 method: 'PUT',
@@ -73,9 +92,10 @@ function TypeId() {
                     name,
                     desc
                 }),
-                // headers: {
-                //     "Content-type": "multipart/form-data"
-                // }
+                headers: {
+                    'Content-type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
             })
             if (!res.ok) {
                 throw new Error('something wrong');
@@ -94,7 +114,7 @@ function TypeId() {
         }
     }
 
-    return (
+    return (!auth ? <div></div> :
         <div className='bg-blue-500 w-full h-full min-h-screen   p-[36px]'>
             <div>
                 <div onClick={() => router.back()} className=' bg-white rounded-[1000px] w-[30px] h-[30px] mb-[10px] cursor-pointer'>

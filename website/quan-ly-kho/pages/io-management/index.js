@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import SearchForm from '../../components/SearchForm.js/SearchForm'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
 import SupplierList from '../../components/list/SupplierList'
 import { supplierSliceActions } from '../../store/supplierSlice'
 import { useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux';
 
 function IoManagement() {
 
@@ -13,13 +14,30 @@ function IoManagement() {
     const router = useRouter()
     const dispatch = useDispatch()
 
+    const [auth, setAuth] = useState()
+
+
+    useEffect(() => {
+        if (!localStorage.getItem('token')) {
+            router.push('/login')
+            return;
+        }
+        const token = localStorage.getItem('token')
+        setAuth(token)
+    }, [])
+
     const searchInputHandle = (value) => {
         setSearchInput(value)
     }
 
     const searchHandle = async () => {
+        let toekn = localStorage.getItem('token')
         try {
-            const response = await fetch('https://scm-tool.thanhpp.ninja/supplier')
+            const response = await fetch('https://scm-tool.thanhpp.ninja/supplier', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
 
             if (!response) {
                 throw new Error('somethign wrong');
@@ -47,11 +65,11 @@ function IoManagement() {
             }))
             console.log(dataSearched)
         } catch (err) {
-            console.log(err)
+            alert(err)
         }
     }
 
-    return (
+    return (!auth ? <div></div> :
         <div className='bg-blue-500 w-full h-full min-h-screen   p-[36px]'>
             <Head>
                 <title>in-out-management</title>

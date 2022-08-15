@@ -1,10 +1,12 @@
 import { useRouter } from 'next/router'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import SearchForm from '../../components/SearchForm.js/SearchForm'
 import Head from 'next/head'
 import ProductList from '../../components/list/ProductList'
 import { useDispatch } from 'react-redux'
 import { productsSliceActions } from '../../store/productsSlice'
+import { useSelector } from 'react-redux';
+
 
 
 function ProductsManagement() {
@@ -14,13 +16,31 @@ function ProductsManagement() {
     const router = useRouter()
     const dispatch = useDispatch()
 
+    const [auth, setAuth] = useState()
+
+
+    useEffect(() => {
+        if (!localStorage.getItem('token')) {
+            router.push('/login')
+            return;
+        }
+        const token = localStorage.getItem('token')
+        setAuth(token)
+    }, [])
+
     const searchInputHandle = (value) => {
         setSearchInput(value)
     }
 
     const searchHandle = async () => {
+        let token = localStorage.getItem('token')
         try {
-            const response = await fetch('https://scm-tool.thanhpp.ninja/item')
+            const response = await fetch('https://scm-tool.thanhpp.ninja/item', {
+                headers: {
+                    "Content-type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                }
+            })
 
             if (!response) {
                 throw new Error('somethign wrong');
@@ -48,11 +68,11 @@ function ProductsManagement() {
             }))
             console.log(dataSearched)
         } catch (err) {
-            console.log(err)
+            alert(err)
         }
     }
 
-    return (
+    return (!auth ? <div></div> :
         <div className='bg-blue-500 w-full h-full min-h-screen   p-[36px]'>
             <Head>
                 <title>products-management</title>

@@ -5,10 +5,10 @@ import Loading from '../../components/UI/Loading';
 import { useSelector } from 'react-redux';
 
 
-function AddWarehouse() {
-    const [name, setName] = useState('')
-    const [desc, setDesc] = useState('')
-    const [location, setLocation] = useState('')
+function ChangePassword() {
+    const [id, setId] = useState('')
+    const [newPassword, setNewPassword] = useState('')
+    // const [confirm, setConfirm] = useState()
     const [loading, setLoading] = useState(false)
     const router = useRouter()
     const [auth, setAuth] = useState()
@@ -22,35 +22,33 @@ function AddWarehouse() {
         setAuth(token)
     }, [])
 
-    const nameHandle = (e) => {
-        setName(e.target.value)
+    const idHandle = (e) => {
+        setId(e.target.value)
     }
 
-    const descHandle = (e) => {
-        setDesc(e.target.value)
+    const newPasswordhandle = (e) => {
+        setNewPassword(e.target.value)
     }
 
-    const locationHandle = (e) => {
-        setLocation(e.target.value)
-    }
+    // const confirmHandle = (e) => {
+    //     setConfirm(e.target.value)
+    // }
 
-    const addWarehouseHandle = async () => {
+    const changePasswordHandle = async () => {
         setLoading(true)
         const token = localStorage.getItem('token')
         try {
-            const res = await fetch('https://scm-tool.thanhpp.ninja/storage', {
-                method: 'POST',
+            const res = await fetch(`https://scm-tool.thanhpp.ninja/user/${id}/password`, {
+                method: 'PATCH',
                 body: JSON.stringify({
-                    name,
-                    desc,
-                    location
+                    new_pass: newPassword
                 }),
                 headers: {
-                    "Content-type": "application/json",
+                    'Content-type': 'application/json; charset=UTF-8',
                     "Authorization": `Bearer ${token}`
                 }
             })
-            if (!res) {
+            if (!res.ok) {
                 throw new Error('somethign wrong');
                 return;
             }
@@ -58,7 +56,7 @@ function AddWarehouse() {
             const data = await res.json()
             if (data.error.code == 200) {
                 alert(data.error.message)
-                router.push('/warehouse-management')
+                router.push('/')
             }
             setLoading(false)
             console.log(data)
@@ -75,7 +73,7 @@ function AddWarehouse() {
                     <ArrowBackIcon className='text-black pl-[4px]' />
                 </div>
                 <div className=' text-[28px]'>
-                    Add new warehouse
+                    Change password
                 </div>
             </div>
             <div className='relative text-[#A16EFF] border-b border-white'>
@@ -86,25 +84,25 @@ function AddWarehouse() {
                 <div>
                     <div className='flex mb-[26px]'>
                         <div className='flex justify-end w-[175px] leading-[38px] mr-[20px]'>
-                            <label htmlFor='name'>Name<span className='text-[#d13143]'>*</span></label>
+                            <label htmlFor='id'>Id<span className='text-[#d13143]'>*</span></label>
                         </div>
-                        <input id='name' type='text' onChange={nameHandle} className='text-black h-[38px] w-[380px] pl-[15px] pr-[40px]' />
+                        <input id='id' type='text' onChange={idHandle} className='text-black h-[38px] w-[380px] pl-[15px] pr-[40px]' />
                     </div>
                     <div className='flex mb-[26px]'>
                         <div className='flex justify-end w-[175px] leading-[38px] mr-[20px]'>
-                            <label htmlFor='description'>Description<span className='text-[#d13143]'>*</span></label>
+                            <label htmlFor='newPassword'>new password<span className='text-[#d13143]'>*</span></label>
                         </div>
-                        <input id='description' type='text' onChange={descHandle} className='text-black h-[38px] w-[380px] pl-[15px] pr-[40px] truncate' />
+                        <input id='newPassword' type='text' onChange={newPasswordhandle} className='text-black h-[38px] w-[380px] pl-[15px] pr-[40px] truncate' />
                     </div>
-                    <div className='flex mb-[26px]'>
+                    {/* <div className='flex mb-[26px]'>
                         <div className='flex justify-end w-[175px] leading-[38px] mr-[20px]'>
-                            <label htmlFor='location'>Location<span className='text-[#d13143]'>*</span></label>
+                            <label htmlFor='confirm'>Confirm new password<span className='text-[#d13143]'>*</span></label>
                         </div>
-                        <input id='location' type='text' onChange={locationHandle} className='text-black h-[38px] w-[380px] pl-[15px] pr-[40px] truncate' />
-                    </div>
+                        <input id='confirm' type='text' onChange={confirmHandle} className='text-black h-[38px] w-[380px] pl-[15px] pr-[40px] truncate' />
+                    </div> */}
                     <div className='flex mb-[26px]'>
-                        <div onClick={addWarehouseHandle} className='h-[38px] text-center hover:opacity-80 rounded-md ml-[200px] px-[12px] py-[6px] bg-transparent border border-white cursor-pointer'>
-                            <button className='text-white ' >Add new warehouse</button>
+                        <div onClick={changePasswordHandle} className='h-[38px] text-center hover:opacity-80 rounded-md ml-[200px] px-[12px] py-[6px] bg-transparent border border-white cursor-pointer'>
+                            <button className='text-white ' >Change password</button>
                         </div>
                     </div>
                 </div>
@@ -114,4 +112,4 @@ function AddWarehouse() {
     )
 }
 
-export default AddWarehouse
+export default ChangePassword

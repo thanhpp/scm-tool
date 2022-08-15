@@ -2,16 +2,19 @@ import React, { useState } from 'react'
 import Loading from '../UI/Loading';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useSelector, useDispatch } from 'react-redux';
+import { authSliceActions } from '../../store/authSlice';
 
 function Login() {
-    const [username, setUsername] = useState()
+    const [nameuser, setNameuser] = useState()
     const [password, setPassword] = useState()
     const [loading, setLoading] = useState(false)
 
     const router = useRouter()
+    const dispatch = useDispatch()
 
     const usernameHandle = (e) => {
-        setUsername(e.target.value)
+        setNameuser(e.target.value)
     }
 
     const passwordHandle = (e) => {
@@ -27,7 +30,7 @@ function Login() {
             const res = await fetch(' https://scm-tool.thanhpp.ninja/login', {
                 method: "POST",
                 body: JSON.stringify({
-                    username: username,
+                    username: nameuser,
                     password: password
                 }),
                 headers: {
@@ -41,16 +44,22 @@ function Login() {
             }
 
             const data = await res.json()
+            console.log(data)
 
             const token = data.data.token
+            const username = data.data.user.name
             localStorage.setItem('token', token)
+            localStorage.setItem('username', username)
+            // dispatch(authSliceActions.setAuth({
+            //     data: true
+            // }))
             if (data.error.code == 200) {
+                alert(data.error.message)
                 router.push('/')
             }
             setLoading(false)
-            console.log(data)
         } catch (err) {
-            console.log(err)
+            alert(err)
             setLoading(false)
         }
 
@@ -58,9 +67,9 @@ function Login() {
     return (
         <div className=' max-w-[410px] w-full m-auto mt-[200px]'>
             <form onSubmit={submitHandle} className='flex flex-col w-full p-[15px] rounded-lg bg-[#f3f3f3] drop-shadow-md'>
-                <p className=' text-center text-[#212509] text-[28px] my-[18px]'>Log In</p>
+                <p className=' text-center text-[#212509] text-[28px] my-[18px]'>Login</p>
                 <div className=' justify-center mb-[5px] '>
-                    <input type="text" onChange={usernameHandle} className='w-full p-[10px] border border-gray-600 outline-blue-300' placeholder='User name' />
+                    <input type="text" onChange={usernameHandle} className='w-full p-[10px] border border-gray-600 outline-blue-300' placeholder='Username' />
                     {/* {isValidated.email ?? <p>{isValidated.email}</p>} */}
                 </div>
                 <div className=' justify-center mb-[10px] '>
@@ -71,8 +80,8 @@ function Login() {
                     Login
                 </button>
                 {/* {errorMessage ?? <p>email or password is wrong!</p>} */}
-                <Link href='/signup'><p className=' ml-auto mt-3 cursor-pointer hover:opacity-80'>Sign up</p></Link>
-                <Link href='/signup'><p className=' ml-auto mt-3 cursor-pointer hover:opacity-80'>Change password</p></Link>
+                {/* <Link href='/signup'><p className=' ml-auto mt-3 cursor-pointer hover:opacity-80'>Sign up</p></Link> */}
+                {/* <Link href='/signup'><p className=' ml-auto mt-3 cursor-pointer hover:opacity-80'>Change password</p></Link> */}
             </form>
             {loading ? <Loading /> : ''}
         </div>

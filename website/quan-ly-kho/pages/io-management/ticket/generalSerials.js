@@ -1,14 +1,28 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useRouter } from 'next/router';
 import Loading from '../../../components/UI/Loading'
 import axios from 'axios';
+import { useSelector } from 'react-redux';
+
 
 function GeneralSerial() {
     const [importTicketId, setImportTicketId] = useState()
 
     const [loading, setLoading] = useState(false)
     const router = useRouter()
+
+    const [auth, setAuth] = useState()
+
+
+    useEffect(() => {
+        if (!localStorage.getItem('token')) {
+            router.push('/login')
+            return;
+        }
+        const token = localStorage.getItem('token')
+        setAuth(token)
+    }, [])
 
 
     const importTicketIdHandle = (e) => {
@@ -21,7 +35,7 @@ function GeneralSerial() {
         console.log(JSON.stringify({
             import_ticket_id: parseInt(importTicketId)
         }))
-
+        let token = localStorage.getItem('token')
         try {
             const res = await fetch('https://scm-tool.thanhpp.ninja/import_ticket/serials', {
                 method: 'POST',
@@ -29,7 +43,8 @@ function GeneralSerial() {
                     import_ticket_id: parseInt(importTicketId)
                 }),
                 headers: {
-                    'Content-type': 'application/json'
+                    'Content-type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 }
             })
             if (!res.ok) {
@@ -39,17 +54,18 @@ function GeneralSerial() {
 
             const data = await res.json()
             if (data.error.code == 200) {
+                alert(data.error.message)
                 router.push('/io-management/ticket')
             }
             setLoading(false)
             console.log(data)
         } catch (err) {
-            console.log(err)
+            alert(err)
             setLoading(false)
         }
     }
 
-    return (
+    return (!auth ? <div></div> :
         <div className='bg-blue-500 w-full h-full min-h-screen   p-[36px]'>
             <div>
                 <div onClick={() => router.back()} className=' bg-white rounded-[1000px] w-[30px] h-[30px] mb-[10px] cursor-pointer'>

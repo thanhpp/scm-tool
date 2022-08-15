@@ -33,7 +33,7 @@ function ItemProduct({ id, name, desc }) {
 
     const updateHandle = async () => {
         setLoading(true)
-
+        let token = localStorage.getItem('token')
 
         try {
             const res = await fetch(` https://scm-tool.thanhpp.ninja/item-type/${id}`, {
@@ -43,7 +43,8 @@ function ItemProduct({ id, name, desc }) {
                     desc: descUpdate
                 }),
                 headers: {
-                    'Content-type': 'application/json'
+                    'Content-type': 'application/json',
+                    "Authorization": `Bearer ${token}`
                 }
             })
 
@@ -54,12 +55,12 @@ function ItemProduct({ id, name, desc }) {
 
             const data = await res.json()
             if (data.error.code == 200) {
-                console.log('edit success')
+                alert(data.error.message)
                 router.reload(window.location.pathname)
             }
             setLoading(false)
         } catch (err) {
-            console.log('edit fail')
+            alert(err)
             setLoading(false)
         }
     }
@@ -74,7 +75,7 @@ function ItemProduct({ id, name, desc }) {
             <Link href={`/products-management/item-types/${id}`}><div className=' col-span-5 my-auto hover:border-b border-black cursor-pointer  truncate'>{name}</div></Link>
             <div className=' col-span-5 my-auto truncate'>{desc}</div>
             <div className=' col-span-1 my-auto pl-[5px] flex justify-between truncate'>
-                <span className=' mr-[10px] rounded-sm cursor-pointer hover:opacity-80'><Delete className='' /></span>
+                {/* <span className=' mr-[10px] rounded-sm cursor-pointer hover:opacity-80'><Delete className='' /></span> */}
                 <span onClick={() => setShowModal(true)} className=' mr-[10px] rounded-sm cursor-pointer hover:opacity-80'><EditIcon className='' /></span>
             </div>
             <Modal show={showModal} onClose={() => setShowModal(false)}>

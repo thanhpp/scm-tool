@@ -12,7 +12,7 @@ import ItemType from '../Item/ItemType'
 function TicketList() {
     const [pagination, setPagination] = useState({
         offset: 0,
-        numberPerPage: 2,
+        numberPerPage: 20,
         pageCount: 0,
     })
 
@@ -24,9 +24,13 @@ function TicketList() {
 
     useEffect(() => {
         const fetchTicket = async () => {
-            console.log(ticketSelector)
+            let token = localStorage.getItem('token')
             try {
-                const response = await fetch(' https://scm-tool.thanhpp.ninja/import_ticket')
+                const response = await fetch(' https://scm-tool.thanhpp.ninja/import_ticket', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                })
                 if (!response) {
                     throw new Error('somethign wrong');
                     return;
@@ -41,9 +45,9 @@ function TicketList() {
                 const ticketDisplay = !isSearchingSelector ? data.data.slice(pagination.offset, parseInt(pagination.offset) + parseInt(pagination.numberPerPage)) : ticketSelector?.slice(pagination.offset, parseInt(pagination.offset) + parseInt(pagination.numberPerPage))
 
                 setTicketList(ticketDisplay)
-                console.log(ticketSelector)
+                console.log(data)
             } catch (err) {
-                console.log('fetch wrong')
+                alert(err)
             }
         }
 
@@ -75,8 +79,8 @@ function TicketList() {
                 <div className=' col-span-6 my-auto truncate'>status</div>
                 <div className=' col-span-2 my-auto truncate'>fee</div>
                 <div className=' col-span-1 my-auto pl-[5px] flex justify-between truncate'>
-                    <span className=' mr-[10px] rounded-sm'>Delete</span>
-                    <span className=' mr-[10px] rounded-sm'>Edit</span>
+                    {/* <span className=' mr-[10px] rounded-sm'>Delete</span> */}
+                    <span className=' mr-[10px] rounded-sm'>Get data serial</span>
                 </div>
             </div>
             {/* {pagination.currentData ? pagination.currentData.map((item) => <ProductItem isSelectedAll={isSelectedAll} key={item.id} id={item.id} sku={item.sku} name={item.name} category={item.category} price={item.price} amount={item.amount} vendor={item.vendor} arrivalDate={item.arrivalDate} />) : <Box sx={{ display: 'flex' }}> */}

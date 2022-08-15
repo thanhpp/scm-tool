@@ -5,6 +5,7 @@ import Loading from '../../../components/UI/Loading';
 import { useDispatch, useSelector } from 'react-redux';
 import { productsSliceActions } from '../../../store/productsSlice';
 
+
 function ProductId() {
     const [productDetail, setProductDetail] = useState()
     const [image, setImage] = useState()
@@ -14,10 +15,26 @@ function ProductId() {
 
     const { productId } = router.query
 
+    const [auth, setAuth] = useState()
+
+
+    useLayoutEffect(() => {
+        if (!localStorage.getItem('token')) {
+            router.push('/login')
+            return;
+        }
+        const token = localStorage.getItem('token')
+        setAuth(token)
+    }, [])
+
     const fetchProduct = async () => {
         setLoading(true)
         try {
-            const res = await fetch(`https://scm-tool.thanhpp.ninja/item`)
+            const res = await fetch(`https://scm-tool.thanhpp.ninja/item`, {
+                headers: {
+                    "Content-type": "application/json"
+                }
+            })
 
             if (!res.ok) {
                 throw new Error('can not fetch data')
@@ -40,7 +57,7 @@ function ProductId() {
 
             setLoading(false)
         } catch (err) {
-            console.log(err)
+            alert(err)
             setLoading(false)
         }
     }
@@ -118,14 +135,14 @@ function ProductId() {
         if (imageDelete) {
             dataForm.append('delete_images', imageDelete)
         }
-
+        let token = localStorage.getItem('token')
         try {
             const res = await fetch(` https://scm-tool.thanhpp.ninja/item/${productId}`, {
                 method: 'PUT',
-                body: dataForm
-                // headers: {
-                //     "Content-type": "multipart/form-data"
-                // }
+                body: dataForm,
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
             })
             if (!res.ok) {
                 throw new Error('something wrong');
@@ -144,7 +161,7 @@ function ProductId() {
         }
     }
 
-    return (
+    return (!auth ? <div></div> :
         <div className='bg-blue-500 w-full h-full min-h-screen   p-[36px]'>
             <div>
                 <div onClick={() => router.back()} className=' bg-white rounded-[1000px] w-[30px] h-[30px] mb-[10px] cursor-pointer'>

@@ -50,8 +50,8 @@ function LoginPage() {
         <div>
             <Login />
             <div className='max-w-[250px] w-full mx-auto mt-[30px] mb-[30px] '>
-                <div className=' text-center  p-[20px] mb-3 '>Dành cho khách hàng</div>
-                <Link href='/serial'><div className=' text-center  p-[20px] shadow-shadowCustom font-semibold cursor-pointer '>Quét mã sản phẩm</div></Link>
+                <div className=' text-center  p-[20px] mb-3 '>Customer section</div>
+                <Link href='/serial'><div className=' text-center  p-[20px] shadow-shadowCustom font-semibold cursor-pointer '>Get product information</div></Link>
                 {/* <div className='text-center  p-[10px] shadow-shadowCustom font-semibold '><input onChange={serialHandle} className='outline-0' type="text" /></div>
                 <div onClick={getSerialInforHandle} className='text-center  p-[10px] shadow-shadowCustom font-semibold cursor-pointer'><button>Get serial information</button></div> */}
             </div>
