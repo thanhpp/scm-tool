@@ -125,7 +125,7 @@ func (h ImportTicketHandler) GetSerialInfo(
 
 	nftInfo, err := h.nftServiceClient.GetNFTInfoBySeri(ctx, seri)
 	if err != nil {
-		return nil, nil, err
+		return serial, new(nftsvclient.NFTInfo), nil
 	}
 
 	return serial, nftInfo, nil
